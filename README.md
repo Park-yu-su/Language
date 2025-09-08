@@ -89,8 +89,8 @@ com.hwarok
   `Android Studio Narwhal | 2025.1.1`
 
 - **SDK 설정**  
-  - `targetSdkVersion`: 24  
-  - `minSdkVersion`: 36
+  - `targetSdkVersion`: 36  
+  - `minSdkVersion`: 24
 
 - **테스트 환경**  
   다양한 기기에서의 원활한 테스트를 위해 **Emulator** 및 **실제 디바이스**를 함께 사용하여 검증을 진행합니다.
