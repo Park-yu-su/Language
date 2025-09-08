@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="transparent">#00ff0000</color>
+
+    <!--강조 아이콘 버튼(메인 버튼) / 배경 / 회색 아이콘 / 폰트 / 텍스트 배경-->
+    <color name="colorPrimary">#737AFB</color>
+    <color name="colorBackground">#F9F9F9</color>
+    <color name="colorGrayIcon">#D1D1D1</color>
+    <color name="colorFont">#4C4C4C</color>
+    <color name="colorFrameBackground">#FFFFFF</color>
+    <color name="colorTextBackground">#F9F9F9</color>
+
+    <!--상단 바 색상-->
+    <!--회색 선 / 보관함 아이콘 / 벨 아이콘-->
+    <color name="colorGrayLine">#F5F5F5</color>
+    <color name="colorStoreBoxIcon">#E4E4E4</color>
+    <color name="colorBellIcon">#FFD88A</color>
+
+    <!--bottomNav 조절-->
+    <style name="CustomBottomNavigationTextStyle" parent="TextAppearance.AppCompat.Caption">
+        <!-- 간격 줄이기 -->
+        <item name="android:layout_marginTop">-2dp</item>
+        <!-- 필요시 텍스트 사이즈 조정 -->
+        <item name="android:textSize">12sp</item>
+    </style>
+
+
+</resources>

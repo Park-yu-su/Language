@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment"
+    >
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.language.ui.home.HomeFragment"
+        android:label="홈"
+        tools:layout="@layout/fragment_home"/>
+
+    <fragment
+        android:id="@+id/studyFragment"
+        android:name="com.example.language.ui.study.StudyFragment"
+        android:label="공부하기"
+        tools:layout="@layout/fragment_study"/>
+
+    <fragment
+        android:id="@+id/friendFragment"
+        android:name="com.example.language.ui.friend.FriendFragment"
+        android:label="친구"
+        tools:layout="@layout/fragment_friend"/>
+
+    <fragment
+        android:id="@+id/mypageFragment"
+        android:name="com.example.language.ui.mypage.MypageFragment"
+        android:label="마이페이지"
+        tools:layout="@layout/fragment_mypage"/>
+
+
+</navigation>
