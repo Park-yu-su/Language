@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -21,6 +23,11 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        //API 추가
+        val properties = Properties()
+        properties.load(project.rootProject.file("local.properties").inputStream())
+        manifestPlaceholders["KAKAO_API_KEY"] = properties.getProperty("KAKAO_API_KEY")
+        buildConfigField("String", "KAKAO_API_KEY", "\"${properties.getProperty("KAKAO_API_KEY")}\"")
     }
 
     buildFeatures {
@@ -111,4 +118,11 @@ dependencies {
 
     //프로필 이미지를 둥글게 만들어 주는 라이브러리
     implementation("de.hdodenhof:circleimageview:3.1.0")
+
+    //RoomDB
+    val roomVersion = "2.6.1"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
+
 }
