@@ -3,12 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.makeVoc.MakeVocFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+
+    <Button
+        android:id="@+id/add_voc_in_exit_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="기존 단어장에 추가하기" />
+
+    <Button
+        android:id="@+id/add_new_voc_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="새 단어장 만들기"
+        android:layout_marginTop="60dp"/>
 
 </FrameLayout>

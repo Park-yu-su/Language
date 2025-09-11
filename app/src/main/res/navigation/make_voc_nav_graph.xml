@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/make_voc_nav_graph"
+    app:startDestination="@id/makeVocFragment">
+
+    <fragment
+        android:id="@+id/makeVocFragment"
+        android:name="com.example.language.ui.makeVoc.MakeVocFragment"
+        android:label="단어장 만들기"
+        tools:layout="@layout/fragment_make_voc" >
+        <action
+            android:id="@+id/action_makeVocFragment_to_addNewVocFragment"
+            app:destination="@id/addNewVocFragment" />
+        <action
+            android:id="@+id/action_makeVocFragment_to_addVocInExitFragment"
+            app:destination="@id/addVocInExitFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addNewVocFragment"
+        android:name="com.example.language.ui.makeVoc.AddNewVocFragment"
+        android:label="새 단어장 만들기"
+        tools:layout="@layout/fragment_add_new_voc" >
+        <action
+            android:id="@+id/action_addNewVocFragment_to_selectWayAddVocFragment"
+            app:destination="@id/selectWayAddVocFragment" >
+            <argument
+                android:name="vocName"
+                app:argType="string" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/addVocInExitFragment"
+        android:name="com.example.language.ui.makeVoc.AddVocInExitFragment"
+        android:label="기존 단어장에 추가하기"
+        tools:layout="@layout/fragment_add_voc_in_exit" >
+        <action
+            android:id="@+id/action_addVocInExitFragment_to_selectWayAddVocFragment"
+            app:destination="@id/selectWayAddVocFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/selectWayAddVocFragment"
+        android:name="com.example.language.ui.makeVoc.SelectWayAddVocFragment"
+        android:label="단어 추가 방식 선택"
+        tools:layout="@layout/fragment_select_way_add_voc" >
+        <argument
+            android:name="vocName"
+            app:argType="string" />
+    </fragment>
+
+</navigation>
