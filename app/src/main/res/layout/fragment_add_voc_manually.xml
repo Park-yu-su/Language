@@ -5,19 +5,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <Button
-        android:id="@+id/add_voc_to_picture_btn"
+        android:id="@+id/add_voc_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="사진으로 추가"
+        android:text="단어 추가"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/add_voc_manually_btn"
+        android:id="@+id/add_voc_finish_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="직접 추가"
-        app:layout_constraintTop_toBottomOf="@id/add_voc_to_picture_btn"
+        android:text="추가"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
