@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    tools:context=".ui.test.TestMeaningFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/mean_wordImv_guideLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.15" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/mean_midWordImv_guideLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.23"/>
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/mean_endWordImv_guideLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.45"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/mean_topButtons_guideLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/mean_bottomButtons_guideLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.9" />
+
+    <!--단어 창-->
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mean_progress_cdv"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_marginBottom="20dp"
+        android:layout_marginStart="20dp"
+        app:cardCornerRadius="24dp"
+        app:strokeWidth="0dp"
+        app:layout_constraintStart_toStartOf="@id/mean_english_cdv"
+        app:layout_constraintTop_toTopOf="@id/mean_wordImv_guideLine"
+        app:layout_constraintBottom_toBottomOf="@id/mean_wordImv_guideLine"/>
+
+    <TextView
+        android:id="@+id/mean_progressDefault_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="진행도"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="@+id/mean_progress_cdv"
+        app:layout_constraintEnd_toStartOf="@+id/mean_progress_tv"
+        app:layout_constraintTop_toTopOf="@+id/mean_progress_cdv"
+        app:layout_constraintBottom_toTopOf="@id/mean_english_cdv"
+        />
+
+    <TextView
+        android:id="@+id/mean_progress_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1/1"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toEndOf="@+id/mean_progressDefault_tv"
+        app:layout_constraintEnd_toEndOf="@+id/mean_progress_cdv"
+        app:layout_constraintTop_toTopOf="@+id/mean_progressDefault_tv"
+        app:layout_constraintBottom_toBottomOf="@+id/mean_progressDefault_tv"
+        />
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mean_english_cdv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_marginHorizontal="30dp"
+        app:cardCornerRadius="24dp"
+        app:strokeWidth="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mean_wordImv_guideLine"
+        app:layout_constraintBottom_toBottomOf="@id/mean_endWordImv_guideLine"
+        />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mean_content_cdv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:backgroundTint="@color/white"
+        android:layout_margin="10dp"
+        app:cardCornerRadius="24dp"
+        app:strokeWidth="0dp"
+        app:layout_constraintStart_toStartOf="@id/mean_english_cdv"
+        app:layout_constraintEnd_toEndOf="@id/mean_english_cdv"
+        app:layout_constraintTop_toTopOf="@id/mean_midWordImv_guideLine"
+        app:layout_constraintBottom_toBottomOf="@id/mean_english_cdv"
+        />
+
+
+
+    <TextView
+        android:id="@+id/mean_question_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="Q. 아래 문장에서 apple은 어떤 의미로 사용되었을까요?"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:layout_marginTop="5dp"
+        android:layout_marginHorizontal="3dp"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMaxTextSize="20sp"
+        app:autoSizeMinTextSize="10sp"
+        app:autoSizeStepGranularity="2sp"
+        app:layout_constraintTop_toTopOf="@id/mean_english_cdv"
+        app:layout_constraintBottom_toBottomOf="@id/mean_midWordImv_guideLine"
+        app:layout_constraintStart_toStartOf="@id/mean_english_cdv"
+        app:layout_constraintEnd_toEndOf="@id/mean_english_cdv"
+        />
+
+    <TextView
+        android:id="@+id/mean_example_tv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="I want to eat apple, but I also want to eat Pinaapple. But but...."
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="10dp"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMaxTextSize="25sp"
+        app:autoSizeMinTextSize="15sp"
+        app:autoSizeStepGranularity="2sp"
+        app:layout_constraintTop_toTopOf="@id/mean_content_cdv"
+        app:layout_constraintBottom_toBottomOf="@id/mean_content_cdv"
+        app:layout_constraintStart_toStartOf="@id/mean_content_cdv"
+        app:layout_constraintEnd_toEndOf="@id/mean_content_cdv"
+        />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/mean_answer1_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="1번"
+        android:textSize="16sp"
+        android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="20dp"
+        app:cardCornerRadius="24dp"
+        app:strokeWidth="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/mean_topButtons_guideLine"
+        app:layout_constraintBottom_toTopOf="@id/mean_answer2_btn"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/mean_answer2_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="1번"
+        android:textSize="16sp"
+        android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="20dp"
+        app:cardCornerRadius="24dp"
+        app:strokeWidth="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/mean_answer3_btn"
+        app:layout_constraintTop_toBottomOf="@id/mean_answer1_btn"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/mean_answer3_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="1번"
+        android:textSize="16sp"
+        android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="20dp"
+        app:cardCornerRadius="24dp"
+        app:strokeWidth="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/mean_answer4_btn"
+        app:layout_constraintTop_toBottomOf="@id/mean_answer2_btn"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/mean_answer4_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="1번"
+        android:textSize="16sp"
+        android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="20dp"
+        app:cardCornerRadius="24dp"
+        app:strokeWidth="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mean_answer3_btn"
+        app:layout_constraintBottom_toBottomOf="@id/mean_bottomButtons_guideLine"
+        />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

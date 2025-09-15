@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    tools:context=".ui.test.TestSpeakingFragment">
+
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/speak_wordImv_guideLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.15"/>
+
+    <!--단어 창-->
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/speak_progress_cdv"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_marginBottom="20dp"
+        android:layout_marginStart="20dp"
+        app:cardCornerRadius="24dp"
+        app:strokeWidth="0dp"
+        app:layout_constraintStart_toStartOf="@id/speak_english_cdv"
+        app:layout_constraintTop_toTopOf="@id/speak_wordImv_guideLine"
+        app:layout_constraintBottom_toBottomOf="@id/speak_wordImv_guideLine"/>
+
+    <TextView
+        android:id="@+id/speak_progressDefault_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="진행도"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="@+id/speak_progress_cdv"
+        app:layout_constraintEnd_toStartOf="@+id/speak_progress_tv"
+        app:layout_constraintTop_toTopOf="@+id/speak_progress_cdv"
+        app:layout_constraintBottom_toTopOf="@id/speak_english_cdv"
+        />
+
+    <TextView
+        android:id="@+id/speak_progress_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1/1"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toEndOf="@+id/speak_progressDefault_tv"
+        app:layout_constraintEnd_toEndOf="@+id/speak_progress_cdv"
+        app:layout_constraintTop_toTopOf="@+id/speak_progressDefault_tv"
+        app:layout_constraintBottom_toBottomOf="@+id/speak_progressDefault_tv"
+        />
+
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/speak_english_cdv"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_marginHorizontal="30dp"
+        app:cardCornerRadius="24dp"
+        app:strokeWidth="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/speak_wordImv_guideLine"/>
+
+    <TextView
+        android:id="@+id/speak_word_tv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text="Your long text here"
+        android:maxLines="2"
+        android:gravity="center"
+        android:ellipsize="end"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
+        app:autoSizeTextType="uniform"
+        app:autoSizeMaxTextSize="38sp"
+        app:autoSizeMinTextSize="12sp"
+        app:autoSizeStepGranularity="1sp"
+        app:layout_constraintTop_toTopOf="@id/speak_english_cdv"
+        app:layout_constraintBottom_toBottomOf="@id/speak_english_cdv"
+        app:layout_constraintStart_toStartOf="@id/speak_english_cdv"
+        app:layout_constraintEnd_toEndOf="@id/speak_english_cdv"
+        />
+
+
+
+    <!-- 발음 입력 창 -->
+
+    <ImageButton
+        android:id="@+id/spaek_record_btn"
+        android:layout_height="120dp"
+        android:layout_width="120dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:src="@drawable/ic_record"
+        android:background="@drawable/bg_circle_button"
+        android:elevation="1dp"
+        android:layout_marginBottom="80dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:background="@drawable/bg_curve_view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="600dp"
+    android:height="200dp"
+    android:viewportWidth="360"
+    android:viewportHeight="100">
+
+    <path
+        android:fillColor="@color/colorPrimary"
+        android:pathData="
+            M0,30
+            L110,30
+            Q180,90 250,30
+            L360,30
+            L360,100
+            L0,100
+        Z" />
+</vector>
+
+    <!--
+    M(x,y) - 펜 이동
+    L(x,y) - 직선 긋기 (이전 지점에서 현재까지)
+    Q(x1,y1,x2,y2) - (x2,y2)까지 (x1,y1) 기준으로 부드럽게 곡선
+    -->
