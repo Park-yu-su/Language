@@ -5,7 +5,7 @@
     <color name="transparent">#00ff0000</color>
 
     <!--강조 아이콘 버튼(메인 버튼) / 배경 / 회색 아이콘 / 폰트 / 텍스트 배경-->
-    <color name="colorPrimary">#737AFB</color>
+    <color name="colorPrimary">#4996F4</color>
     <color name="colorBackground">#F9F9F9</color>
     <color name="colorGrayIcon">#D1D1D1</color>
     <color name="colorFont">#4C4C4C</color>
