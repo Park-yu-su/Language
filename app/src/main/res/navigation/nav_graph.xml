@@ -10,7 +10,19 @@
         android:id="@+id/homeFragment"
         android:name="com.example.language.ui.home.HomeFragment"
         android:label="홈"
-        tools:layout="@layout/fragment_home"/>
+        tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/action_homeFragment_to_testFragment"
+            app:destination="@id/testFragment"
+            app:enterAnim="@anim/create_from_right"
+            app:exitAnim="@anim/delete_to_left"
+            app:popEnterAnim="@anim/pop_create_from_left"
+            app:popExitAnim="@anim/pop_delete_from_right"
+            />
+
+
+    </fragment>
 
     <fragment
         android:id="@+id/studyFragment"
@@ -30,5 +42,14 @@
         android:label="마이페이지"
         tools:layout="@layout/fragment_mypage"/>
 
+
+
+
+
+    <!--테스트 관련 Fragment-->
+    <fragment
+        android:id="@+id/testFragment"
+        android:name="com.example.language.ui.test.TestFragment"
+        tools:layout="@layout/fragment_test"/>
 
 </navigation>
