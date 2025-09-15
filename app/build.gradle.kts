@@ -9,6 +9,7 @@ plugins {
     //id("com.google.gms.google-services")
     //Glide를 위해
     id("kotlin-kapt")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {

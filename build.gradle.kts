@@ -9,6 +9,8 @@ buildscript {
     dependencies {
         // Google Services 플러그인 클래스패스
         //classpath("com.google.gms:google-services:4.4.3")
+        // fragment간 안전한 데이터 전달
+        classpath ("androidx.navigation:navigation-safe-args-gradle-plugin:2.9.3")
     }
 }
 
