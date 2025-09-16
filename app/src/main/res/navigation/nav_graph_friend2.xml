@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_friend2"
+    app:startDestination="@id/FriendListFragment"
+    >
+
+    <fragment
+        android:id="@+id/FriendListFragment"
+        android:name="com.example.language.ui.friend.FriendListFragment"
+        tools:layout="@layout/fragment_friend_list">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/FriendRequestFragment"
+        android:name="com.example.language.ui.friend.FriendRequestFragment"
+        tools:layout="@layout/fragment_friend_request">
+
+    </fragment>
+
+
+</navigation>

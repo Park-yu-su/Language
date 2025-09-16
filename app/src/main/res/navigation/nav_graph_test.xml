@@ -6,7 +6,6 @@
     app:startDestination="@id/testSpeakingFragment"
     >
 
-
     <fragment
         android:id="@+id/testSpeakingFragment"
         android:name="com.example.language.ui.test.TestSpeakingFragment"
