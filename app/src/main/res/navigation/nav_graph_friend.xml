@@ -2,23 +2,28 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/FriendListFragment"
+    app:startDestination="@id/friendFragment"
     android:id="@+id/nav_graph_friend">
 
 
     <fragment
-        android:id="@+id/FriendListFragment"
-        android:name="com.example.language.ui.friend.FriendListFragment"
-        tools:layout="@layout/fragment_friend_list">
+        android:id="@+id/friendFragment"
+        android:name="com.example.language.ui.friend.FriendFragment"
+        android:label="친구"
+        tools:layout="@layout/fragment_friend">
+
+        <action
+            android:id="@+id/action_friendFragment_to_friendAddFragment"
+            app:destination="@id/friendAddFragment"
+            />
 
     </fragment>
 
     <fragment
-        android:id="@+id/FriendRequestFragment"
-        android:name="com.example.language.ui.friend.FriendRequestFragment"
-        tools:layout="@layout/fragment_friend_request">
-
-    </fragment>
+        android:id="@+id/friendAddFragment"
+        android:name="com.example.language.ui.friend.FriendAddFragment"
+        android:label="친구추가"
+        tools:layout="@layout/fragment_friend_add"/>
 
 
 

@@ -2,20 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-    android:id="@+id/homeFragment"
+    android:id="@+id/nav_graph_home"
     android:icon="@drawable/ic_menu_home"
     android:title="홈" />
     <item
-        android:id="@+id/studyFragment"
+        android:id="@+id/nav_grpah_study"
         android:icon="@drawable/ic_menu_study"
         android:title="공부하기" />
 
     <item
-        android:id="@+id/friendFragment"
+        android:id="@+id/nav_graph_friend"
         android:icon="@drawable/ic_menu_friend"
         android:title="친구" />
     <item
-        android:id="@+id/mypageFragment"
+        android:id="@+id/nav_graph_mypage"
         android:icon="@drawable/ic_menu_mypage"
         android:title="마이페이지" />
 

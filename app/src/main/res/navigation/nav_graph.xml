@@ -3,67 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment"
+    app:startDestination="@id/nav_graph_home"
     >
 
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.example.language.ui.home.HomeFragment"
-        android:label="홈"
-        tools:layout="@layout/fragment_home">
-
-        <action
-            android:id="@+id/action_homeFragment_to_testFragment"
-            app:destination="@id/testFragment"
-            app:enterAnim="@anim/create_from_right"
-            app:exitAnim="@anim/delete_to_left"
-            app:popEnterAnim="@anim/pop_create_from_left"
-            app:popExitAnim="@anim/pop_delete_from_right"
-            />
-
-
-    </fragment>
-
-    <fragment
-        android:id="@+id/studyFragment"
-        android:name="com.example.language.ui.study.StudyFragment"
-        android:label="공부하기"
-        tools:layout="@layout/fragment_study"/>
-
-    <fragment
-        android:id="@+id/friendFragment"
-        android:name="com.example.language.ui.friend.FriendFragment"
-        android:label="친구"
-        tools:layout="@layout/fragment_friend">
-
-        <action
-            android:id="@+id/action_friendFragment_to_friendAddFragment"
-            app:destination="@id/friendAddFragment"
-            />
-
-    </fragment>
-
-    <fragment
-        android:id="@+id/friendAddFragment"
-        android:name="com.example.language.ui.friend.FriendAddFragment"
-        android:label="친구추가"
-        tools:layout="@layout/fragment_friend_add"/>
-
-
-    <fragment
-        android:id="@+id/mypageFragment"
-        android:name="com.example.language.ui.mypage.MypageFragment"
-        android:label="마이페이지"
-        tools:layout="@layout/fragment_mypage"/>
-
-
-
-
-
-    <!--테스트 관련 Fragment-->
-    <fragment
-        android:id="@+id/testFragment"
-        android:name="com.example.language.ui.test.TestFragment"
-        tools:layout="@layout/fragment_test"/>
+    <include app:graph="@navigation/nav_graph_home"/>
+    <include app:graph="@navigation/nav_grpah_study"/>
+    <include app:graph="@navigation/nav_graph_friend"/>
+    <include app:graph="@navigation/nav_graph_mypage"/>
 
 </navigation>
