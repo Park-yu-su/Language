@@ -56,6 +56,12 @@ class HomeFragment : Fragment() {
 
         }
 
+        // 단어장 만들기 로직
+        binding.homeMakeVocBtn.setOnClickListener {
+            val navController = findNavController()
+            navController.navigate(R.id.action_homeFragment_to_makeVocFragment)
+        }
+
     }
 
 
