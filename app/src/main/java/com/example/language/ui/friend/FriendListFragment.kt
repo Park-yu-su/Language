@@ -51,9 +51,9 @@ class FriendListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //임시 데이터 셋
-        friendList.add(FriendData("친구1", "자기소개"))
-        friendList.add(FriendData("친구2", "자기소개"))
-        friendList.add(FriendData("친구3", "자기소개"))
+        friendList.add(FriendData("1","친구1", "자기소개"))
+        friendList.add(FriendData("2","친구2", "자기소개"))
+        friendList.add(FriendData("3","친구3", "자기소개"))
 
         settingRecyclerView()
 
