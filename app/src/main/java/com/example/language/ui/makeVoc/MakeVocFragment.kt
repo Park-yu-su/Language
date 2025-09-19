@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2
 import com.example.language.R
 import com.example.language.databinding.FragmentMakeVocBinding
 
@@ -47,12 +48,11 @@ class MakeVocFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val addVocInExitBtn = binding.addVocInExitBtn
-        addVocInExitBtn.setOnClickListener {
+        binding.addVocInExitBtn.setOnClickListener {
             findNavController().navigate(R.id.action_makeVocFragment_to_addVocInExitFragment)
         }
-        val addNewVocBtn = binding.addNewVocBtn
-        addNewVocBtn.setOnClickListener {
+
+        binding.addNewVocBtn.setOnClickListener {
             findNavController().navigate(R.id.action_makeVocFragment_to_addNewVocFragment)
         }
 
