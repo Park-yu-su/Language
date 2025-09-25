@@ -29,4 +29,29 @@
         app:layout_constraintTop_toBottomOf="@id/user_img"
         app:layout_constraintStart_toEndOf="@id/user_nickname_txt" />
 
+    <TextView
+        android:id="@+id/user_id_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="유저 아이디"
+        app:layout_constraintTop_toBottomOf="@id/user_nickname_txt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/user_nickname_txt"
+        app:layout_constraintStart_toEndOf="@id/user_id_txt" />
+
+    <EditText
+        android:id="@+id/self_introduction_et"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="자기소개를 입력하세요"
+        app:layout_constraintTop_toBottomOf="@id/user_id_txt"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="100dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
