@@ -5,7 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import com.example.language.R
+import com.example.language.databinding.FragmentStudyBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,6 +26,14 @@ class StudyFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var binding: FragmentStudyBinding
+
+    private lateinit var navHostFragment: NavHostFragment
+    private lateinit var navController: NavController
+
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -35,8 +47,37 @@ class StudyFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_study, container, false)
+        binding = FragmentStudyBinding.inflate(inflater, container, false)
+        return binding.root
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        navHostFragment = childFragmentManager.findFragmentById(R.id.study_fragmentContainer) as NavHostFragment
+        navController = navHostFragment.navController
+
+        //내 단어장 버튼 클릭
+        binding.studyMyVocBtn.setOnClickListener {
+            binding.studyMyVocBtn.setBackgroundResource(R.drawable.bg_btn_primary_press)
+            binding.studyMyVocTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+            binding.studySearchBtn.setBackgroundResource(R.drawable.bg_btn_white_press)
+            binding.studySearchTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorFont))
+            navController.navigate(R.id.studyVoclistFragment)
+        }
+        //단어장 검색 버튼 클릭
+        binding.studySearchBtn.setOnClickListener {
+            binding.studyMyVocBtn.setBackgroundResource(R.drawable.bg_btn_white_press)
+            binding.studyMyVocTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.colorFont))
+            binding.studySearchBtn.setBackgroundResource(R.drawable.bg_btn_primary_press)
+            binding.studySearchTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+            navController.navigate(R.id.studyVocsearchFragment)
+
+
+        }
+
+    }
+
 
     companion object {
         /**

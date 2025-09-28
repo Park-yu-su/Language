@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.study.StudyWordDetailPageFragment">
+
+    <TextView
+        android:id="@+id/worddetail_english_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="영어"
+        android:textSize="50sp"
+        style="@style/freesentation7_22sp_title"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/worddetail_meaning_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="영어"
+        android:textSize="50sp"
+        style="@style/freesentation7_22sp_title"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/worddetail_english_tv"/>
+
+
+    <TextView
+        android:id="@+id/worddetail_example_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="뜻"
+        android:textSize="50sp"
+        style="@style/freesentation7_22sp_title"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/worddetail_meaning_tv"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,92 @@
+package com.example.language.ui.study
+
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.language.R
+import com.example.language.adapter.VocListAdapter
+import com.example.language.data.VocData
+import com.example.language.databinding.FragmentStudyVoclistBinding
+
+// TODO: Rename parameter arguments, choose names that match
+// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+private const val ARG_PARAM1 = "param1"
+private const val ARG_PARAM2 = "param2"
+
+/**
+ * A simple [Fragment] subclass.
+ * Use the [StudyVoclistFragment.newInstance] factory method to
+ * create an instance of this fragment.
+ */
+class StudyVoclistFragment : Fragment() {
+    // TODO: Rename and change types of parameters
+    private var param1: String? = null
+    private var param2: String? = null
+
+    private lateinit var binding: FragmentStudyVoclistBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            param1 = it.getString(ARG_PARAM1)
+            param2 = it.getString(ARG_PARAM2)
+        }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        binding = FragmentStudyVoclistBinding.inflate(inflater, container, false)
+        return binding.root
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        //임시 데이터
+        var vocList = mutableListOf(
+            VocData("고등 필수 단어 100", mutableListOf("고등"), "owner1"),
+            VocData("토익 필수 단어", mutableListOf("토익", "커스텀"), "owner1"),
+            VocData("내 중등 단어장", mutableListOf("중등", "커스텀"), "owner2"),
+            VocData("IT 개발 용어", mutableListOf("업무", "커스텀", "어려움"), "owner3")
+        )
+
+        val adapter = VocListAdapter(vocList,
+            onItemClicked = {
+                val action = StudyVoclistFragmentDirections.actionStudyVoclistFragmentToStudyWordlistFragment()
+                findNavController().navigate(action)
+            })
+
+        binding.studyRecyclerview.layoutManager = LinearLayoutManager(requireContext())
+        binding.studyRecyclerview.adapter = adapter
+
+
+    }
+
+    companion object {
+        /**
+         * Use this factory method to create a new instance of
+         * this fragment using the provided parameters.
+         *
+         * @param param1 Parameter 1.
+         * @param param2 Parameter 2.
+         * @return A new instance of fragment StudyVoclistFragment.
+         */
+        // TODO: Rename and change types and number of parameters
+        @JvmStatic
+        fun newInstance(param1: String, param2: String) =
+            StudyVoclistFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
+                }
+            }
+    }
+}
