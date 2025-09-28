@@ -102,6 +102,7 @@ class FriendFragment : Fragment() {
         //친구 추가 버튼
         binding.friendAddFriendBtn.setOnClickListener {
             //나를 호스팅하는 navController get
+            navController.navigate(R.id.FriendListFragment)
             findNavController().navigate(R.id.action_friendFragment_to_friendAddFragment)
         }
 

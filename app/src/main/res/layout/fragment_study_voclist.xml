@@ -5,10 +5,10 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorBackground"
-    tools:context=".ui.friend.FriendRequestFragment">
+    tools:context=".ui.study.StudyVoclistFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/friend_request_recyclerview"
+        android:id="@+id/study_recyclerview"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:clipToPadding="false"
