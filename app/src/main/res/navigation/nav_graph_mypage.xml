@@ -10,6 +10,50 @@
         android:id="@+id/mypageFragment"
         android:name="com.example.language.ui.mypage.MypageFragment"
         android:label="마이페이지"
-        tools:layout="@layout/fragment_mypage"/>
+        tools:layout="@layout/fragment_mypage">
+
+        <action
+            android:id="@+id/action_mypageFragment_to_mypageSettingFragment"
+            app:destination="@id/mypageSettingFragment" />
+
+        <action
+            android:id="@+id/action_mypageFragment_to_mypageMyprofileFragment"
+            app:destination="@id/mypageMyprofileFragment" />
+
+        <action
+            android:id="@+id/action_mypageFragment_to_mypageMyvocFragment"
+            app:destination="@id/mypageMyvocFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/mypageSettingFragment"
+        android:name="com.example.language.ui.mypage.MypageSettingFragment"
+        android:label="설정"
+        tools:layout="@layout/fragment_mypage_setting"/>
+
+    <fragment
+        android:id="@+id/mypageMyprofileFragment"
+        android:name="com.example.language.ui.mypage.MypageMyprofileFragment"
+        android:label="프로필"
+        tools:layout="@layout/fragment_mypage_myprofile"/>
+
+    <fragment
+        android:id="@+id/mypageMyvocFragment"
+        android:name="com.example.language.ui.mypage.MypageMyvocFragment"
+        android:label="내 단어장"
+        tools:layout="@layout/fragment_mypage_myvoc">
+
+        <action
+            android:id="@+id/action_mypageMyvocFragment_to_mypageMyvocDetailFragment"
+            app:destination="@id/mypageMyvocDetailFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/mypageMyvocDetailFragment"
+        android:name="com.example.language.ui.mypage.MypageMyvocDetailFragment"
+        android:label="단어장 상세"
+        tools:layout="@layout/fragment_mypage_myvoc_detail"/>
 
 </navigation>
