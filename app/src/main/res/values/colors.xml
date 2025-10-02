@@ -4,6 +4,22 @@
     <color name="white">#FFFFFFFF</color>
     <color name="transparent">#00ff0000</color>
 
+    <!--피그마 색깔-->
+
+    <color name="Black">#404040</color>
+    <color name="Gray1">#626262</color>
+    <color name="Gray2">#878787</color>
+    <color name="Gray3">#ADADAD</color>
+    <color name="Gray4">#D5D5D5</color>
+    <color name="Main1_1">#427FF6</color>
+    <color name="Main1_2">#79A5F9</color>
+    <color name="Main1_3">#C3D6FD</color>
+    <color name="Main1_4">#EAF5FF</color>
+    <color name="Main1_5">#F2F9FF</color>
+    <color name="Sub1">#FFBE00</color>
+
+    <!-- 아래 꺼는 Depricated된 색깔들입니다. 삭제 시 오류 발생 위험을 위해 새로 추가합니다-->
+
     <!--강조 아이콘 버튼(메인 버튼) / 배경 / 회색 아이콘 / 폰트 / 텍스트 배경-->
     <color name="colorPrimary">#4996F4</color>
     <color name="colorBackground">#F9F9F9</color>
