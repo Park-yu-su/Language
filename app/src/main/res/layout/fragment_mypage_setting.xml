@@ -29,11 +29,11 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/tts_volume_value_txt"
         app:layout_constraintStart_toStartOf="parent"
-        app:valueFrom="0"
-        app:valueTo="100"
-        app:stepSize="1"
-        android:layout_marginTop="8dp"
-        app:value="50" />
+        android:layout_marginTop="8dp" />
+<!--        app:valueFrom="0"-->
+<!--        app:valueTo="100"-->
+<!--        app:stepSize="1"-->
+<!--        app:value="50"-->
 
     <TextView
         android:id="@+id/vibration_txt"

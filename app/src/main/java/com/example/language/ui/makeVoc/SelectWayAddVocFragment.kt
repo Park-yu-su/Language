@@ -2,11 +2,12 @@ package com.example.language.ui.makeVoc
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Matrix
-import android.media.ExifInterface
+import androidx.exifinterface.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -16,7 +17,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar;
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -83,7 +84,20 @@ class SelectWayAddVocFragment : Fragment() {
         val vocName = args.vocName
 
         binding.addVocToPictureBtn.setOnClickListener {
-           // showImagePickDialog()
+            val options = arrayOf("카메라로 촬영", "갤러리에서 선택")
+            AlertDialog.Builder(requireContext())
+                .setTitle("사진 추가 방법 선택")
+                .setItems(options) { _, which ->
+                    when (which) {
+                        0 -> { // 카메라
+                            getPictureFromCamera()
+                        }
+                        1 -> { // 갤러리
+                            getPictureFromAlbum()
+                        }
+                    }
+                }
+                .show()
         }
         binding.addVocManuallyBtn.setOnClickListener {
             findNavController().navigate(R.id.action_selectWayAddVocFragment_to_addVocManuallyFragment)
