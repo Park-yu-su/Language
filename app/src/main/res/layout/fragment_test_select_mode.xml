@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#F5F5F5"
+    tools:context=".ui.test.TestSelectModeFragment">
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/selectMode_guideLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5"/>
+
+    <TextView
+        android:id="@+id/selectMode_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/pretendard_20sp_semibold"
+        android:text="원하시는 테스트 유형을 선택해주세요"
+        android:layout_margin="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+    <!--발음 테스트 버튼-->
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/selectMode_voctest_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="20dp"
+        app:cardCornerRadius="20dp"
+        android:backgroundTint="@color/Main1_5"
+        app:layout_constraintTop_toBottomOf="@id/selectMode_tv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/selectMode_guideLine"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="20dp"
+            >
+
+            <TextView
+                android:id="@+id/selectMode_voctest_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/pretendard_16sp_semibold"
+                android:text="발음 테스트"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@drawable/img_test_voc"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/selectMode_voctest_tv"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+
+    <!--유의어 테스트 버튼-->
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/selectMode_meaningtest_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="20dp"
+        app:cardCornerRadius="20dp"
+        android:backgroundTint="@color/Main1_5"
+        app:layout_constraintTop_toBottomOf="@id/selectMode_tv"
+        app:layout_constraintStart_toEndOf="@id/selectMode_guideLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="20dp"
+            >
+
+            <TextView
+                android:id="@+id/selectMode_meaningtest_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/pretendard_16sp_semibold"
+                android:text="유의어 테스트"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:src="@drawable/img_test_mean"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/selectMode_meaningtest_tv"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

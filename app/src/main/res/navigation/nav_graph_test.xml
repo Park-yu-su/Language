@@ -3,14 +3,49 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_test"
-    app:startDestination="@id/testSpeakingFragment"
+    app:startDestination="@id/testSelectVocFragment"
     >
+
+
+    <fragment
+        android:id="@+id/testSelectVocFragment"
+        android:name="com.example.language.ui.test.TestSelectVocFragment"
+        tools:layout="@layout/fragment_test_select_voc">
+
+        <action
+            android:id="@+id/action_testSelectVocFragment_to_testSelectModeFragment"
+            app:destination="@id/testSelectModeFragment"/>
+
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/testSelectModeFragment"
+        android:name="com.example.language.ui.test.TestSelectModeFragment"
+        tools:layout="@layout/fragment_test_select_mode">
+
+        <action
+            android:id="@+id/action_testSelectModeFragment_to_testSpeakingFragment"
+            app:destination="@id/testSpeakingFragment"/>
+
+        <action
+            android:id="@+id/action_testSelectModeFragment_to_testMeaningFragment"
+            app:destination="@id/testMeaningFragment"/>
+
+    </fragment>
+
 
     <fragment
         android:id="@+id/testSpeakingFragment"
         android:name="com.example.language.ui.test.TestSpeakingFragment"
         tools:layout="@layout/fragment_test_speaking">
 
+
     </fragment>
+
+    <fragment
+        android:id="@+id/testMeaningFragment"
+        android:name="com.example.language.ui.test.TestMeaningFragment"
+        tools:layout="@layout/fragment_test_meaning"/>
 
 </navigation>

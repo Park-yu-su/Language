@@ -15,14 +15,11 @@
         <action
             android:id="@+id/action_homeFragment_to_testFragment"
             app:destination="@id/testFragment"
-            app:enterAnim="@anim/create_from_right"
-            app:exitAnim="@anim/delete_to_left"
-            app:popEnterAnim="@anim/pop_create_from_left"
-            app:popExitAnim="@anim/pop_delete_from_right"
             />
         <action
             android:id="@+id/action_homeFragment_to_makeVocFragment"
             app:destination="@id/makeVocFragment" />
+
     </fragment>
 
     <fragment

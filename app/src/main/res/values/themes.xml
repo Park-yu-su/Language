@@ -16,13 +16,13 @@
 
     <!--글꼴 style 정의-->
     <style name="pretendard_22sp_semibold">
-        <item name="android:fontFamily">@font/pretendard_semiBold</item>
+        <item name="android:fontFamily">@font/pretendard_semibold</item>
         <item name="android:textColor">@color/Black</item>
         <item name="android:textSize">22sp</item>
     </style>
 
     <style name="pretendard_20sp_semibold">
-        <item name="android:fontFamily">@font/pretendard_semiBold</item>
+        <item name="android:fontFamily">@font/pretendard_semibold</item>
         <item name="android:textColor">@color/Black</item>
         <item name="android:textSize">20sp</item>
     </style>
@@ -34,7 +34,7 @@
     </style>
 
     <style name="pretendard_16sp_semibold">
-        <item name="android:fontFamily">@font/pretendard_semiBold</item>
+        <item name="android:fontFamily">@font/pretendard_semibold</item>
         <item name="android:textColor">@color/Black</item>
         <item name="android:textSize">16sp</item>
     </style>
@@ -46,7 +46,7 @@
     </style>
 
     <style name="pretendard_14sp_semibold">
-        <item name="android:fontFamily">@font/pretendard_semiBold</item>
+        <item name="android:fontFamily">@font/pretendard_semibold</item>
         <item name="android:textColor">@color/Black</item>
         <item name="android:textSize">14sp</item>
     </style>
@@ -58,7 +58,7 @@
     </style>
 
     <style name="pretendard_12sp_semibold">
-        <item name="android:fontFamily">@font/pretendard_semiBold</item>
+        <item name="android:fontFamily">@font/pretendard_semibold</item>
         <item name="android:textColor">@color/Black</item>
         <item name="android:textSize">12sp</item>
     </style>

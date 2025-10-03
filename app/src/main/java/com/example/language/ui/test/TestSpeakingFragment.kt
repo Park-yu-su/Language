@@ -15,12 +15,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavOptions
+import androidx.navigation.fragment.findNavController
 import com.example.language.R
+import com.example.language.data.WordData
 import com.example.language.databinding.FragmentTestSpeakingBinding
+import com.example.language.ui.home.MainActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -44,11 +50,28 @@ class TestSpeakingFragment : Fragment() {
 
     private lateinit var binding: FragmentTestSpeakingBinding
 
+    //녹음 관련 변수
     private var audioRecord: AudioRecord? = null
     private var isRecord = false
     private lateinit var textToSpeech: TextToSpeech
     private lateinit var myVoice: String
     private var recordJob: Job? = null
+
+    //현재 단어 관련 변수
+    //더미 데이터
+    private var tmpData = mutableListOf(
+        WordData("APPLE", mutableListOf("사과"), "An apple a day keeps the doctor away."),
+        WordData("EFFICIENT", mutableListOf("효율적인"), "We need an efficient solution."),
+        WordData("PROGRAMMING", mutableListOf("프로그래밍"), "I love programming."),
+        WordData("LANGUAGE", mutableListOf("언어"), "English is a global language."),
+        WordData("DEVELOPMENT", mutableListOf("개발"), "Software development is complex.")
+    )
+    private var nowWordIndex = 0
+    private var totalWord = tmpData.size
+
+
+    //기타 변수
+    private lateinit var papAnim : Animation
 
     //권한 요청 result
     private val requestPermissionLauncher =
@@ -76,14 +99,69 @@ class TestSpeakingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //상단 하단 제거
+        (activity as? MainActivity)?.setUIVisibility(false)
+
+        //애니메이션 로드
+        papAnim = AnimationUtils.loadAnimation(requireContext(), R.anim.button_pop)
+
+        //TTS랑 녹음 기능 세팅
         settingTTSwithVoice()
 
+        //UI 세팅
+        updateUI()
+        binding.speakProgressbar.max = totalWord
+
+        //녹음 버튼
         binding.spaekRecordBtn.setOnClickListener {
+            binding.spaekRecordBtn.startAnimation(papAnim)
             startRecord()
+        }
+
+        //듣기 버튼(TTS)
+        binding.speakListenBtn.setOnClickListener {
+            binding.speakListenBtn.startAnimation(papAnim)
+            startTTS()
+        }
+
+        //다음 단어 버튼
+        binding.speakNextBtn.setOnClickListener {
+            binding.speakNextBtn.startAnimation(papAnim)
+            nowWordIndex++
+            updateUI()
+        }
+
+        //뒤로 가기 버튼
+        binding.speakBackBtn.setOnClickListener {
+            binding.speakBackBtn.startAnimation(papAnim)
+            navigateToHome()
         }
 
     }
 
+    //홈 화면 이동
+    fun navigateToHome(){
+        requireActivity().onBackPressed()
+    }
+
+    //단어 UI 관련 Handler
+    private fun updateUI(){
+        //아직 남으면 업뎃
+        if(nowWordIndex < totalWord){
+            var nowWord = tmpData.get(nowWordIndex)
+
+            //UI 적용
+            binding.speakWordTv.text = nowWord.word
+            binding.speakProgressTv.text = "${nowWordIndex + 1}/${totalWord}"
+            binding.speakProgressbar.progress = nowWordIndex + 1
+
+        }
+        //끝나면
+        else{
+            Toast.makeText(context, "테스트 완료!", Toast.LENGTH_LONG).show()
+
+        }
+    }
 
     //TTS 세팅을 위한 코드 (영단어 발음)
     private fun settingTTSwithVoice() {
@@ -95,6 +173,12 @@ class TestSpeakingFragment : Fragment() {
         }
         //녹음이 저장될 내 파일 경로 초기화
         myVoice = requireContext().getExternalFilesDir(null)?.absolutePath + "/voice.wav"
+    }
+
+    //TTS Start
+    private fun startTTS(){
+        val text = binding.speakWordTv.text.toString()
+        textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, null)
     }
 
     //녹음 시작
@@ -114,7 +198,8 @@ class TestSpeakingFragment : Fragment() {
                 AudioRecord.getMinBufferSize(16000, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT)
             )
 
-            binding.spaekRecordBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.black))
+            binding.spaekRecordBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.Main1_1))
+            binding.spaekRecordBtn.setImageResource(R.drawable.ic_mic_recording)
             binding.spaekRecordBtn.isEnabled = false
             //2. 녹음
             audioRecord!!.startRecording()
@@ -165,6 +250,7 @@ class TestSpeakingFragment : Fragment() {
             recordJob?.cancel()
 
             binding.spaekRecordBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.colorPrimary))
+            binding.spaekRecordBtn.setImageResource(R.drawable.ic_mic)
             binding.spaekRecordBtn.isEnabled = true
             isRecord = false
 
@@ -289,6 +375,11 @@ class TestSpeakingFragment : Fragment() {
             mediaPlayer.release()
             Toast.makeText(context, "오디오 재생 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        (activity as? MainActivity)?.setUIVisibility(true)
     }
 
 
