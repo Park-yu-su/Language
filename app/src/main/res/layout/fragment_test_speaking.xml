@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/Main1_3"
+    android:background="@color/white"
     tools:context=".ui.test.TestSpeakingFragment">
 
 
@@ -22,7 +22,7 @@
         android:id="@+id/speak_info_cdv"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/Main1_5"
         android:layout_marginTop="20dp"
         android:layout_marginHorizontal="20dp"
         app:cardCornerRadius="24dp"
@@ -44,11 +44,26 @@
         app:layout_constraintBottom_toBottomOf="@id/speak_info_cdv"
         />
 
+    <ImageView
+        android:id="@+id/speak_like_btn"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_like_heart2"
+        android:layout_marginEnd="20dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="@id/speak_info_cdv"
+        app:layout_constraintTop_toTopOf="@id/speak_info_cdv"
+        app:layout_constraintBottom_toBottomOf="@id/speak_info_cdv"
+        />
+
+
+
     <TextView
         android:id="@+id/speak_nickanme_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="닉네임"
+        android:textColor="#004DA5"
         android:layout_marginStart="10dp"
         style="@style/pretendard_16sp_medium"
         app:layout_constraintStart_toEndOf="@+id/speak_back_btn"
@@ -200,11 +215,22 @@
             />
     </LinearLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/pretendard_16sp_medium"
+        android:text="녹음 버튼을 눌러 발음을 연습하세요!"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/speak_bottom_view"/>
+
+
     <View
         android:id="@+id/speak_bottom_view"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:background="@color/white"
+        android:background="@color/Main1_5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>

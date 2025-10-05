@@ -5,14 +5,18 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.language.R
+import com.example.language.api.study.viewModel.StudyViewModel
 import com.example.language.databinding.ActivityMainBinding
 import com.kakao.sdk.common.util.Utility
 
@@ -20,6 +24,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private var bottomInset = 0
+
+    //검색용 ViewModel
+    private val searchViewModel: StudyViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +38,14 @@ class MainActivity : AppCompatActivity() {
         //bottomNav 연결
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.main_fragmentContainer) as NavHostFragment
         val navController = navHostFragment.navController
-        binding.mainBnv.setupWithNavController(navController)
+        //binding.mainBnv.setupWithNavController(navController)
+        setupBottomNavListener(navController)
+
+        //검색 버튼 누를 시
+        binding.mainSearchBtn.setOnClickListener {
+            searchViewModel.searchEventStart.value = true
+        }
+
 
 
 
@@ -43,6 +57,37 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupBottomNavListener(navController: NavController){
+        binding.mainBnv.setOnItemSelectedListener { item ->
+            val selectedId = item.itemId
+            // 현재 위치와 이동하려는 위치가 다를 때만 실행
+            if (selectedId != navController.currentDestination?.id) {
+                //NavOptions 설정: 스택 초기화 옵션
+                val navOptions = NavOptions.Builder()
+                    // 메인 NavGraph의 시작 지점(nav_graph_home)으로 돌아갑니다.
+                    // inclusive = false: nav_graph_home은 그대로 두고, 그 위에 쌓인 것만 제거합니다.
+                    //                  -> 이렇게 해야 탭 복귀 시 해당 탭의 시작점으로 돌아갑니다.
+                    // R.id.nav_graph는 최상위 NavGraph의 ID입니다.
+                    .setPopUpTo(navController.graph.id, false)
+
+                    // 새로운 탭을 시작할 때 스택 최상단에 하나만 유지하도록 함
+                    .setLaunchSingleTop(true)
+                    .build()
+
+                // 새로운 탭의 NavGraph ID로 이동
+                navController.navigate(selectedId, null, navOptions)
+                return@setOnItemSelectedListener true
+            }
+
+            // 같은 탭을 재클릭했을 때 스택 맨 위로 돌아가도록 처리 (선택 사항)
+            // navController.popBackStack(selectedId, false)
+
+            return@setOnItemSelectedListener false
+        }
+    }
+
+
+    /** 상단 바 관련 로직 **/
     //특정 fragment에서 상단/하단 바 제어
     fun setUIVisibility(visible: Boolean) {
         val fragmentParams = binding.mainFragmentContainer.layoutParams as ConstraintLayout.LayoutParams
@@ -102,10 +147,9 @@ class MainActivity : AppCompatActivity() {
         binding.mainTitleTv.setTextColor(selectedColorStateList)
 
     }
-    fun setTopBar(isBackVisible: Boolean, isShow: Boolean){
-        binding.mainTitleTv.text = title
-        binding.mainBackBtn.visibility = if (isBackVisible) View.VISIBLE else View.INVISIBLE
 
+    fun showSearchIcon(boolean: Boolean){
+        binding.mainSearchBtn.visibility = if (boolean) View.VISIBLE else View.INVISIBLE
     }
 
 }

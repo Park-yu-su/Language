@@ -68,6 +68,7 @@ class TestSpeakingFragment : Fragment() {
     )
     private var nowWordIndex = 0
     private var totalWord = tmpData.size
+    private var isLike = false
 
 
     //기타 변수
@@ -137,11 +138,35 @@ class TestSpeakingFragment : Fragment() {
             navigateToHome()
         }
 
+        //좋아 버튼
+        binding.speakLikeBtn.setOnClickListener {
+            binding.speakLikeBtn.startAnimation(papAnim)
+            handleLike()
+        }
+
     }
 
     //홈 화면 이동
     fun navigateToHome(){
         requireActivity().onBackPressed()
+    }
+
+    //좋아요 관리
+    fun handleLike(){
+        val likeBtn = binding.speakLikeBtn
+
+
+        //안좋아
+        if(!isLike){
+            isLike = true
+            likeBtn.setImageResource(R.drawable.ic_like_heart)
+
+        }
+        else{
+            isLike = false
+            likeBtn.setImageResource(R.drawable.ic_like_heart2)
+        }
+
     }
 
     //단어 UI 관련 Handler
@@ -159,7 +184,7 @@ class TestSpeakingFragment : Fragment() {
         //끝나면
         else{
             Toast.makeText(context, "테스트 완료!", Toast.LENGTH_LONG).show()
-
+            navigateToHome()
         }
     }
 

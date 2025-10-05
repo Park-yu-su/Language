@@ -65,6 +65,18 @@
         app:layout_constraintBottom_toBottomOf="@id/mean_info_cdv"
         />
 
+    <ImageView
+        android:id="@+id/mean_like_btn"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_like_heart2"
+        android:layout_marginEnd="20dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="@id/mean_info_cdv"
+        app:layout_constraintTop_toTopOf="@id/mean_info_cdv"
+        app:layout_constraintBottom_toBottomOf="@id/mean_info_cdv"
+        />
+
     <TextView
         android:id="@+id/mean_nickanme_tv"
         android:layout_width="wrap_content"
@@ -126,7 +138,7 @@
         android:backgroundTint="@color/Main1_1"
         android:layout_marginHorizontal="30dp"
         android:layout_marginTop="10dp"
-        app:cardCornerRadius="24dp"
+        app:cardCornerRadius="12dp"
         app:strokeWidth="0dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -166,7 +178,7 @@
                 android:layout_height="0dp"
                 android:backgroundTint="@color/white"
                 android:layout_margin="15dp"
-                app:cardCornerRadius="24dp"
+                app:cardCornerRadius="12dp"
                 app:strokeWidth="0dp"
                 app:layout_constraintTop_toBottomOf="@id/mean_word_tv"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -198,100 +210,158 @@
 
 
     <!--선택창 4개-->
-
-    <com.google.android.material.button.MaterialButton
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/mean_answer1_btn"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:backgroundTint="@color/Main1_4"
-        android:text="1번"
-        style="@style/pretendard_20sp_semibold"
         android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="5dp"
         android:paddingVertical="10dp"
-        app:cardCornerRadius="12dp"
+        app:cardCornerRadius="10dp"
         app:strokeWidth="0dp"
-        app:rippleColor="@android:color/transparent"
-        android:stateListAnimator="@null"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/mean_wordImv_guideLine2_5"
-        app:layout_constraintBottom_toTopOf="@id/mean_answer2_btn"
+        app:layout_constraintBottom_toTopOf="@id/mean_answer2_btn"/>
+    <TextView
+        android:id="@+id/mean_answer1_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1번"
+        android:layout_marginStart="30dp"
+        style="@style/pretendard_20sp_semibold"
+        app:layout_constraintStart_toStartOf="@id/mean_answer1_btn"
+        app:layout_constraintTop_toTopOf="@id/mean_answer1_btn"
+        app:layout_constraintBottom_toBottomOf="@id/mean_answer1_btn"/>
+    <ImageView
+        android:id="@+id/mean_answer1_imv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_correct_blue"
+        android:layout_margin="18dp"
+        android:visibility="invisible"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="@id/mean_answer1_btn"
+        app:layout_constraintTop_toTopOf="@id/mean_answer1_btn"
+        app:layout_constraintBottom_toBottomOf="@id/mean_answer1_btn"/>
 
-        />
 
-    <com.google.android.material.button.MaterialButton
+
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/mean_answer2_btn"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:backgroundTint="@color/Main1_4"
-        android:text="2번"
-        style="@style/pretendard_20sp_semibold"
         android:layout_marginHorizontal="20dp"
         android:paddingVertical="10dp"
-        app:cardCornerRadius="12dp"
+        android:layout_marginVertical="5dp"
+        app:cardCornerRadius="10dp"
         app:strokeWidth="0dp"
-        app:rippleColor="@android:color/transparent"
-        android:stateListAnimator="@null"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/mean_answer1_btn"
-        app:layout_constraintBottom_toTopOf="@id/mean_answer3_btn"
+        app:layout_constraintBottom_toTopOf="@id/mean_answer3_btn"/>
+    <TextView
+        android:id="@+id/mean_answer2_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2번"
+        android:layout_marginStart="30dp"
+        style="@style/pretendard_20sp_semibold"
+        app:layout_constraintStart_toStartOf="@id/mean_answer2_btn"
+        app:layout_constraintTop_toTopOf="@id/mean_answer2_btn"
+        app:layout_constraintBottom_toBottomOf="@id/mean_answer2_btn"/>
+    <ImageView
+        android:id="@+id/mean_answer2_imv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_correct_blue"
+        android:layout_margin="18dp"
+        android:visibility="invisible"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="@id/mean_answer2_btn"
+        app:layout_constraintTop_toTopOf="@id/mean_answer2_btn"
+        app:layout_constraintBottom_toBottomOf="@id/mean_answer2_btn"/>
 
-        />
 
-    <com.google.android.material.button.MaterialButton
+
+
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/mean_answer3_btn"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:backgroundTint="@color/Main1_4"
-        android:text="3번"
-        style="@style/pretendard_20sp_semibold"
         android:layout_marginHorizontal="20dp"
         android:paddingVertical="10dp"
-        app:cardCornerRadius="12dp"
+        android:layout_marginVertical="5dp"
+        app:cardCornerRadius="10dp"
         app:strokeWidth="0dp"
-        app:rippleColor="@android:color/transparent"
-        android:stateListAnimator="@null"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/mean_answer2_btn"
-        app:layout_constraintBottom_toTopOf="@id/mean_answer4_btn"
+        app:layout_constraintBottom_toTopOf="@id/mean_answer4_btn"/>
+    <TextView
+        android:id="@+id/mean_answer3_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="3번"
+        android:layout_marginStart="30dp"
+        style="@style/pretendard_20sp_semibold"
+        app:layout_constraintStart_toStartOf="@id/mean_answer3_btn"
+        app:layout_constraintTop_toTopOf="@id/mean_answer3_btn"
+        app:layout_constraintBottom_toBottomOf="@id/mean_answer3_btn"/>
+    <ImageView
+        android:id="@+id/mean_answer3_imv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/ic_correct_blue"
+        android:layout_margin="18dp"
+        android:visibility="invisible"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="@id/mean_answer3_btn"
+        app:layout_constraintTop_toTopOf="@id/mean_answer3_btn"
+        app:layout_constraintBottom_toBottomOf="@id/mean_answer3_btn"/>
 
-        />
 
-    <com.google.android.material.button.MaterialButton
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/mean_answer4_btn"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:backgroundTint="@color/Main1_4"
-        android:text="4번"
-        style="@style/pretendard_20sp_semibold"
         android:layout_marginHorizontal="20dp"
         android:paddingVertical="10dp"
-        app:cardCornerRadius="12dp"
+        android:layout_marginVertical="5dp"
+        app:cardCornerRadius="10dp"
         app:strokeWidth="0dp"
-        app:rippleColor="@android:color/transparent"
-        android:stateListAnimator="@null"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/mean_answer3_btn"
-        app:layout_constraintBottom_toBottomOf="@id/mean_wordImv_guideLine3"
-
-        />
-
+        app:layout_constraintBottom_toBottomOf="@id/mean_wordImv_guideLine3"/>
+    <TextView
+        android:id="@+id/mean_answer4_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="4번"
+        android:layout_marginStart="30dp"
+        style="@style/pretendard_20sp_semibold"
+        app:layout_constraintStart_toStartOf="@id/mean_answer4_btn"
+        app:layout_constraintTop_toTopOf="@id/mean_answer4_btn"
+        app:layout_constraintBottom_toBottomOf="@id/mean_answer4_btn"/>
     <ImageView
-        android:id="@+id/mean_checkAnswer_imv"
+        android:id="@+id/mean_answer4_imv"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_correct_o"
+        android:src="@drawable/ic_correct_blue"
+        android:layout_margin="18dp"
         android:visibility="invisible"
         app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintTop_toTopOf="@+id/mean_answer1_btn"
-        app:layout_constraintBottom_toBottomOf="@+id/mean_answer4_btn"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.53" />
+        app:layout_constraintEnd_toEndOf="@id/mean_answer4_btn"
+        app:layout_constraintTop_toTopOf="@id/mean_answer4_btn"
+        app:layout_constraintBottom_toBottomOf="@id/mean_answer4_btn"/>
+
+
+
 
 
 

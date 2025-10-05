@@ -18,6 +18,9 @@
     <color name="Main1_5">#F2F9FF</color>
     <color name="Sub1">#FFBE00</color>
 
+    <color name="redStroke">#F64242</color>
+    <color name="redBackground">#FFEAEA</color>
+
     <!-- 아래 꺼는 Depricated된 색깔들입니다. 삭제 시 오류 발생 위험을 위해 새로 추가합니다-->
 
     <!--강조 아이콘 버튼(메인 버튼) / 배경 / 회색 아이콘 / 폰트 / 텍스트 배경-->

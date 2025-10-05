@@ -31,6 +31,18 @@
             app:layout_constraintTop_toTopOf="parent"
             />
 
+        <ImageView
+            android:id="@+id/main_search_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_search"
+            android:layout_marginEnd="20dp"
+            android:visibility="invisible"
+            style="@style/freesentation6_20sp_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
         <TextView
             android:id="@+id/main_title_tv"
             android:layout_width="wrap_content"

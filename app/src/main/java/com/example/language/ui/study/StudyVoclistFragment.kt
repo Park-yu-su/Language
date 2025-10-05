@@ -5,12 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.language.R
 import com.example.language.adapter.VocListAdapter
+import com.example.language.api.study.viewModel.StudyViewModel
 import com.example.language.data.VocData
 import com.example.language.databinding.FragmentStudyVoclistBinding
+import com.example.language.ui.home.MainActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,6 +31,8 @@ class StudyVoclistFragment : Fragment() {
     private var param2: String? = null
 
     private lateinit var binding: FragmentStudyVoclistBinding
+
+    private val studyViewModel: StudyViewModel by activityViewModels() // Activity 스코프 공유
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +55,24 @@ class StudyVoclistFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        (activity as MainActivity).setTopBar("공부하기", false, true)
+        (activity as MainActivity).showSearchIcon(true)
+
+        //검색 버튼 관찰
+        studyViewModel.searchEventStart.observe(viewLifecycleOwner) { start ->
+            if (start) {
+                //이동
+                var action = StudyVoclistFragmentDirections.actionStudyVoclistFragmentToVocSearchFragment()
+                findNavController().navigate(action)
+
+                // 이벤트 소비 후 false로 설정하여 재실행 방지
+                studyViewModel.searchEventStart.value = false
+            }
+
+        }
+
+
+
         //임시 데이터
         var vocList = mutableListOf(
             VocData("고등 필수 단어 100", mutableListOf("고등"), "owner1"),
@@ -68,6 +91,11 @@ class StudyVoclistFragment : Fragment() {
         binding.studyRecyclerview.adapter = adapter
 
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        (activity as MainActivity).showSearchIcon(false)
     }
 
     companion object {

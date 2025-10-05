@@ -2,9 +2,9 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph_study2"
-    app:startDestination="@id/studyVoclistFragment"
-    >
+    android:id="@+id/nav_graph_study"
+    app:startDestination="@id/studyVoclistFragment">
+
 
     <fragment
         android:id="@+id/studyVoclistFragment"
@@ -15,6 +15,10 @@
         <action
             android:id="@+id/action_studyVoclistFragment_to_studyWordlistFragment"
             app:destination="@id/studyWordlistFragment"/>
+
+        <action
+            android:id="@+id/action_studyVoclistFragment_to_vocSearchFragment"
+            app:destination="@id/studyVocsearchFragment"/>
 
     </fragment>
 
@@ -39,15 +43,13 @@
 
     </fragment>
 
-
-
     <fragment
         android:id="@+id/studyVocsearchFragment"
         android:name="com.example.language.ui.study.StudyVocsearchFragment"
         android:label="단어장 검색"
-        tools:layout="@layout/fragment_study_vocsearch"/>
+        tools:layout="@layout/fragment_study_vocsearch">
 
 
-
+    </fragment>
 
 </navigation>

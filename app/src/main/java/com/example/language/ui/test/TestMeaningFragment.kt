@@ -9,6 +9,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.animation.OvershootInterpolator
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.language.R
 import com.example.language.data.WordData
@@ -46,6 +47,7 @@ class TestMeaningFragment : Fragment() {
     )
     private var nowWordIndex = 0
     private var totalWord = tmpData.size
+    private var isLike = false
 
     //팝 애니메이션
     private lateinit var papAnim : Animation
@@ -84,25 +86,30 @@ class TestMeaningFragment : Fragment() {
         //각 버튼 리스너
         binding.meanAnswer1Btn.setOnClickListener {
             binding.meanAnswer1Btn.startAnimation(papAnim)
-            handleAnswer(binding.meanAnswer1Btn.text.toString())
+            handleAnswer(binding.meanAnswer1Tv.text.toString(), 1)
         }
         binding.meanAnswer2Btn.setOnClickListener {
             binding.meanAnswer2Btn.startAnimation(papAnim)
-            handleAnswer(binding.meanAnswer2Btn.text.toString())
+            handleAnswer(binding.meanAnswer2Tv.text.toString(), 2)
         }
         binding.meanAnswer3Btn.setOnClickListener {
             binding.meanAnswer3Btn.startAnimation(papAnim)
-            handleAnswer(binding.meanAnswer3Btn.text.toString())
+            handleAnswer(binding.meanAnswer3Tv.text.toString(), 3)
         }
         binding.meanAnswer4Btn.setOnClickListener {
             binding.meanAnswer4Btn.startAnimation(papAnim)
-            handleAnswer(binding.meanAnswer4Btn.text.toString())
+            handleAnswer(binding.meanAnswer4Tv.text.toString(), 4)
         }
 
         binding.meanBackBtn.setOnClickListener {
             binding.meanBackBtn.startAnimation(papAnim)
             navigateToHome()
 
+        }
+
+        binding.meanLikeBtn.setOnClickListener {
+            binding.meanLikeBtn.startAnimation(papAnim)
+            handleLike()
         }
     }
 
@@ -111,52 +118,102 @@ class TestMeaningFragment : Fragment() {
         requireActivity().onBackPressed()
     }
 
-    private fun handleAnswer(select: String){
-        //정답
-        if(select == tmpData.get(nowWordIndex).meanings.get(0)){
-            showAnimate(true)
+    //좋아요 관리
+    fun handleLike(){
+        val likeBtn = binding.meanLikeBtn
+        //안좋아
+        if(!isLike){
+            isLike = true
+            likeBtn.setImageResource(R.drawable.ic_like_heart)
+
         }
         else{
-            showAnimate(false)
+            isLike = false
+            likeBtn.setImageResource(R.drawable.ic_like_heart2)
+        }
+
+    }
+
+    private fun handleAnswer(select: String, numBtn: Int){
+        //정답
+        if(select == tmpData.get(nowWordIndex).meanings.get(0)){
+            showResult(true, numBtn)
+        }
+        else{
+            showResult(false, numBtn)
         }
     }
 
-    private fun showAnimate(check: Boolean){
-        val imgCheck = binding.meanCheckAnswerImv
+    private fun showResult(check: Boolean, btnNum: Int){
         //1. 모양 맞추기
+        var nowBtn = binding.meanAnswer1Btn
+        var nowCheckBtn = binding.meanAnswer1Imv
+        if(btnNum == 2){nowBtn = binding.meanAnswer2Btn
+            nowCheckBtn = binding.meanAnswer2Imv}
+        else if(btnNum == 3){nowBtn = binding.meanAnswer3Btn
+            nowCheckBtn = binding.meanAnswer3Imv}
+        else if(btnNum == 4){nowBtn = binding.meanAnswer4Btn
+            nowCheckBtn = binding.meanAnswer4Imv}
+
+        binding.meanAnswer1Btn.isEnabled = false
+        binding.meanAnswer2Btn.isEnabled = false
+        binding.meanAnswer3Btn.isEnabled = false
+        binding.meanAnswer4Btn.isEnabled = false
+
+
+        //정답이면 바꾸기
         if(check){
-            imgCheck.setImageResource(R.drawable.ic_correct_o)
-        }
-        else{
-            imgCheck.setImageResource(R.drawable.ic_correct_x)
-        }
-        //2. 초기 상태
-        imgCheck.visibility = View.VISIBLE
-        imgCheck.alpha = 0f
-        imgCheck.scaleX = 0.5f
-        imgCheck.scaleY = 0.5f
-
-        //3. 애니메이션 실행
-        imgCheck.animate()
-            .alpha(1f)
-            .scaleX(1f)
-            .scaleY(1f)
-            .setDuration(500)
-            .setInterpolator(OvershootInterpolator())
-            .withEndAction {
-                //4. 애니메이션 종료 후 코루틴을 사용하여 딜레이 처리
-                viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
-                    delay(1000)
-                    imgCheck.visibility = View.INVISIBLE
-
-                    if(check){
-                        nowWordIndex++
-                        updateUI()
-                    }
-                }
+            nowBtn.apply {
+                strokeWidth = 2
+                strokeColor = ContextCompat.getColor(requireContext(), R.color.Main1_1)
+                //backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.Main1_5)
+                nowCheckBtn.visibility = View.VISIBLE
+                nowCheckBtn.setImageResource(R.drawable.ic_correct_blue)
             }
-            .start()
+        }
+        //오답이면 바꾸기
+        else{
+            nowBtn.apply {
+                strokeWidth = 2
+                strokeColor = ContextCompat.getColor(requireContext(), R.color.redStroke)
+                backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.redBackground)
+                nowCheckBtn.visibility = View.VISIBLE
+                nowCheckBtn.setImageResource(R.drawable.ic_correct_no_red)
+            }
+        }
 
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+            delay(1000)
+            reResult(btnNum)
+            nowWordIndex++
+            updateUI()
+        }
+
+
+    }
+
+    private fun reResult(btnNum: Int){
+        //1. 모양 맞추기
+        var nowBtn = binding.meanAnswer1Btn
+        var nowCheckBtn = binding.meanAnswer1Imv
+        if(btnNum == 2){nowBtn = binding.meanAnswer2Btn
+            nowCheckBtn = binding.meanAnswer2Imv}
+        else if(btnNum == 3){nowBtn = binding.meanAnswer3Btn
+            nowCheckBtn = binding.meanAnswer3Imv}
+        else if(btnNum == 4){nowBtn = binding.meanAnswer4Btn
+            nowCheckBtn = binding.meanAnswer4Imv}
+
+        binding.meanAnswer1Btn.isEnabled = true
+        binding.meanAnswer2Btn.isEnabled = true
+        binding.meanAnswer3Btn.isEnabled = true
+        binding.meanAnswer4Btn.isEnabled = true
+
+        //이 이후에 버튼 or 시간 지나고 바꾸기
+        nowBtn.apply {
+            strokeWidth = 0
+            backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.Main1_5)
+            nowCheckBtn.visibility = View.INVISIBLE
+        }
     }
 
 
@@ -172,10 +229,10 @@ class TestMeaningFragment : Fragment() {
             binding.meanProgressTv.text = "${nowWordIndex + 1}/${totalWord}"
             binding.meanProgressbar.progress = nowWordIndex + 1
 
-            binding.meanAnswer1Btn.text = nowWord.meanings.get(0)
-            binding.meanAnswer2Btn.text = nowWord.meanings.get(1)
-            binding.meanAnswer3Btn.text = nowWord.meanings.get(2)
-            binding.meanAnswer4Btn.text = nowWord.meanings.get(3)
+            binding.meanAnswer1Tv.text = nowWord.meanings.get(0)
+            binding.meanAnswer2Tv.text = nowWord.meanings.get(1)
+            binding.meanAnswer3Tv.text = nowWord.meanings.get(2)
+            binding.meanAnswer4Tv.text = nowWord.meanings.get(3)
 
 
 
@@ -183,8 +240,7 @@ class TestMeaningFragment : Fragment() {
         //끝나면
         else{
             Toast.makeText(context, "테스트 완료!", Toast.LENGTH_LONG).show()
-            
-
+            navigateToHome()
         }
     }
 
