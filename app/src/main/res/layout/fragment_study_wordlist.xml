@@ -4,7 +4,44 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#F5F5F5"
     tools:context=".ui.study.StudyWordlistFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/study_word_topbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="20dp"
+        android:background="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+        <ImageView
+            android:id="@+id/study_word_back_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_back_btn"
+            android:layout_marginStart="10dp"
+            android:visibility="visible"
+            style="@style/freesentation6_20sp_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/study_word_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="단어장 이름"
+            style="@style/pretendard_22sp_semibold"
+            android:textColor="@color/Black"
+            android:layout_marginStart="5dp"
+            app:layout_constraintStart_toEndOf="@id/study_word_back_btn"
+            app:layout_constraintTop_toTopOf="@id/study_word_back_btn"
+            app:layout_constraintBottom_toBottomOf="@id/study_word_back_btn"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/study_word_recyclerview"
@@ -13,7 +50,7 @@
         android:clipToPadding="false"
         android:paddingVertical="20dp"
         android:scrollbars="vertical"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/study_word_topbar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

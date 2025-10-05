@@ -148,7 +148,7 @@ class TestSpeakingFragment : Fragment() {
 
     //홈 화면 이동
     fun navigateToHome(){
-        requireActivity().onBackPressed()
+        requireActivity().onBackPressedDispatcher.onBackPressed()
     }
 
     //좋아요 관리
