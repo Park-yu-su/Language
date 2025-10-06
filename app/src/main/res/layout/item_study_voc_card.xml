@@ -34,6 +34,17 @@
             app:layout_constraintBottom_toBottomOf="@id/study_icon_imv"
             />
 
+        <ImageView
+            android:id="@+id/study_vocAdd_btn"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_plus"
+            android:visibility="invisible"
+            app:layout_constraintTop_toTopOf="@id/study_icon_imv"
+            app:layout_constraintBottom_toBottomOf="@id/study_icon_imv"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
         <View
             android:id="@+id/stduy_divide_view"
             android:layout_width="0dp"
