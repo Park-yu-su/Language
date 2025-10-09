@@ -2,38 +2,26 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="72dp"
+    android:layout_height="wrap_content"
     android:layout_marginHorizontal="10dp"
     android:layout_marginVertical="8dp"
-    app:cardCornerRadius="10dp"
+    app:cardCornerRadius="12dp"
     android:backgroundTint="#FFFFFF">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingHorizontal="12dp">
+        android:paddingVertical="12dp"
+        android:paddingHorizontal="16dp">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/status_guide_line"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.8" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/status_guide_line2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.37" />
 
         <!-- 프로필 이미지 -->
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/friendAdd_profile"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:src="@color/Gray4"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_menu_home"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -41,52 +29,47 @@
         <!-- 친구 이름 텍스트 뷰 -->
         <TextView
             android:id="@+id/friendAdd_tv_name"
-            style="@style/freesentation5_24sp_title"
-            android:textSize="22sp"
+            style="@style/pretendard_16sp_semibold"
             android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:gravity="center"
-            android:paddingStart="12dp"
-            android:paddingEnd="4dp"
-            android:scaleType="centerCrop"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="@color/Black"
             android:text="닉네임"
             app:layout_constraintStart_toEndOf="@id/friendAdd_profile"
-            app:layout_constraintEnd_toStartOf="@id/status_guide_line2"
             app:layout_constraintTop_toTopOf="@id/friendAdd_profile"
-            app:layout_constraintTop_toBottomOf="@id/friendAdd_profile"/>
+            app:layout_constraintEnd_toStartOf="@id/friendAdd_action_btn"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintVertical_chainStyle="packed"/>
 
 
         <TextView
             android:id="@+id/friendAdd_tv_status"
-            style="@style/freesentation5_16sp_icon"
+            style="@style/pretendard_14sp_medium"
             android:text="(자기소개)"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            app:layout_constraintStart_toEndOf="@id/status_guide_line2"
-            app:layout_constraintEnd_toStartOf="@id/status_guide_line"
-            app:layout_constraintTop_toTopOf="@id/friendAdd_tv_name"
-            app:layout_constraintBottom_toBottomOf="@id/friendAdd_tv_name"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="2dp"
             android:maxLines="2"
             android:ellipsize="end"
-            android:breakStrategy="simple"
-            android:hyphenationFrequency="none"
-            android:includeFontPadding="false" />
-
+            android:textColor="@color/Gray1"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@id/friendAdd_profile"
+            app:layout_constraintTop_toBottomOf="@id/friendAdd_tv_name"
+            app:layout_constraintEnd_toStartOf="@id/friendAdd_action_btn"
+            app:layout_constraintBottom_toBottomOf="@id/friendAdd_profile" />
 
         <ImageView
-            android:id="@+id/friendAdd_add_btn"
+            android:id="@+id/friendAdd_action_btn"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:scaleType="centerCrop"
-            android:src="@color/colorPrimary"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/ic_plus"
+            android:padding="4dp"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/status_guide_line"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
+            />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -33,13 +33,13 @@ class FriendAddAdapter(
                     binding.friendAddTvStatus.text = item.introduce
                 
                     //일단 버튼 누를 시 뿅
-                    binding.friendAddAddBtn.setOnClickListener { 
+                    binding.friendAddActionBtn.setOnClickListener {
                         //일단 콜백함수로 빼서 처리
                         onRequestClick(item)
 
                         //일단 FriendData 부분에 isRequest 부분을 추가해서 누르면 더 이상 요청 안되게 막기
-                        binding.friendAddAddBtn.isEnabled = false
-                        binding.friendAddAddBtn.setImageResource(R.color.colorBellIcon)
+                        binding.friendAddActionBtn.isEnabled = false
+                        binding.friendAddActionBtn.setImageResource(R.color.colorBellIcon)
 
                     }
                 

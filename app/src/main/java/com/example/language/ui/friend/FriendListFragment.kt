@@ -8,12 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.language.R
 import com.example.language.adapter.FriendListAdapter
+import com.example.language.api.friend.viewModel.FriendViewModel
 import com.example.language.data.FriendData
 import com.example.language.databinding.FragmentFriendListBinding
-import com.example.language.viewModel.FriendViewModel
+import com.example.language.ui.home.MainActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -32,7 +34,9 @@ class FriendListFragment : Fragment() {
     private lateinit var adatper : FriendListAdapter
 
     //FriendFragment가 소유한 ViewModel 인스턴스를 사용
-    private val viewModel: FriendViewModel by activityViewModels()
+    private val friendViewModel: FriendViewModel by activityViewModels()
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +54,21 @@ class FriendListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //상단 바
+        (activity as? MainActivity)?.setUIVisibility(true)
+
+        (activity as MainActivity).setTopBar("친구", false, true)
+        (activity as MainActivity).showToprightIcon(true, 2)
+
+        //친구 기능 관찰
+        friendViewModel.friendEventStart.observe(viewLifecycleOwner){start ->
+            if(start){
+                findNavController().navigate(R.id.action_FriendListFragment_to_friendHandleFragment)
+                friendViewModel.friendEventStart.value = false
+            }
+        }
+
+
         //임시 데이터 셋
         friendList.add(FriendData("1","친구1", "자기소개"))
         friendList.add(FriendData("2","친구2", "자기소개"))
@@ -57,22 +76,18 @@ class FriendListFragment : Fragment() {
 
         settingRecyclerView()
 
-        //LiveData 관찰
-        viewModel.friendList.observe(viewLifecycleOwner) { newList ->
-            friendList = newList
-            adatper.notifyDataSetChanged()
-        }
-        viewModel.isDelete.observe(viewLifecycleOwner){ isDelete ->
-            adatper.isDelete = isDelete
-            Log.d("log_friend", "FriendListFragment 친구삭제 모드: $isDelete")
-            adatper.notifyDataSetChanged()
-        }
 
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        //(activity as MainActivity).showToprightIcon(false, 2)
     }
 
 
     private fun settingRecyclerView(){
-        adatper = FriendListAdapter(friendList, isDelete = viewModel.isDelete.value ?: false,
+        adatper = FriendListAdapter(friendList,
             onAlarmClicked = {
 
         })

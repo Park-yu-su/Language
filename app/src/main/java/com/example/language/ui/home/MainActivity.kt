@@ -16,6 +16,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.language.R
+import com.example.language.api.friend.viewModel.FriendViewModel
 import com.example.language.api.study.viewModel.StudyViewModel
 import com.example.language.databinding.ActivityMainBinding
 import com.kakao.sdk.common.util.Utility
@@ -27,6 +28,8 @@ class MainActivity : AppCompatActivity() {
 
     //검색용 ViewModel
     private val searchViewModel: StudyViewModel by viewModels()
+    private val friendViewModel: FriendViewModel by viewModels()
+    private var showMode = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,9 +44,14 @@ class MainActivity : AppCompatActivity() {
         //binding.mainBnv.setupWithNavController(navController)
         setupBottomNavListener(navController)
 
-        //검색 버튼 누를 시
+        //우상단 버튼을 누를 경우, showMode의 값에 따라 다른 ViewMoel 값을 변경한다.
         binding.mainSearchBtn.setOnClickListener {
-            searchViewModel.searchEventStart.value = true
+            if(showMode == 1) {
+                searchViewModel.searchEventStart.value = true
+            }
+            else if(showMode == 2){
+                friendViewModel.friendEventStart.value = true
+            }
         }
 
 
@@ -133,6 +141,7 @@ class MainActivity : AppCompatActivity() {
 
 
     //다른 Fragment에서 Topbar 제어를 위한 메소드
+    //mytitle: topbar에 적힐 이름 / isBackVisible: 뒤로가기 버튼 보여주기 / isBule: topbar 색깔 (파랑/흰색)
     fun setTopBar(mytitle: String, isBackVisible: Boolean, isBlue: Boolean){
         binding.mainTitleTv.text = mytitle
         binding.mainBackBtn.visibility = if (isBackVisible) View.VISIBLE else View.INVISIBLE
@@ -148,8 +157,18 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun showSearchIcon(boolean: Boolean){
+    //우상단 버튼 보여주기 및 로직
+    fun showToprightIcon(boolean: Boolean, mode: Int){
         binding.mainSearchBtn.visibility = if (boolean) View.VISIBLE else View.INVISIBLE
+
+        if(mode == 1){
+            showMode = 1
+            binding.mainSearchBtn.setImageResource(R.drawable.ic_search)
+        }
+        else if(mode == 2){
+            showMode = 2
+            binding.mainSearchBtn.setImageResource(R.drawable.ic_friend_handle)
+        }
     }
 
 }

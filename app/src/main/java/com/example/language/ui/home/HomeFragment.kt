@@ -49,6 +49,7 @@ class HomeFragment : Fragment() {
 
         //색깔 정의
         (activity as MainActivity).setTopBar("찍어보카", false, true)
+        (activity as MainActivity).showToprightIcon(false, 1)
 
         //단어 테스트 로직
         binding.homeTestBtn.setOnClickListener {

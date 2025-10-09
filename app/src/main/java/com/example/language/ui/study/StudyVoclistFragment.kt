@@ -59,7 +59,7 @@ class StudyVoclistFragment : Fragment() {
         (activity as? MainActivity)?.setUIVisibility(true)
 
         (activity as MainActivity).setTopBar("공부하기", false, true)
-        (activity as MainActivity).showSearchIcon(true)
+        (activity as MainActivity).showToprightIcon(true, 1)
 
         //검색 버튼 관찰
         studyViewModel.searchEventStart.observe(viewLifecycleOwner) { start ->
@@ -98,7 +98,7 @@ class StudyVoclistFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        (activity as MainActivity).showSearchIcon(false)
+        //(activity as MainActivity).showToprightIcon(false, 1)
     }
 
     companion object {

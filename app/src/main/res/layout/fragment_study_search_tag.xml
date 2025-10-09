@@ -51,7 +51,7 @@
                 <!-- 친구 검색 텍스트 -->
                 <EditText
                     android:id="@+id/searchtag_search_edt"
-                    style="@style/freesentation4_16sp"
+                    style="@style/pretendard_16sp_medium"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

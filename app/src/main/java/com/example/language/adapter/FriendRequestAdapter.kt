@@ -26,7 +26,7 @@ class FriendRequestAdapter(
                 .into(binding.friendRequestProfile)
             * */
             binding.friendRequestTvName.text = data.name
-            binding.friendReqestTvStatus.text = data.introduce
+            binding.friendRequestTvStatus.text = data.introduce
 
             //수락 시 콜백 후 제거
             binding.friendRequestAcceptBtn.setOnClickListener {
