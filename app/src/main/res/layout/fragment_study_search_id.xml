@@ -92,27 +92,28 @@
             android:id="@+id/searchid_searchInfo_ll"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
+            android:gravity="center_horizontal"
             android:visibility="visible"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             >
 
 
             <TextView
-                style="@style/freesentation6_24sp_title"
+                android:id="@+id/searchid_SearchInfo_tv"
+                style="@style/pretendard_14sp_medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="아이디는 어디서 확인하나요?"
-                android:textColor="#BCBCBC" />
+                android:text="내 단어장 ID를 모르겠어요"
+                android:textColor="@color/Gray2" />
 
-            <TextView
-                style="@style/freesentation4_16sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:text="마이페이지 → 내정보 → 아이디 복사"
-                android:textColor="#BCBCBC" />
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="5dp"
+                android:src="@drawable/ic_question"/>
+
         </LinearLayout>
 
         <!-- 검색 결과 없음 안내 -->
@@ -133,6 +134,7 @@
                 style="@style/pretendard_14sp_semibold"
                 android:text="검색 결과가 없습니다."
                 android:textColor="#999999"
+                android:visibility="invisible"
                 android:textSize="14sp" />
         </LinearLayout>
 

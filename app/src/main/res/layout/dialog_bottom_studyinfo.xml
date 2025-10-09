@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="30dp"
+    android:background="@drawable/bg_bottom_dialog_round"
+    >
+
+    <TextView
+        android:id="@+id/dialog_bottom_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/pretendard_16sp_semibold"
+        android:text="내 단어장 ID는\n'마이페이지 > 단어장 관리'에서 확인할 수 있어요"
+        android:gravity="center_horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:id="@+id/dialog_bottom_imv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/img_searchid_example"
+        app:layout_constraintDimensionRatio="1.74:1"
+        app:layout_constraintStart_toStartOf="@id/dialog_bottom_tv"
+        app:layout_constraintEnd_toEndOf="@id/dialog_bottom_tv"
+        app:layout_constraintTop_toBottomOf="@id/dialog_bottom_tv"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

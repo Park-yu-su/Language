@@ -91,7 +91,12 @@ class StudySearchIdFragment : Fragment() {
             }
         )
 
+        binding.searchidSearchInfoTv.setOnClickListener {
+            val bottomSheet = BottomSheetDialog.newInstance()
+            // requireFragmentManager() 또는 childFragmentManager 사용
+            bottomSheet.show(childFragmentManager, BottomSheetDialog.TAG)
 
+        }
 
     }
 

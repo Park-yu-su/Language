@@ -53,7 +53,7 @@ class StudyWordDetailFragment : Fragment() {
 
         //일단 임시 데이터
         val wordList: MutableList<WordData> = mutableListOf(
-            WordData("word", mutableListOf("meanings", "meanings", "meanings", "meanings"), "example"),
+            WordData("word", mutableListOf("뜻1", "뜻2", "뜻3", "뜻4"), "This word is example."),
             WordData("word2", mutableListOf("meanings", "meanings", "meanings", "meanings"), "example2"),
             WordData("word3", mutableListOf("meanings", "meanings", "meanings", "meanings"), "example3"),
             WordData("word4", mutableListOf("meanings", "meanings", "meanings", "meanings"), "example4"),
