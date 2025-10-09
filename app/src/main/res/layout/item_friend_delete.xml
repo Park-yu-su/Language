@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="10dp"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="12dp"
+    android:backgroundTint="#FFFFFF">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingVertical="12dp"
+        android:paddingHorizontal="16dp">
+
+
+        <!-- 프로필 이미지 -->
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/friendDelete_profile"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@color/Gray4"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- 친구 이름 텍스트 뷰 -->
+        <TextView
+            android:id="@+id/friendDelete_tv_name"
+            style="@style/pretendard_16sp_semibold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="@color/Black"
+            android:text="닉네임"
+            app:layout_constraintStart_toEndOf="@id/friendDelete_profile"
+            app:layout_constraintTop_toTopOf="@id/friendDelete_profile"
+            app:layout_constraintEnd_toStartOf="@id/friendDelete_action_btn"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintVertical_chainStyle="packed"/>
+
+
+        <TextView
+            android:id="@+id/friendDelete_tv_status"
+            style="@style/pretendard_14sp_medium"
+            android:text="(자기소개)"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="2dp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:textColor="@color/Gray1"
+            android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@id/friendDelete_profile"
+            app:layout_constraintTop_toBottomOf="@id/friendDelete_tv_name"
+            app:layout_constraintEnd_toStartOf="@id/friendDelete_action_btn"
+            app:layout_constraintBottom_toBottomOf="@id/friendDelete_profile" />
+
+        <ImageView
+            android:id="@+id/friendDelete_action_btn"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_close"
+            android:padding="4dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

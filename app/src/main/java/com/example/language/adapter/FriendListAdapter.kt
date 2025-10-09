@@ -35,17 +35,7 @@ class FriendListAdapter(private var friendList: MutableList<FriendData>,
                 onAlarmClicked()
             }
 
-            /*
-            binding.friendDeleteBtn.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION) {
-                    val friend = friendList[adapterPosition]
-                    /**API 호출**/
 
-                    //UI 제거
-                    friendList.removeAt(adapterPosition)
-                    notifyItemRemoved(adapterPosition)
-                }
-            }*/
         }
     }
 
