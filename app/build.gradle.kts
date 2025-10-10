@@ -127,4 +127,7 @@ dependencies {
     kapt("androidx.room:room-compiler:$roomVersion")
 
 
+    //flexLayout (유연한 recycler)
+    implementation("com.google.android.flexbox:flexbox:3.0.0")
+
 }

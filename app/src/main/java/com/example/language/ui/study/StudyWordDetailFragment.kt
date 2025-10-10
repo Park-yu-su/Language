@@ -9,6 +9,7 @@ import com.example.language.R
 import com.example.language.adapter.WordPagerAdapter
 import com.example.language.data.WordData
 import com.example.language.databinding.FragmentStudyWordDetailBinding
+import com.example.language.ui.home.MainActivity
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -47,9 +48,12 @@ class StudyWordDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //상단 바 제거
+        (activity as? MainActivity)?.setUIVisibility(false)
+
         //일단 임시 데이터
         val wordList: MutableList<WordData> = mutableListOf(
-            WordData("word", mutableListOf("meanings", "meanings", "meanings", "meanings"), "example"),
+            WordData("word", mutableListOf("뜻1", "뜻2", "뜻3", "뜻4"), "This word is example."),
             WordData("word2", mutableListOf("meanings", "meanings", "meanings", "meanings"), "example2"),
             WordData("word3", mutableListOf("meanings", "meanings", "meanings", "meanings"), "example3"),
             WordData("word4", mutableListOf("meanings", "meanings", "meanings", "meanings"), "example4"),
@@ -61,9 +65,17 @@ class StudyWordDetailFragment : Fragment() {
         binding.wordViewPager.adapter = WordPagerAdapter(this, wordList)
         binding.wordViewPager.setCurrentItem(startIndex, false)
 
+        //뒤로가기
+        binding.wordDetailBackBtn.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+
     }
 
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+    }
 
 
     companion object {

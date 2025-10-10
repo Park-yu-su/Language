@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_study"
+    app:startDestination="@id/studyVoclistFragment">
+
+
+    <fragment
+        android:id="@+id/studyVoclistFragment"
+        android:name="com.example.language.ui.study.StudyVoclistFragment"
+        android:label="내 단어장 리스트"
+        tools:layout="@layout/fragment_study_voclist">
+
+        <action
+            android:id="@+id/action_studyVoclistFragment_to_studyWordlistFragment"
+            app:destination="@id/studyWordlistFragment"/>
+
+        <action
+            android:id="@+id/action_studyVoclistFragment_to_vocSearchFragment"
+            app:destination="@id/studyVocsearchFragment"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/studyWordlistFragment"
+        android:name="com.example.language.ui.study.StudyWordlistFragment"
+        android:label="단어장의 단어 리스트"
+        tools:layout="@layout/fragment_study_wordlist">
+
+        <action
+            android:id="@+id/action_studyWordlistFragment_to_studyWordDetailFragment"
+            app:destination="@id/studyWordDetailFragment"/>
+
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/studyWordDetailFragment"
+        android:name="com.example.language.ui.study.StudyWordDetailFragment"
+        android:label="단어 상세"
+        tools:layout="@layout/fragment_study_word_detail">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/studyVocsearchFragment"
+        android:name="com.example.language.ui.study.StudyVocsearchFragment"
+        android:label="단어장 검색"
+        tools:layout="@layout/fragment_study_vocsearch">
+
+
+    </fragment>
+
+</navigation>

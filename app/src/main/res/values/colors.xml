@@ -17,6 +17,10 @@
     <color name="Main1_4">#EAF5FF</color>
     <color name="Main1_5">#F2F9FF</color>
     <color name="Sub1">#FFBE00</color>
+    <color name="BG">#FAFAFA</color>
+
+    <color name="redStroke">#F64242</color>
+    <color name="redBackground">#FFEAEA</color>
 
     <!-- 아래 꺼는 Depricated된 색깔들입니다. 삭제 시 오류 발생 위험을 위해 새로 추가합니다-->
 

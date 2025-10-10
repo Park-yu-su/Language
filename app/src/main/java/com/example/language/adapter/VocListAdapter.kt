@@ -18,7 +18,7 @@ class VocListAdapter(
 
             //단어 바인딩
             binding.stduyVocNameTv.text = data.title
-            binding.stduyVocTagTv.text = data.tags.toString()
+
 
             //해당 단어 누를 때 함수 콜백
             binding.root.setOnClickListener {

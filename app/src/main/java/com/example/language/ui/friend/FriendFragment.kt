@@ -82,7 +82,7 @@ class FriendFragment : Fragment() {
             binding.friendRequestBtn.setBackgroundResource(R.drawable.bg_btn_primary_press)
             binding.friendRequestTv.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
             //친구 요청 목록 표시
-            navController.navigate(R.id.FriendRequestFragment)
+            //navController.navigate(R.id.FriendRequestFragment)
         }
 
         //친구 삭제 버튼
@@ -103,7 +103,6 @@ class FriendFragment : Fragment() {
         binding.friendAddFriendBtn.setOnClickListener {
             //나를 호스팅하는 navController get
             navController.navigate(R.id.FriendListFragment)
-            findNavController().navigate(R.id.action_friendFragment_to_friendAddFragment)
         }
 
 

@@ -9,7 +9,6 @@ import com.example.language.data.FriendData
 import com.example.language.databinding.ItemFriendBinding
 
 class FriendListAdapter(private var friendList: MutableList<FriendData>,
-                        var isDelete: Boolean = false,
                         private val onAlarmClicked: () -> Unit,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -31,25 +30,12 @@ class FriendListAdapter(private var friendList: MutableList<FriendData>,
             binding.friendTvName.text = friend.name
             binding.friendTvStatus.text = friend.introduce
 
-            //삭제 눌렀나에 여부에 따라 보이는 버튼 diff
-            binding.friendAlramBtn.visibility = if (isDelete) View.GONE else View.VISIBLE
-            binding.friendDeleteBtn.visibility = if (isDelete) View.VISIBLE else View.GONE
-
             //각 버튼에 콜백 함수 전달
-            binding.friendAlramBtn.setOnClickListener {
+            binding.friendActionBtn.setOnClickListener {
                 onAlarmClicked()
             }
 
-            binding.friendDeleteBtn.setOnClickListener {
-                if (adapterPosition != RecyclerView.NO_POSITION) {
-                    val friend = friendList[adapterPosition]
-                    /**API 호출**/
 
-                    //UI 제거
-                    friendList.removeAt(adapterPosition)
-                    notifyItemRemoved(adapterPosition)
-                }
-            }
         }
     }
 

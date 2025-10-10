@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_friend2"
-    app:startDestination="@id/FriendListFragment"
     >
 
+    <!--
     <fragment
         android:id="@+id/FriendListFragment"
         android:name="com.example.language.ui.friend.FriendListFragment"
@@ -20,5 +20,6 @@
 
     </fragment>
 
+    -->
 
 </navigation>

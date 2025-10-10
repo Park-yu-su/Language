@@ -47,12 +47,15 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
+        //색깔 정의
+        (activity as MainActivity).setTopBar("찍어보카", false, true)
+        (activity as MainActivity).showToprightIcon(false, 1)
 
         //단어 테스트 로직
         binding.homeTestBtn.setOnClickListener {
             val navController = findNavController()
             navController.navigate(R.id.action_homeFragment_to_testFragment)
+
 
         }
 

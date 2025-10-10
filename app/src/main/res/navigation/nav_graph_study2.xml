@@ -15,6 +15,9 @@
         <action
             android:id="@+id/action_studyVoclistFragment_to_studyWordlistFragment"
             app:destination="@id/studyWordlistFragment"/>
+        <action
+            android:id="@+id/action_studyVoclistFragment_to_vocSearchFragment"
+            app:destination="@id/studyVocsearchFragment"/>
 
     </fragment>
 

@@ -1,6 +1,7 @@
 package com.example.language.ui.study
 
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,8 @@ import com.example.language.R
 import com.example.language.adapter.WordListAdapter
 import com.example.language.data.WordData
 import com.example.language.databinding.FragmentStudyWordlistBinding
+import com.example.language.ui.home.MainActivity
+import java.util.Locale
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,6 +29,9 @@ class StudyWordlistFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    //TTS
+    private lateinit var textToSpeech: TextToSpeech
 
     private lateinit var binding: FragmentStudyWordlistBinding
 
@@ -49,6 +55,16 @@ class StudyWordlistFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //상단 바 제거
+        (activity as? MainActivity)?.setUIVisibility(false)
+
+        //TTS 세팅
+        textToSpeech = TextToSpeech(requireContext()) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                textToSpeech.language = Locale.US
+            }
+        }
+
         //일단 임시 데이터
         val wordList: MutableList<WordData> = mutableListOf(
             WordData("word", mutableListOf("meanings", "meanings", "meanings", "meanings"), "example"),
@@ -58,13 +74,26 @@ class StudyWordlistFragment : Fragment() {
             WordData("word5", mutableListOf("meanings", "meanings", "meanings", "meanings"), "example5")
         )
 
-        val adapter = WordListAdapter(wordList, onItemClicked = {
+        val adapter = WordListAdapter(wordList,
+            onItemClicked = {
             val action = StudyWordlistFragmentDirections.actionStudyWordlistFragmentToStudyWordDetailFragment()
             findNavController().navigate(action)
-        })
+        },
+            onTTSRequest = { word->
+                textToSpeech.speak(word, TextToSpeech.QUEUE_FLUSH, null, null)
+            }
+        )
         binding.studyWordRecyclerview.adapter = adapter
         binding.studyWordRecyclerview.layoutManager = LinearLayoutManager(requireContext())
 
+        binding.studyWordBackBtn.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
     }
 
 

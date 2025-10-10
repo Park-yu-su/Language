@@ -2,28 +2,59 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
-    android:layout_marginHorizontal="30dp"
+    android:layout_height="99dp"
+    android:layout_marginHorizontal="25dp"
     android:layout_marginVertical="10dp"
     app:cardCornerRadius="20dp"
-    android:backgroundTint="@color/colorGrayIcon">
+    android:backgroundTint="@color/white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingHorizontal="12dp">
 
+        <ImageView
+            android:id="@+id/study_icon_imv"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_vocbook"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/stduy_divide_view"/>
+
         <TextView
             android:id="@+id/stduy_vocName_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/freesentation6_24sp_title"
+            style="@style/pretendard_16sp_semibold"
             android:text="단어장 이름"
-            android:textSize="36sp"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintStart_toEndOf="@id/study_icon_imv"
+            app:layout_constraintTop_toTopOf="@id/study_icon_imv"
+            app:layout_constraintBottom_toBottomOf="@id/study_icon_imv"
+            />
+
+        <ImageView
+            android:id="@+id/study_vocAdd_btn"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/ic_plus"
+            android:visibility="invisible"
+            app:layout_constraintTop_toTopOf="@id/study_icon_imv"
+            app:layout_constraintBottom_toBottomOf="@id/study_icon_imv"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <View
+            android:id="@+id/stduy_divide_view"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/Gray4"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
 
         <TextView
             android:id="@+id/stduy_vocTag_tv"

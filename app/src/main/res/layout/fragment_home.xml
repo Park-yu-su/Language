@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,122 +7,367 @@
     tools:context=".ui.home.HomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/home_mainBtn_cl"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/BG">
 
-        <!-- 단어 공부하기 카드 -->
+        <!--프로필 카드-->
         <androidx.cardview.widget.CardView
-            android:id="@+id/home_test_btn"
+            android:id="@+id/home_profile_cdv"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginEnd="8dp"
-            android:clickable="true"
-            app:cardBackgroundColor="@color/colorPrimary"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/home_makeVoc_btn"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
+            android:visibility="visible"
+            android:background="@color/white"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="1dp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_weight="1">
-
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="12dp">
+                android:layout_height="wrap_content"
+                android:padding="16dp">
 
-                <!--
-
-                <ImageView
-                    android:id="@+id/home_test_imv"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:src=""
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/home_profile_imv"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@color/Gray3"
+                    android:scaleType="centerCrop"
+                    app:civ_border_width="0dp"
+                    app:civ_border_color="@color/black"
+                    app:layout_constraintTop_toTopOf="@id/home_name_tv"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="@id/home_greeting_tv"
                     />
-
-                  -->
 
                 <TextView
-                    android:id="@+id/home_test_tv"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/home_name_tv"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="단어 테스트"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:textSize="16sp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:text="닉네임"
+                    style="@style/pretendard_20sp_semibold"
+                    android:layout_marginStart="10dp"
+                    app:layout_constraintStart_toEndOf="@id/home_profile_imv"
+                    app:layout_constraintTop_toTopOf="@id/home_profile_imv"
                     />
+
+                <TextView
+                    android:id="@+id/home_greeting_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    style="@style/pretendard_16sp_medium"
+                    android:text="님 안녕하세요!"
+                    android:layout_marginTop="4dp"
+                    app:layout_constraintStart_toStartOf="@id/home_name_tv"
+                    app:layout_constraintTop_toBottomOf="@id/home_name_tv"
+                    app:layout_constraintEnd_toEndOf="parent"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-
         </androidx.cardview.widget.CardView>
 
-        <!-- 단어장 만들기 카드 -->
+        <!--오늘의 단어!-->
         <androidx.cardview.widget.CardView
-            android:id="@+id/home_makeVoc_btn"
+            android:id="@+id/home_todayword_cdv"
             android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:clickable="true"
-            android:layout_marginStart="8dp"
-            app:cardBackgroundColor="@color/colorPrimary"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintStart_toEndOf="@id/home_test_btn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_weight="1">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="19dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/white"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="1dp"
+            app:layout_constraintTop_toBottomOf="@id/home_profile_cdv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="12dp">
+                android:layout_height="wrap_content"
+                android:padding="16dp">
 
-                <!--
-
-                <ImageView
-                    android:id="@+id/home_makeVoc_imv"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:src=""
+                <TextView
+                    android:id="@+id/home_todayword_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="이 단어는 어떠신가요?"
+                    style="@style/pretendard_16sp_semibold"
+                    android:textColor="@color/Gray2"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"/>
 
-                -->
+                <ImageView
+                    android:id="@+id/home_todayword_listen_btn"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:scaleType="centerCrop"
+                    android:backgroundTint="@android:color/transparent"
+                    android:src="@drawable/ic_listen"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/home_todayword_english_tv"
+                    />
+
 
                 <TextView
-                    android:id="@+id/home_makeVoc_tv"
+                    android:id="@+id/home_todayword_english_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="단어장 만들기"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:textSize="16sp"
+                    android:text="car"
+                    style="@style/pretendard_20sp_semibold"
+                    android:textColor="@color/Main1_1"
+                    android:layout_marginTop="8dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
+                    app:layout_constraintTop_toBottomOf="@id/home_todayword_tv"/>
 
+                <TextView
+                    android:id="@+id/home_todayword_koearn_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="자동차"
+                    android:textColor="@color/Black"
+                    style="@style/pretendard_20sp_medium"
+                    android:layout_marginTop="4dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/home_todayword_english_tv"/>
+
+
+                <View
+                    android:id="@+id/home_todayword_view"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="@color/Gray4"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintStart_toStartOf="@id/home_todayword_tv"
+                    app:layout_constraintEnd_toEndOf="@id/home_todayword_listen_btn"
+                    app:layout_constraintTop_toBottomOf="@id/home_todayword_koearn_tv"/>
+
+                <TextView
+                    android:id="@+id/home_todayword_example_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="I have a car."
+                    style="@style/pretendard_16sp_medium"
+                    android:textColor="@color/Black"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/home_todayword_view"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
         </androidx.cardview.widget.CardView>
 
+
+        <!--2지선다 버튼-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/home_mainBtn_cl"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@id/home_todayword_cdv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <!-- 단어 공부하기 카드 -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/home_test_btn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="8dp"
+                android:clickable="true"
+                app:cardBackgroundColor="@color/Main1_5"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/Main1_1"
+                app:layout_constraintDimensionRatio="1:1.2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/home_makeVoc_btn"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_weight="1">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="12dp">
+
+                    <ImageView
+                        android:id="@+id/home_test_imv"
+                        android:layout_width="140dp"
+                        android:layout_height="140dp"
+                        android:src="@drawable/img_wordtest"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        />
+
+
+                    <TextView
+                        android:id="@+id/home_test_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="단어 테스트"
+                        style="@style/pretendard_20sp_semibold"
+                        android:textColor="@color/Main1_1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- 단어장 만들기 카드 -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/home_makeVoc_btn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:clickable="true"
+                android:layout_marginStart="8dp"
+                app:cardBackgroundColor="@color/Main1_5"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/Main1_1"
+                app:layout_constraintDimensionRatio="1:1.2"
+                app:layout_constraintStart_toEndOf="@id/home_test_btn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_weight="1">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="12dp">
+
+                    <ImageView
+                        android:id="@+id/home_makeVoc_imv"
+                        android:layout_width="140dp"
+                        android:layout_height="140dp"
+                        android:src="@drawable/img_vocmake"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+
+                    <TextView
+                        android:id="@+id/home_makeVoc_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="단어장 만들기"
+                        style="@style/pretendard_20sp_semibold"
+                        android:textColor="@color/Main1_1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--오늘의 퀴즈-->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/home_quiz_cdv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="20dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@id/home_mainBtn_cl"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/home_todayquiz_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="오늘의 퀴즈"
+                    style="@style/pretendard_16sp_semibold"
+                    android:textColor="@color/Gray2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+
+                <!-- 1) 퀴즈 문장 (맨 위, 볼드) -->
+                <TextView
+                    android:id="@+id/home_quiz_question_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="아래 예문에서 'watch'는 '손목시계'라는 의미로 사용되었다."
+                    style="@style/pretendard_16sp_medium"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintTop_toBottomOf="@id/home_todayquiz_tv"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <!-- 2) 예문 (그 아래, 연한 색) -->
+                <TextView
+                    android:id="@+id/home_quiz_example_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="I watch tv."
+                    android:layout_marginTop="10dp"
+                    style="@style/pretendard_20sp_semibold"
+                    app:layout_constraintTop_toBottomOf="@id/home_quiz_question_tv"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+                <!-- O/X 버튼 그룹 -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/home_quiz_true_btn"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    app:strokeColor="#C1C1C1"
+                    android:text="O"
+                    android:textColor="#1500FF"
+                    android:textSize="18sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/home_quiz_false_btn"
+                    app:layout_constraintTop_toBottomOf="@id/home_quiz_example_tv"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_weight="1"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/home_quiz_false_btn"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="8dp"
+                    android:textColor="#E91E63"
+                    android:text="X"
+                    android:textSize="18sp"
+                    app:strokeColor="#C1C1C1"
+                    app:layout_constraintStart_toEndOf="@id/home_quiz_true_btn"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/home_quiz_example_tv"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintHorizontal_weight="1"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+
+
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
