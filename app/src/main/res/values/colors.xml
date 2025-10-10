@@ -17,6 +17,7 @@
     <color name="Main1_4">#EAF5FF</color>
     <color name="Main1_5">#F2F9FF</color>
     <color name="Sub1">#FFBE00</color>
+    <color name="BG">#FAFAFA</color>
 
     <color name="redStroke">#F64242</color>
     <color name="redBackground">#FFEAEA</color>
