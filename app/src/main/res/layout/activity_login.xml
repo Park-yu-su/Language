@@ -5,8 +5,54 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/Main1_5"
     tools:context=".ui.login.LoginActivity">
+
+
+    <ImageView
+        android:id="@+id/login_info_imv"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/ic_logo_blue"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintStart_toStartOf="@id/login_info1_tv"
+        app:layout_constraintBottom_toTopOf="@id/login_info1_tv"/>
+
+
+    <TextView
+        android:id="@+id/login_info1_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/pretendard_20sp_semibold"
+        android:textColor="@color/Black"
+        android:text="찍자! 익히자! 연습하자!"
+        android:layout_marginBottom="2dp"
+        app:layout_constraintStart_toStartOf="@id/login_btn"
+        app:layout_constraintBottom_toTopOf="@id/login_info2_tv"/>
+
+
+    <TextView
+        android:id="@+id/login_info2_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/pretendard_20sp_semibold"
+        android:textColor="@color/Black"
+        android:text="찍어서 만드는 나만의 단어장,"
+        android:layout_marginBottom="50dp"
+        app:layout_constraintStart_toStartOf="@id/login_btn"
+        app:layout_constraintBottom_toTopOf="@id/login_btn"/>
+
+    <TextView
+        android:id="@+id/login_info3_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/pretendard_20sp_semibold"
+        android:textColor="@color/Main1_1"
+        android:text="찍어보카"
+        android:layout_marginStart="3dp"
+        app:layout_constraintStart_toEndOf="@id/login_info2_tv"
+        app:layout_constraintTop_toTopOf="@id/login_info2_tv"
+        app:layout_constraintBottom_toBottomOf="@id/login_info2_tv"/>
 
 
     <androidx.constraintlayout.widget.Guideline

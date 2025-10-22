@@ -9,6 +9,10 @@
         android:id="@+id/nav_graph_study"
         android:icon="@drawable/ic_menu_study"
         android:title="공부하기" />
+    <item
+        android:id="@+id/nav_graph_chat"
+        android:icon="@drawable/ic_menu_chat"
+        android:title="챗봇"/>
 
     <item
         android:id="@+id/nav_graph_friend"

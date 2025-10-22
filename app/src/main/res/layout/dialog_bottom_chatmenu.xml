@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="30dp"
+    android:background="@drawable/bg_bottom_dialog_round"
+    >
+
+    <TextView
+        android:id="@+id/dialog_bottom_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/pretendard_16sp_semibold"
+        android:text="사용할 기능을 선택하세요"
+        android:gravity="center_horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
