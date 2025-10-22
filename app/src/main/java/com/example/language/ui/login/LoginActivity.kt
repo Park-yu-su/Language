@@ -5,12 +5,18 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.language.R
+import com.example.language.api.ApiResponse
+import com.example.language.api.login.LoginRepository
+import com.example.language.api.login.UserPreference
+import com.example.language.api.login.viewModel.LoginViewModel
+import com.example.language.api.login.viewModel.LoginViewModelFactory
 import com.example.language.databinding.ActivityLoginBinding
 import com.example.language.ui.home.MainActivity
 import com.kakao.sdk.auth.TokenManagerProvider
@@ -26,12 +32,28 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
 
+    //API 테스트
+    private var loginRepository = LoginRepository()
+    private val LoginViewModel: LoginViewModel by viewModels {
+        LoginViewModelFactory(loginRepository)
+    }
+    //sharedPref
+    private lateinit var userPreference: UserPreference
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        //sharedPref 초기화
+        userPreference = UserPreference(this)
+
+        //옵저빙
+        observeLoginResult()
 
         //해시 키 출력
         val keyHash = Utility.getKeyHash(this)
@@ -156,13 +178,48 @@ class LoginActivity : AppCompatActivity() {
                 Log.d("log_login", "이메일: $email")
                 Log.d("log_login", "프로필 이미지: $profileImageUrl")
 
+                /**API 시작**/
+                LoginViewModel.requestLogin(this, email!!, nickname!!)
+
+                /*
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
                 finish()
 
+                 */
             }
+        }
+    }
 
+    //API 요청 후 observe하기
+    private fun observeLoginResult() {
+        LoginViewModel.loginResult.observe(this) { response ->
+            when (response) {
+                is ApiResponse.Success -> {
+                    //서버 인증 성공
+                    val userData = response.data
+                    Log.d("log_login", "서버 인증 성공: UID ${userData.uid}, 닉네임 ${userData.nickname}")
 
+                    //sharedPref 저장
+                    userPreference.saveUserInfo(userData.uid, userData.nickname, userData.email)
+
+                    //메인 화면으로 이동
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+                is ApiResponse.Error -> {
+                    //서버 인증/통신 실패
+                    Log.e("log_login", "서버 인증 실패: 코드 ${response.code}, 메시지 ${response.message}")
+                    Toast.makeText(this, "서버 인증 오류: ${response.message}", Toast.LENGTH_LONG).show()
+
+                    /**메인 화면으로 이동(일단 로컬 임시)**/
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                    finish()
+
+                }
+            }
         }
     }
 

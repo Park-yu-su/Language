@@ -10,6 +10,9 @@ plugins {
     //Glide를 위해
     id("kotlin-kapt")
     id("androidx.navigation.safeargs.kotlin")
+
+    //추가 kotlin sericalizaion
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.22"
 }
 
 android {
@@ -129,5 +132,14 @@ dependencies {
 
     //flexLayout (유연한 recycler)
     implementation("com.google.android.flexbox:flexbox:3.0.0")
+
+    
+    /**서버 관련**/
+    //Kotlinx Serialization 런타임 라이브러리 추가 (필수)
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+
+    //Kotlin Coroutines (비동기 처리)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
 
 }
