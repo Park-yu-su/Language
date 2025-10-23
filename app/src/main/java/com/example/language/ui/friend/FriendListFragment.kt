@@ -12,7 +12,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.language.R
 import com.example.language.adapter.FriendListAdapter
+import com.example.language.api.friend.FriendRepository
 import com.example.language.api.friend.viewModel.FriendViewModel
+import com.example.language.api.friend.viewModel.FriendViewModelFactory
 import com.example.language.data.FriendData
 import com.example.language.databinding.FragmentFriendListBinding
 import com.example.language.ui.home.MainActivity
@@ -34,7 +36,10 @@ class FriendListFragment : Fragment() {
     private lateinit var adatper : FriendListAdapter
 
     //FriendFragment가 소유한 ViewModel 인스턴스를 사용
-    private val friendViewModel: FriendViewModel by activityViewModels()
+    private val friendRepository = FriendRepository()
+    private val friendViewModel: FriendViewModel by activityViewModels() {
+        FriendViewModelFactory(friendRepository)
+    }
 
 
 

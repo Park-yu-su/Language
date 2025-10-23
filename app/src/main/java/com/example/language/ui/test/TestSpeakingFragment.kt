@@ -20,10 +20,16 @@ import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.example.language.R
+import com.example.language.api.ApiResponse
+import com.example.language.api.test.TestRepository
+import com.example.language.api.test.viewModel.TestViewModel
+import com.example.language.api.test.viewModel.TestViewModelFactory
 import com.example.language.data.WordData
 import com.example.language.databinding.FragmentTestSpeakingBinding
 import com.example.language.ui.home.MainActivity
@@ -70,6 +76,13 @@ class TestSpeakingFragment : Fragment() {
     private var totalWord = tmpData.size
     private var isLike = false
 
+    //녹음 전송 용 API
+    private val testRepository = TestRepository()
+    private val testViewModel : TestViewModel by activityViewModels() {
+        TestViewModelFactory(testRepository)
+    }
+
+
 
     //기타 변수
     private lateinit var papAnim : Animation
@@ -99,6 +112,8 @@ class TestSpeakingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        observeSTT()
 
         //상단 하단 제거
         (activity as? MainActivity)?.setUIVisibility(false)
@@ -289,11 +304,21 @@ class TestSpeakingFragment : Fragment() {
                 val recordedFileConvert = File(myVoiceConvert)
 
                 //이 이후는 서버한테 보내는 로직
-                playWavFile(recordedFileConvert, requireContext())
+                sendWavForSTT(recordedFileConvert, binding.speakWordTv.text.toString().trim())
+                //playWavFile(recordedFileConvert, requireContext())
             }
 
         }
     }
+
+
+    //음원(wav)을 송수신하는 코드
+    private fun sendWavForSTT(wavFile: File, answer: String){
+        val wavBytes = wavFile.readBytes()
+        val fileName = wavFile.name
+        testViewModel.sendVoiceForSTT(requireContext(), wavBytes, fileName, answer)
+    }
+
 
     //PCM -> WAW 파일로 바꾸는 코드
     @Throws(IOException::class)
@@ -316,6 +341,32 @@ class TestSpeakingFragment : Fragment() {
                 }
             }
         }
+    }
+
+    //여기서 결과를 처리
+    private fun observeSTT(){
+        testViewModel.voiceResult.observe(viewLifecycleOwner){ response ->
+            when(response) {
+                is ApiResponse.Success -> {
+                    /**결과는 뭐로 오냐?**/
+                    val data = response.data
+
+                    //정답 처리
+                    if(data.result.equals("true")){
+                        nowWordIndex++
+                        updateUI()
+                    }
+                    //오답 처리
+                    else{
+                        Toast.makeText(requireContext(), "오답입니다.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                is ApiResponse.Error -> {
+
+                }
+            }
+        }
+
     }
 
     //파일 앞에 WAV 해더를 삽입
