@@ -5,22 +5,30 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.language.R
 import com.example.language.adapter.FriendAddAdapter
 import com.example.language.adapter.FriendDeleteAdapter
 import com.example.language.adapter.FriendRequestAdapter
+import com.example.language.api.ApiResponse
+import com.example.language.api.friend.FriendRepository
+import com.example.language.api.friend.viewModel.FriendViewModel
+import com.example.language.api.friend.viewModel.FriendViewModelFactory
+import com.example.language.api.login.UserPreference
 import com.example.language.data.FriendData
 import com.example.language.databinding.DialogCustomSelectBinding
 import com.example.language.databinding.FragmentFriendHandleBinding
 import com.example.language.ui.home.MainActivity
+import kotlin.getValue
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,6 +61,15 @@ class FriendHandleFragment : Fragment() {
     private var searchResult = mutableListOf<FriendData>()
     private var tmpResult = mutableListOf<FriendData>()
 
+    //API
+    private val friendRepository = FriendRepository()
+    private val friendViewModel: FriendViewModel by activityViewModels() {
+        FriendViewModelFactory(friendRepository)
+    }
+
+    //유저 UID 가져오기
+    private lateinit var userPreference : UserPreference
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,24 +94,28 @@ class FriendHandleFragment : Fragment() {
 
         //상단 바 제거
         (activity as? MainActivity)?.setUIVisibility(false)
+        userPreference = UserPreference(requireContext())
 
         //더미 데이터
         requestList.add(
-            FriendData("22", "사람입니다", "자기소개")
+            FriendData("22", "사람입니다", "","자기소개")
         )
         requestList.add(
-            FriendData("33", "너도?", "자기소개")
+            FriendData("33", "너도?", "","자기소개")
         )
         tmpResult.add(
-            FriendData("7130", "핑구", "자기소개")
+            FriendData("7130", "핑구", "","자기소개")
         )
         tmpResult.add(
-            FriendData("3174", "뽀로로", "자기소개")
+            FriendData("3174", "뽀로로", "","자기소개")
         )
         //임시 데이터 셋
-        friendList.add(FriendData("1","친구1", "자기소개"))
-        friendList.add(FriendData("2","친구2", "자기소개"))
-        friendList.add(FriendData("3","친구3", "자기소개"))
+        /*
+        friendList.add(FriendData("1","친구1", "","자기소개"))
+        friendList.add(FriendData("2","친구2", "","자기소개"))
+        friendList.add(FriendData("3","친구3", "","자기소개"))
+         */
+
 
         //EditText listenr -> request/delete or add를 보여준다.
         binding.friendHandleSearchEdt.addTextChangedListener(object : TextWatcher{
@@ -135,6 +156,8 @@ class FriendHandleFragment : Fragment() {
         settingAddRecyclerView()
         //친구 삭제
         settingDeleteRecycleView()
+        //API로 친구 리스트 불러오기
+        getFriendList()
 
     }
 
@@ -153,7 +176,41 @@ class FriendHandleFragment : Fragment() {
         }
     }
 
+    //친구 목록을 가져오기(이미 FriendList에서 받아온 정보)
+    private fun getFriendList(){
+        var response = friendViewModel.friendListResult.value
 
+        when (response) {
+            is ApiResponse.Success -> {
+                //성공 응답일 경우에만 data에 안전하게 접근
+                val data = response.data
+                friendList.clear()
+
+                val uids = data.uids
+                val nicknames = data.nicknames
+                val images = data.images
+
+                for(i in 0 until uids.size){
+                    // FriendData 생성자 순서에 맞춰 데이터를 추가합니다.
+                    friendList.add(FriendData(uids[i], nicknames[i], images[i], "현재는 이미지 URL"))
+                }
+
+                deleteAdapter.notifyDataSetChanged()
+            }
+
+            is ApiResponse.Error -> {
+                // 통신 오류 발생 시 처리
+                Log.e("log_friend", "친구 핸들링 친구 목록 로드 실패: ${response.message}")
+                Toast.makeText(context, "친구 목록을 불러오지 못했습니다.", Toast.LENGTH_SHORT).show()
+            }
+
+            null -> {
+                // LiveData에 아직 값이 설정되지 않았거나 null인 경우
+                Log.d("log_friend", "친구 목록 데이터가 ViewModel에 아직 없습니다.")
+                Toast.makeText(context, "친구 목록을 불러오지 못했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
 
     //친구요청목록 recyclerview 관리
@@ -168,6 +225,15 @@ class FriendHandleFragment : Fragment() {
                     requestList.removeAt(index)
                     requestAdatper.notifyItemRemoved(index)
                     Toast.makeText(requireContext(), "수락", Toast.LENGTH_SHORT).show()
+
+                    Log.d("log_friend", "추가할 친구 UID: ${friend.id}")
+                    var StringUid = userPreference.getUid() ?: "0"
+                    var uid = StringUid.toInt()
+
+                    /**API로 친구 요청 수락**/
+                    //friendViewModel.acceptFriend(requireContext(), uid, friend.id.toInt())
+
+
                 }
             },
             onReject = {friend ->

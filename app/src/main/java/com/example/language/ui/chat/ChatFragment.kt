@@ -12,6 +12,7 @@ import com.example.language.R
 import com.example.language.adapter.ChatAdapter
 import com.example.language.data.ChatMessage
 import com.example.language.databinding.FragmentChatBinding
+import com.example.language.ui.home.MainActivity
 import com.example.language.ui.study.BottomSheetDialog
 
 // TODO: Rename parameter arguments, choose names that match
@@ -20,7 +21,7 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 
-class ChatFragment : Fragment() {
+class ChatFragment : Fragment(), ChatMenuListener {
 
     private lateinit var binding: FragmentChatBinding
     private lateinit var chatAdapter: ChatAdapter
@@ -40,6 +41,7 @@ class ChatFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        (activity as MainActivity).setUIVisibility(false)
         setRecyclerView()
         setInputListeners()
         setMicMode() //초기는 editText = 없음
@@ -128,6 +130,32 @@ class ChatFragment : Fragment() {
     private fun showBottomSheetDialog(){
         val bottomSheet = BottomSheetChatDialog.newInstance()
         bottomSheet.show(childFragmentManager, BottomSheetChatDialog.TAG)
+    }
+
+    //콜백함수를 여기서 오버라이딩해서 구현 (bottomSheetDialog + ChatCallBackClass의 함수)
+    override fun onFeatureSelected(feature: ChatFeature) {
+        //리뷰
+        if(feature == ChatFeature.REVIEW_WORDS){
+            //현재 메시지를 넣어서 IN
+            val message = ChatMessage(System.currentTimeMillis(), "리뷰 기능 출력",
+                true, System.currentTimeMillis().toString())
+            chatAdapter.addMessage(message)
+
+            //RecyclerView를 가장 아래로 스크롤
+            binding.chatRecyclerview.scrollToPosition(messageList.size - 1)
+
+        }
+        //예문
+        else if(feature == ChatFeature.CREATE_EXAMPLE){
+            //현재 메시지를 넣어서 IN
+            val message = ChatMessage(System.currentTimeMillis(), "예문 만들기 출력",
+                true, System.currentTimeMillis().toString())
+            chatAdapter.addMessage(message)
+
+            //RecyclerView를 가장 아래로 스크롤
+            binding.chatRecyclerview.scrollToPosition(messageList.size - 1)
+
+        }
     }
 
     //이미지 아이콘 변환

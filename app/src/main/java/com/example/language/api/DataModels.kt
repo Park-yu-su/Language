@@ -54,7 +54,7 @@ data class AuthResponsePayload(
 // 4.2.1. 친구 목록 조회 (Friend)
 @Serializable
 data class FriendListRequestPayload(
-    val uids: List<Int>
+    val uid: Int
 )
 
 @Serializable
@@ -63,6 +63,7 @@ data class FriendListResponsePayload(
     val nicknames: List<String>,
     val images: List<String>
 )
+
 
 // 4.2.2. 친구 요청 (Request)
 @Serializable

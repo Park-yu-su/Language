@@ -9,9 +9,9 @@ import com.example.language.api.SimpleMessagePayload
 class FriendRepository {
 
     //1. 친구 리스트 가져오기
-    suspend fun getFriendList(context: Context, uids: List<Int>)
+    suspend fun getFriendList(context: Context, uid: Int)
     : ApiResponse<FriendListResponsePayload> {
-        return ApiClient.getFriendList(context, uids)
+        return ApiClient.getFriendList(context, uid)
     }
 
     //2. 친구 추가하기

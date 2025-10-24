@@ -135,8 +135,8 @@ object ApiClient {
         return executeRequest(context, request)
     }
 
-    suspend fun getFriendList(context: Context, uids: List<Int>): ApiResponse<FriendListResponsePayload> {
-        val payload = FriendListRequestPayload(uids)
+    suspend fun getFriendList(context: Context, uid: Int): ApiResponse<FriendListResponsePayload> {
+        val payload = FriendListRequestPayload(uid)
         val request = ClientRequest("Friend", payload)
         return executeRequest(context, request)
     }
