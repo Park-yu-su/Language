@@ -156,6 +156,15 @@ data class TagUpdateRequestPayload(
     val tags: List<String>
 )
 
+// 4.7. 유저 검색(SearchUserByUid)
+@Serializable
+data class SearchUserResponsePayload(
+    val uid: Int,
+    val nickname: String,
+    val image: String
+)
+
+
 // 공통 사용 모델
 @Serializable
 data class WordData(

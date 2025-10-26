@@ -4,6 +4,7 @@ import android.content.Context
 import com.example.language.api.ApiClient
 import com.example.language.api.ApiResponse
 import com.example.language.api.FriendListResponsePayload
+import com.example.language.api.SearchUserResponsePayload
 import com.example.language.api.SimpleMessagePayload
 
 class FriendRepository {
@@ -42,6 +43,12 @@ class FriendRepository {
     suspend fun deleteFriend(context: Context, requesterID: Int, requestieID: Int)
     : ApiResponse<SimpleMessagePayload> {
         return ApiClient.deleteFriend(context, requesterID, requestieID)
+    }
+
+    //7. 유저 검색
+    suspend fun searchUserByUid(context: Context, uid: Int)
+    : ApiResponse<SearchUserResponsePayload> {
+        return ApiClient.searchUserByUid(context, uid)
     }
 
 

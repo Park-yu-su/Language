@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.language.api.ApiResponse
 import com.example.language.api.FriendListResponsePayload
 import com.example.language.api.PendingRequestsPayload
+import com.example.language.api.SearchUserResponsePayload
 import com.example.language.api.SttResponsePayload
 import com.example.language.api.friend.FriendRepository
 import com.example.language.data.FriendData
@@ -25,6 +26,9 @@ class FriendViewModel(private val repository: FriendRepository): ViewModel() {
     private val _pendingListResult = MutableLiveData<ApiResponse<FriendListResponsePayload>>()
     val pendingListResult = _pendingListResult
 
+    //유저 ID 검색 결과
+    private val _uidSearchResult = MutableLiveData<ApiResponse<SearchUserResponsePayload>>()
+    val uidSearchResult = _uidSearchResult
 
 
     //친구 리스트 출력
@@ -62,6 +66,22 @@ class FriendViewModel(private val repository: FriendRepository): ViewModel() {
         viewModelScope.launch {
             val response = repository.deleteFriend(context, myUid, friendUid)
             Log.d("log_friend", "")
+        }
+    }
+
+    //ID로 유저 점색
+    fun searchIserByUid(context: Context, uid: Int){
+        viewModelScope.launch {
+            val response = repository.searchUserByUid(context, uid)
+            _uidSearchResult.value = response
+
+        }
+    }
+
+    //친구 추가
+    fun addFriend(context: Context, myUid: Int, friendUid: Int){
+        viewModelScope.launch {
+            repository.addFriend(context, myUid, friendUid)
         }
     }
 

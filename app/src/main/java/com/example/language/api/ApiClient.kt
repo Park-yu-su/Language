@@ -215,4 +215,14 @@ object ApiClient {
         val request = ClientRequest("TagUpdate", payload)
         return executeRequest(context, request)
     }
+
+
+    /**유저 ID 검색**/
+    suspend fun searchUserByUid(context: Context, uid: Int): ApiResponse<SearchUserResponsePayload> {
+        val payload = FriendListRequestPayload(uid)
+        val request = ClientRequest("SearchUserByUid", payload)
+        return executeRequest(context, request)
+    }
+
+
 }

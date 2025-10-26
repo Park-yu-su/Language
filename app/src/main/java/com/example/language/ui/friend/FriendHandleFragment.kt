@@ -106,12 +106,16 @@ class FriendHandleFragment : Fragment() {
         )
         */
 
+        //더미데이터(유저 검색 결과 임시)
+        /*
         tmpResult.add(
             FriendData("7130", "핑구", "","자기소개")
         )
         tmpResult.add(
             FriendData("3174", "뽀로로", "","자기소개")
         )
+        */
+
         //임시 데이터 셋(친구 리스트-삭제 때)
         /*
         friendList.add(FriendData("1","친구1", "","자기소개"))
@@ -134,10 +138,7 @@ class FriendHandleFragment : Fragment() {
 
                 //내용이 있으면 -> 검색 목록을 보여준다. -> API
                 else{
-                    for(item in tmpResult){
-                        searchResult.add(item)
-                        addAdapter.notifyDataSetChanged()
-                    }
+                    searchUserByUID(nowText)
                     updateView(nowText)
                 }
 
@@ -164,6 +165,8 @@ class FriendHandleFragment : Fragment() {
         //친구 요청 리스트 API 호출
         observePendingList()
         getPendingList()
+        //UID 검색
+        observeSearchUID()
 
     }
 
@@ -181,6 +184,44 @@ class FriendHandleFragment : Fragment() {
             binding.friendHandleSearchRecyclerView.visibility = View.VISIBLE
         }
     }
+
+    //친구 검색 결과에 대해 API 호출
+    private fun searchUserByUID(uid: String){
+        val userId: Int? = uid.toIntOrNull()
+        if(userId != null){
+            friendViewModel.searchIserByUid(requireContext(), userId)
+        }
+    }
+
+    private fun observeSearchUID(){
+        friendViewModel.uidSearchResult.observe(viewLifecycleOwner){ response ->
+            when(response){
+                is ApiResponse.Success -> {
+                    searchResult.clear()
+
+                    val data = response.data
+
+                    val uid = data.uid
+                    val nickname = data.nickname
+                    val image = data.image
+                    Log.d("log_friend", "친구 검색 API 호출 성공 : ${response.data}")
+
+                    val friendData = FriendData(uid.toString(), nickname, image, "")
+                    searchResult.add(friendData)
+                    addAdapter.notifyDataSetChanged()
+
+
+                }
+                is ApiResponse.Error -> {
+                    searchResult.clear()
+                    addAdapter.notifyDataSetChanged()
+                    Log.d("log_friend", "친구 검색 API 호출 실패 or 결과 X : ${response.message}")
+
+                }
+            }
+        }
+    }
+
 
     //친구 목록을 가져오기(이미 FriendList에서 받아온 정보)
     private fun getFriendList(){
@@ -326,9 +367,13 @@ class FriendHandleFragment : Fragment() {
 
     //친구검색및추가 recyclerview
     private fun settingAddRecyclerView(){
-        addAdapter = FriendAddAdapter(searchResult, onRequestClick = {
+        addAdapter = FriendAddAdapter(searchResult, onRequestClick = { item ->
             /**여기서는 검색한 친구 추가 시 로직을 처리**/
-
+            var StringUid = userPreference.getUid() ?: "0"
+            var myUid = StringUid.toInt()
+            var friendUid = item.id.toInt()
+            Log.d("log_friend", "친구 추가: 내 UID: ${myUid} / 추가할 친구 UID: ${friendUid}")
+            friendViewModel.addFriend(requireContext(), myUid, friendUid)
 
         })
         binding.friendHandleSearchRecyclerView.adapter = addAdapter
