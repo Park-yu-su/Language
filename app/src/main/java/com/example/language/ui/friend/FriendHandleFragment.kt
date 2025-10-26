@@ -96,20 +96,23 @@ class FriendHandleFragment : Fragment() {
         (activity as? MainActivity)?.setUIVisibility(false)
         userPreference = UserPreference(requireContext())
 
-        //더미 데이터
+        //더미 데이터(요청 리스트)
+        /*
         requestList.add(
             FriendData("22", "사람입니다", "","자기소개")
         )
         requestList.add(
             FriendData("33", "너도?", "","자기소개")
         )
+        */
+
         tmpResult.add(
             FriendData("7130", "핑구", "","자기소개")
         )
         tmpResult.add(
             FriendData("3174", "뽀로로", "","자기소개")
         )
-        //임시 데이터 셋
+        //임시 데이터 셋(친구 리스트-삭제 때)
         /*
         friendList.add(FriendData("1","친구1", "","자기소개"))
         friendList.add(FriendData("2","친구2", "","자기소개"))
@@ -158,6 +161,9 @@ class FriendHandleFragment : Fragment() {
         settingDeleteRecycleView()
         //API로 친구 리스트 불러오기
         getFriendList()
+        //친구 요청 리스트 API 호출
+        observePendingList()
+        getPendingList()
 
     }
 
@@ -212,6 +218,41 @@ class FriendHandleFragment : Fragment() {
         }
     }
 
+    //친구 요청 목록 가져오기
+    private fun getPendingList(){
+        var stringUid = userPreference.getUid() ?: "0"
+        var uid = stringUid.toInt()
+        Log.d("log_friend", "친구요청리스트 호출 시 내 UID : ${uid}")
+        if(uid != 0) {
+            friendViewModel.getPendingList(requireContext(), uid, "received")
+        }
+    }
+
+    //친구 요청 목록 observe
+    private fun observePendingList(){
+        friendViewModel.pendingListResult.observe(viewLifecycleOwner){ response ->
+            when (response) {
+                is ApiResponse.Success -> {
+                    requestList.clear()
+                    Log.d("log_friend", "친구 요청 리스트 불러오기 성공 : ${response.data}")
+
+                    val uids = response.data.uids
+                    val nicknames = response.data.nicknames
+                    val images = response.data.images
+
+                    for(i in 0 until uids.size){
+                        requestList.add(FriendData(uids[i], nicknames[i], images[i], ""))
+                    }
+                    requestAdatper.notifyDataSetChanged()
+
+                }
+                is ApiResponse.Error -> {
+                    Log.d("log_friend", "실패 : ${response.message}")
+                    Toast.makeText(context, "친구 요청 목록을 불러오지 못했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
 
     //친구요청목록 recyclerview 관리
     private fun settingRequestRecyclerView(){
@@ -231,7 +272,7 @@ class FriendHandleFragment : Fragment() {
                     var uid = StringUid.toInt()
 
                     /**API로 친구 요청 수락**/
-                    //friendViewModel.acceptFriend(requireContext(), uid, friend.id.toInt())
+                    friendViewModel.acceptFriend(requireContext(), uid, friend.id.toInt())
 
 
                 }
@@ -242,6 +283,14 @@ class FriendHandleFragment : Fragment() {
                     requestList.removeAt(index)
                     requestAdatper.notifyItemRemoved(index)
                     Toast.makeText(requireContext(), "거절", Toast.LENGTH_SHORT).show()
+
+                    Log.d("log_friend", "거절할 친구 UID: ${friend.id}")
+                    var StringUid = userPreference.getUid() ?: "0"
+                    var uid = StringUid.toInt()
+
+                    /**API로 친구 요청 거절**/
+                    friendViewModel.rejectFriend(requireContext(), uid, friend.id.toInt())
+
                 }
 
             })
@@ -319,6 +368,13 @@ class FriendHandleFragment : Fragment() {
             friendList.removeAt(adapterPosition)
             deleteAdapter.notifyItemRemoved(adapterPosition)
             dialog.dismiss()
+            //실제 API 호출
+            var StringUid = userPreference.getUid() ?: "0"
+            var myUid = StringUid.toInt()
+            var friendUid = uid.toInt()
+            Log.d("log_friend", "내 UID: ${myUid} / 삭제 UID: ${friendUid}")
+            friendViewModel.deleteFriend(requireContext(), myUid, friendUid)
+
         }
 
         dialog.show()

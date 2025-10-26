@@ -110,8 +110,9 @@ class FriendListFragment : Fragment() {
     private fun getFriendListByAPI(){
         var stringUid = userPreference.getUid() ?: "0"
         var uid = stringUid.toInt()
+        Log.d("log_friend", "친구리스트 호출 시 내 UID : ${uid}")
         if(uid != 0) {
-            friendViewModel.getFriendList(requireContext(), 1)
+            friendViewModel.getFriendList(requireContext(), uid)
         }
     }
 
@@ -121,7 +122,7 @@ class FriendListFragment : Fragment() {
             when (response) {
                 is ApiResponse.Success -> {
                     friendList.clear()
-                    Log.d("log_friend", "성공 : ${response.data}")
+                    Log.d("log_friend", "친구 리스트 불러오기 성공 : ${response.data}")
 
                     val uids = response.data.uids
                     val nicknames = response.data.nicknames
@@ -153,5 +154,10 @@ class FriendListFragment : Fragment() {
         binding.friendRecyclerview.adapter = adatper
     }
 
+
+    override fun onResume() {
+        super.onResume()
+        getFriendListByAPI()
+    }
 
 }

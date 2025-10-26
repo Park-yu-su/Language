@@ -153,6 +153,25 @@ object ApiClient {
         return executeRequest(context, request)
     }
 
+    suspend fun rejectFriend(context: Context, requesterId: Int, requestieId: Int): ApiResponse<SimpleMessagePayload> {
+        val payload = FriendRequestPayload(requesterId, requestieId)
+        val request = ClientRequest("Reject", payload)
+        return executeRequest(context, request)
+    }
+
+    suspend fun getPendingRequests(context: Context, uid: Int, type: String): ApiResponse<FriendListResponsePayload> {
+        val payload = PendingRequestsPayload(uid, type)
+        val request = ClientRequest("PendingRequests", payload)
+        return executeRequest(context, request)
+    }
+
+    suspend fun deleteFriend(context: Context, requesterID: Int, requestieID: Int): ApiResponse<SimpleMessagePayload> {
+        val payload = FriendRequestPayload(requesterID, requestieID)
+        val request = ClientRequest("DeleteFriend", payload)
+        return executeRequest(context, request)
+    }
+
+
     suspend fun sendVoiceForSTT(context: Context, fileBytes: ByteArray, fileName: String, answer: String): ApiResponse<SttResponsePayload> {
         val payload = SttRequestPayload(fileName, fileBytes.size.toLong(), answer)
         val request = ClientRequest("STT", payload)

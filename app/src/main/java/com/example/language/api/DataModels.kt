@@ -65,11 +65,18 @@ data class FriendListResponsePayload(
 )
 
 
-// 4.2.2. 친구 요청 (Request)
+// 4.2.2. 친구 요청/삭제 (Request/Reject)
 @Serializable
 data class FriendRequestPayload(
     val requester: Int,
     val requestie: Int
+)
+
+// 4.2.3. 대기중인 친구 요청 조회 (PendingRequests)
+@Serializable
+data class PendingRequestsPayload(
+    val uid: Int,
+    val type: String // 서버에서 "sent" 또는 "received"를 구분하기 위함
 )
 
 // 4.3. 단어장 사진 분석 (Dictionary)
