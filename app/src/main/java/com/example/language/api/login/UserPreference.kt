@@ -26,6 +26,11 @@ class UserPreference(context: Context) {
         return prefs.getString(KEY_UID, null)
     }
 
+    //이름 불러오기
+    fun getName(): String {
+        return prefs.getString(KEY_NICKNAME, null) ?: ""
+    }
+
     //그레이트리셋
     fun clearAll() {
         prefs.edit().clear().apply()

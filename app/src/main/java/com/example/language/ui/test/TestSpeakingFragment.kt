@@ -8,7 +8,11 @@ import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaPlayer
 import android.media.MediaRecorder
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -20,10 +24,16 @@ import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.example.language.R
+import com.example.language.api.ApiResponse
+import com.example.language.api.test.TestRepository
+import com.example.language.api.test.viewModel.TestViewModel
+import com.example.language.api.test.viewModel.TestViewModelFactory
 import com.example.language.data.WordData
 import com.example.language.databinding.FragmentTestSpeakingBinding
 import com.example.language.ui.home.MainActivity
@@ -70,6 +80,13 @@ class TestSpeakingFragment : Fragment() {
     private var totalWord = tmpData.size
     private var isLike = false
 
+    //녹음 전송 용 API
+    private val testRepository = TestRepository()
+    private val testViewModel : TestViewModel by activityViewModels() {
+        TestViewModelFactory(testRepository)
+    }
+
+
 
     //기타 변수
     private lateinit var papAnim : Animation
@@ -99,6 +116,8 @@ class TestSpeakingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        observeSTT()
 
         //상단 하단 제거
         (activity as? MainActivity)?.setUIVisibility(false)
@@ -289,11 +308,21 @@ class TestSpeakingFragment : Fragment() {
                 val recordedFileConvert = File(myVoiceConvert)
 
                 //이 이후는 서버한테 보내는 로직
-                playWavFile(recordedFileConvert, requireContext())
+                sendWavForSTT(recordedFileConvert, binding.speakWordTv.text.toString().trim())
+                //playWavFile(recordedFileConvert, requireContext())
             }
 
         }
     }
+
+
+    //음원(wav)을 송수신하는 코드
+    private fun sendWavForSTT(wavFile: File, answer: String){
+        val wavBytes = wavFile.readBytes()
+        val fileName = wavFile.name
+        testViewModel.sendVoiceForSTT(requireContext(), wavBytes, fileName, answer)
+    }
+
 
     //PCM -> WAW 파일로 바꾸는 코드
     @Throws(IOException::class)
@@ -316,6 +345,34 @@ class TestSpeakingFragment : Fragment() {
                 }
             }
         }
+    }
+
+    //여기서 결과를 처리
+    private fun observeSTT(){
+        testViewModel.voiceResult.observe(viewLifecycleOwner){ response ->
+            when(response) {
+                is ApiResponse.Success -> {
+                    Log.d("log_stt", "성공 : ${response.data.result}")
+                    /**결과는 뭐로 오냐?**/
+                    val data = response.data
+
+                    //정답 처리
+                    if(data.result == "True"){
+                        nowWordIndex++
+                        updateUI()
+                    }
+                    //오답 처리
+                    else{
+                        Toast.makeText(requireContext(), "오답입니다.", Toast.LENGTH_SHORT).show()
+                        vibrateForError()
+                    }
+                }
+                is ApiResponse.Error -> {
+                    Log.d("log_stt", "실패 : ${response.message}")
+                }
+            }
+        }
+
     }
 
     //파일 앞에 WAV 해더를 삽입
@@ -399,6 +456,40 @@ class TestSpeakingFragment : Fragment() {
             // 오류 발생 시에도 리소스 해제
             mediaPlayer.release()
             Toast.makeText(context, "오디오 재생 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    //진동을 주는 함수
+    private fun vibrateForError() {
+        // Context를 가져옵니다. Fragment에서는 requireContext()를 사용합니다.
+        val context = requireContext()
+
+        // 진동 길이 (밀리초)
+        val DURATION_MS = 300L
+
+        // API 버전에 따라 다른 Vibrator 객체를 사용합니다.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            // Android 12 (API 31) 이상 (VibratorManager 사용)
+            val vibratorManager = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+            val vibrator = vibratorManager.defaultVibrator
+
+            // 단일 진동 효과를 생성하여 실행합니다.
+            val effect = VibrationEffect.createOneShot(DURATION_MS, VibrationEffect.DEFAULT_AMPLITUDE)
+            vibrator.vibrate(effect)
+
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // Android 8.0 (API 26) ~ Android 11 (VibrationEffect 사용)
+            val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
+            // 단일 진동 효과를 생성하여 실행합니다.
+            val effect = VibrationEffect.createOneShot(DURATION_MS, VibrationEffect.DEFAULT_AMPLITUDE)
+            vibrator.vibrate(effect)
+
+        } else {
+            // 레거시 API (API 25 이하)
+            @Suppress("DEPRECATION")
+            val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            vibrator.vibrate(DURATION_MS) // DURATION_MS 동안 진동
         }
     }
 

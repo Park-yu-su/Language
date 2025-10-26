@@ -53,10 +53,10 @@ class FriendAddFragment : Fragment() {
         settingRecyclerview()
         
         tmpResult.add(
-            FriendData("7130", "핑구", "자기소개")
+            FriendData("7130", "핑구", "", "자기소개")
         )
         tmpResult.add(
-            FriendData("3174", "뽀로로", "자기소개")
+            FriendData("3174", "뽀로로","", "자기소개")
         )
 
         //EditText의 입력 처리

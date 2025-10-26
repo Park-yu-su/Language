@@ -50,10 +50,10 @@ class FriendRequestFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         requestList.add(
-            FriendData("22", "사람입니다", "자기소개")
+            FriendData("22", "사람입니다",  "","자기소개")
         )
         requestList.add(
-            FriendData("33", "너도?", "자기소개")
+            FriendData("33", "너도?", "","자기소개")
         )
 
         //recyclerView 세팅

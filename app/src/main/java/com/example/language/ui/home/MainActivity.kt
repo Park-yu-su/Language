@@ -2,8 +2,10 @@ package com.example.language.ui.home
 
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -31,6 +33,9 @@ class MainActivity : AppCompatActivity() {
     private val friendViewModel: FriendViewModel by viewModels()
     private var showMode = 0
 
+    private lateinit var navController: NavController
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -40,7 +45,7 @@ class MainActivity : AppCompatActivity() {
 
         //bottomNav 연결
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.main_fragmentContainer) as NavHostFragment
-        val navController = navHostFragment.navController
+        navController = navHostFragment.navController
         //binding.mainBnv.setupWithNavController(navController)
         setupBottomNavListener(navController)
 
@@ -54,7 +59,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
+        setBackPressHandle()
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -92,6 +97,43 @@ class MainActivity : AppCompatActivity() {
 
             return@setOnItemSelectedListener false
         }
+    }
+
+    //뒤로 가기 세팅
+    private fun setBackPressHandle() {
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+
+                val isPoppedLocally = navController.popBackStack()
+
+                if (!isPoppedLocally) {
+                    Log.d("log_back", "맨 끝임")
+
+                    // ⭐ 1. 현재 선택된 BNV 항목의 ID를 가져옵니다. ⭐
+                    val selectedTabId = binding.mainBnv.selectedItemId
+
+                    // 2. 현재 선택된 ID가 Home 탭의 ID와 같지 않은지 확인합니다.
+                    if (selectedTabId != R.id.nav_graph_home) { // R.id.nav_graph_home은 BottomNav 메뉴의 ID
+                        Log.d("log_back", "홈으로 (탭 전환 필요)")
+
+                        // Home 탭으로 이동 (nav_graph_home ID는 BottomNav 메뉴 ID이자, NavGraph ID)
+                        navController.navigate(R.id.nav_graph_home)
+
+                        // BNV 아이콘 동기화 (이미 눌러져 있지만, 명시적으로)
+                        binding.mainBnv.selectedItemId = R.id.nav_graph_home
+
+                    } else {
+                        // ⭐ 3. 현재 BNV 선택 항목이 R.id.nav_graph_home이고, pop할 스택이 없을 때 ⭐
+                        Log.d("log_back", "죽어 (종료)")
+
+                        // 콜백 비활성화 후 Activity 종료
+                        isEnabled = false
+                        onBackPressedDispatcher.onBackPressed()
+                    }
+                }
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, callback)
     }
 
 

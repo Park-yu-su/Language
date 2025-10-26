@@ -54,7 +54,7 @@ data class AuthResponsePayload(
 // 4.2.1. 친구 목록 조회 (Friend)
 @Serializable
 data class FriendListRequestPayload(
-    val uids: List<Int>
+    val uid: Int
 )
 
 @Serializable
@@ -64,11 +64,19 @@ data class FriendListResponsePayload(
     val images: List<String>
 )
 
-// 4.2.2. 친구 요청 (Request)
+
+// 4.2.2. 친구 요청/삭제 (Request/Reject)
 @Serializable
 data class FriendRequestPayload(
     val requester: Int,
     val requestie: Int
+)
+
+// 4.2.3. 대기중인 친구 요청 조회 (PendingRequests)
+@Serializable
+data class PendingRequestsPayload(
+    val uid: Int,
+    val type: String // 서버에서 "sent" 또는 "received"를 구분하기 위함
 )
 
 // 4.3. 단어장 사진 분석 (Dictionary)
@@ -147,6 +155,15 @@ data class TagUpdateRequestPayload(
     val wid: String,
     val tags: List<String>
 )
+
+// 4.7. 유저 검색(SearchUserByUid)
+@Serializable
+data class SearchUserResponsePayload(
+    val uid: Int,
+    val nickname: String,
+    val image: String
+)
+
 
 // 공통 사용 모델
 @Serializable
