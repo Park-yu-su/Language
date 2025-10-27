@@ -1,6 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/BG"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.makeVoc.AddVocInExitFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/add_voc_in_exit_topbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="20dp"
+        android:background="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/add_voc_in_exit_back_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_back_btn"
+            android:layout_marginStart="10dp"
+            android:visibility="visible"
+            style="@style/freesentation6_20sp_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/add_voc_in_exit_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="내 단어장"
+            style="@style/pretendard_22sp_semibold"
+            android:textColor="@color/Black"
+            android:layout_marginStart="5dp"
+            app:layout_constraintStart_toEndOf="@id/add_voc_in_exit_back_btn"
+            app:layout_constraintTop_toTopOf="@id/add_voc_in_exit_back_btn"
+            app:layout_constraintBottom_toBottomOf="@id/add_voc_in_exit_back_btn" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/word_list_recyclerview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingVertical="20dp"
+        android:scrollbars="vertical"
+        app:layout_constraintTop_toBottomOf="@id/add_voc_in_exit_topbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/add_voc_btn_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="32dp"
+        android:paddingVertical="20dp"
+        android:elevation="10dp">
+
+        <Button
+            android:id="@+id/add_voc_btn"
+            android:layout_width="320dp"
+            android:layout_height="56dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:minWidth="152dp"
+            android:minHeight="56dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingStart="20dp"
+            android:paddingEnd="10dp"
+            android:text="단어 추가하기"
+            android:fontFamily="@font/pretendard_semibold"
+            android:textSize="16sp"
+            android:background="@drawable/btn_custom_bottom"
+            app:backgroundTint="@color/Main1_1" />
+
+        <ImageView
+            android:id="@id/plus_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:src="@drawable/ic_plus_white"
+            android:layout_marginEnd="140dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

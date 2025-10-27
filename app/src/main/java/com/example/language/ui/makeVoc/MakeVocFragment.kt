@@ -7,12 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.viewpager2.widget.ViewPager2
-import com.example.language.R
 import com.example.language.adapter.VocListAdapter
 import com.example.language.data.VocData
 import com.example.language.databinding.FragmentMakeVocBinding
-import com.example.language.ui.test.TestSelectVocFragmentDirections
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
