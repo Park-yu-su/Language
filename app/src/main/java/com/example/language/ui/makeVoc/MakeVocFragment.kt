@@ -6,9 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.language.R
+import com.example.language.adapter.VocListAdapter
+import com.example.language.data.VocData
 import com.example.language.databinding.FragmentMakeVocBinding
+import com.example.language.ui.test.TestSelectVocFragmentDirections
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -48,12 +52,26 @@ class MakeVocFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.addVocInExitBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_makeVocFragment_to_addVocInExitFragment)
-        }
+        //임시 데이터
+        var vocList = mutableListOf(
+            VocData("고등 필수 단어 100", mutableListOf("고등"), "owner1"),
+            VocData("토익 필수 단어", mutableListOf("토익", "커스텀"), "owner1"),
+            VocData("내 중등 단어장", mutableListOf("중등", "커스텀"), "owner2"),
+            VocData("IT 개발 용어", mutableListOf("업무", "커스텀", "어려움"), "owner3")
+        )
+
+        val adapter = VocListAdapter(vocList,
+            onItemClicked = {
+                val action = MakeVocFragmentDirections.actionMakeVocFragmentToAddVocInExitFragment()
+                findNavController().navigate(action)
+            })
+
+        binding.makeVocRecyclerview.adapter = adapter
+        binding.makeVocRecyclerview.layoutManager = LinearLayoutManager(requireContext())
 
         binding.addNewVocBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_makeVocFragment_to_addNewVocFragment)
+            val action = MakeVocFragmentDirections.actionMakeVocFragmentToAddNewVocFragment()
+            findNavController().navigate(action)
         }
 
     }
