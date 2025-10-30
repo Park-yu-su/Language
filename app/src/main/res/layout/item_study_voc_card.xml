@@ -63,7 +63,7 @@
             style="@style/freesentation5_16sp_icon"
             android:text="태그"
             android:textStyle="bold"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textColor="@color/Main1_1"
             android:layout_marginStart="20dp"
             app:layout_constraintTop_toBottomOf="@id/stduy_vocName_tv"

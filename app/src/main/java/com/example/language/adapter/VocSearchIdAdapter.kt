@@ -20,6 +20,13 @@ class VocSearchIdAdapter(
             binding.stduyVocNameTv.text = data.title
             binding.studyVocAddBtn.visibility = View.VISIBLE
 
+            var tags = ""
+            for(tag in data.tags){
+                tags += "#$tag  "
+            }
+            binding.stduyVocTagTv.text = tags
+
+
             binding.studyVocAddBtn.setOnClickListener {
                 binding.studyVocAddBtn.startAnimation(
                     AnimationUtils.loadAnimation(itemView.context, R.anim.button_pop))
