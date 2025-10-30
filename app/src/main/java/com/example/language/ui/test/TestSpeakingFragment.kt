@@ -31,6 +31,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.example.language.R
 import com.example.language.api.ApiResponse
+import com.example.language.api.login.UserPreference
 import com.example.language.api.test.TestRepository
 import com.example.language.api.test.viewModel.TestViewModel
 import com.example.language.api.test.viewModel.TestViewModelFactory
@@ -68,12 +69,10 @@ class TestSpeakingFragment : Fragment() {
     private var recordJob: Job? = null
 
     //현재 단어 관련 변수
-    //더미 데이터
-    private var tmpData = mutableListOf(
-        WordData(1, "APPLE", mutableListOf("사과", "사과2", "사과3", "사과4"), mutableListOf("사과", "사과2", "사과3", "사과4"), "An apple a day keeps the doctor away.")
-    )
+    private lateinit var testWords : MutableList<WordData>
+    private lateinit var nowTestWord : WordData
     private var nowWordIndex = 0
-    private var totalWord = tmpData.size
+    private var totalWord = 0
     private var isLike = false
 
     //녹음 전송 용 API
@@ -82,6 +81,8 @@ class TestSpeakingFragment : Fragment() {
         TestViewModelFactory(testRepository)
     }
 
+    //유저 UID 가져오기
+    private lateinit var userPreference : UserPreference
 
 
     //기타 변수
@@ -113,7 +114,9 @@ class TestSpeakingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        observeSTT()
+        
+        userPreference = UserPreference(requireContext())
+        
 
         //상단 하단 제거
         (activity as? MainActivity)?.setUIVisibility(false)
@@ -123,10 +126,16 @@ class TestSpeakingFragment : Fragment() {
 
         //TTS랑 녹음 기능 세팅
         settingTTSwithVoice()
-
+        //단어들 섞기
+        getWordDataWithShuffle()
+        
+        observeSTT()
+        
         //UI 세팅
         updateUI()
         binding.speakProgressbar.max = totalWord
+        binding.speakNickanmeTv.text = userPreference.getName()
+
 
         //녹음 버튼
         binding.spaekRecordBtn.setOnClickListener {
@@ -166,6 +175,40 @@ class TestSpeakingFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.onBackPressed()
     }
 
+    //일단 먼저 data를 한 번 섞을거야 그리고 개수도 맞추자.
+    private fun getWordDataWithShuffle(){
+        var tmpData = testViewModel.selectWordList
+        var shuffleData = tmpData.shuffled()
+        testWords = shuffleData.toMutableList()
+        totalWord = testWords.size
+    }
+
+    //인자로 받는 값 1=review | 2=liked | 3=wrong
+    private fun linkWordUser(status: Int){
+        //일단 내 UID
+        var stringUid = userPreference.getUid() ?: "0"
+        var uid = stringUid.toInt()
+        //타입 체크
+        var typeCheck = listOf<String>("review", "liked", "wrong")
+        var type = typeCheck[status - 1]
+        //단어 가져오기
+        var wordIds = listOf<Int>(nowTestWord.wordId)
+
+        testViewModel.linkWordUser(requireContext(), uid, wordIds, type)
+    }
+    private fun unlinkWordUser(status: Int){
+        //일단 내 UID
+        var stringUid = userPreference.getUid() ?: "0"
+        var uid = stringUid.toInt()
+        //타입 체크
+        var typeCheck = listOf<String>("review", "liked", "wrong")
+        var type = typeCheck[status - 1]
+        //단어 가져오기
+        var wordIds = listOf<Int>(nowTestWord.wordId)
+
+        testViewModel.unlinkWordUser(requireContext(), uid, wordIds, type)
+    }
+
     //좋아요 관리
     fun handleLike(){
         val likeBtn = binding.speakLikeBtn
@@ -175,11 +218,15 @@ class TestSpeakingFragment : Fragment() {
         if(!isLike){
             isLike = true
             likeBtn.setImageResource(R.drawable.ic_like_heart)
+            linkWordUser(2) //like
+
 
         }
         else{
             isLike = false
             likeBtn.setImageResource(R.drawable.ic_like_heart2)
+            unlinkWordUser(2) //unlike
+
         }
 
     }
@@ -188,10 +235,10 @@ class TestSpeakingFragment : Fragment() {
     private fun updateUI(){
         //아직 남으면 업뎃
         if(nowWordIndex < totalWord){
-            var nowWord = tmpData.get(nowWordIndex)
+            nowTestWord = testWords[nowWordIndex]
 
             //UI 적용
-            binding.speakWordTv.text = nowWord.word
+            binding.speakWordTv.text = nowTestWord.word
             binding.speakProgressTv.text = "${nowWordIndex + 1}/${totalWord}"
             binding.speakProgressbar.progress = nowWordIndex + 1
 
@@ -356,6 +403,7 @@ class TestSpeakingFragment : Fragment() {
                     if(data.result == "True"){
                         nowWordIndex++
                         updateUI()
+                        linkWordUser(1) //review
                     }
                     //오답 처리
                     else{
