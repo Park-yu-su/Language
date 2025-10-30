@@ -30,6 +30,7 @@ class TestSelectVocFragment : Fragment() {
 
     private lateinit var binding: FragmentTestSelectVocBinding
 
+    private var vocList : MutableList<VocData> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +54,7 @@ class TestSelectVocFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
+        /*
         //임시 데이터
         var vocList = mutableListOf(
             VocData("고등 필수 단어 100", mutableListOf("고등"), "owner1"),
@@ -60,6 +62,8 @@ class TestSelectVocFragment : Fragment() {
             VocData("내 중등 단어장", mutableListOf("중등", "커스텀"), "owner2"),
             VocData("IT 개발 용어", mutableListOf("업무", "커스텀", "어려움"), "owner3")
         )
+
+         */
 
         val adapter = VocListAdapter(vocList,
             onItemClicked = {

@@ -11,7 +11,8 @@ class WordPagerAdapter(fragment: Fragment,
 
     override fun createFragment(position: Int): Fragment {
         val word = wordList[position]
-        return StudyWordDetailPageFragment.newInstance(word)
+        val totalCount = wordList.size
+        return StudyWordDetailPageFragment.newInstance(word, position+1, totalCount)
     }
 
     override fun getItemCount(): Int {

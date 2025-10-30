@@ -38,12 +38,9 @@ class TestMeaningFragment : Fragment() {
 
 
     //임시 데이터
+
     private var tmpData = mutableListOf(
-        WordData("APPLE", mutableListOf("사과", "사과2", "사과3", "사과4"), "An apple a day keeps the doctor away."),
-        WordData("EFFICIENT", mutableListOf("효율적인", "사과2", "사과3", "사과4"), "We need an efficient solution."),
-        WordData("PROGRAMMING", mutableListOf("프로그래밍", "사과2", "사과3", "사과4"), "I love programming."),
-        WordData("LANGUAGE", mutableListOf("언어", "사과2", "사과3", "사과4"), "English is a global language."),
-        WordData("DEVELOPMENT", mutableListOf("개발", "사과2", "사과3", "사과4"), "Software development is complex.")
+        WordData(1, "APPLE", mutableListOf("사과", "사과2", "사과3", "사과4"), mutableListOf("사과", "사과2", "사과3", "사과4"), "An apple a day keeps the doctor away.")
     )
     private var nowWordIndex = 0
     private var totalWord = tmpData.size

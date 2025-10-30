@@ -59,9 +59,12 @@ class StudySearchTagFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         settingRecyclerView()
+        /*
         tmpResult.add(VocData("단어장 이름1", mutableListOf("태그1", "태그2"), "7130"))
         tmpResult.add(VocData("단어장 이름2", mutableListOf("태그1", "태그2"), "7130"))
 
+
+         */
         binding.searchtagSearchEdt.addTextChangedListener(object : TextWatcher{
             override fun afterTextChanged(p0: Editable?) {
                 val nowText = p0.toString().trim()

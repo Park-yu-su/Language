@@ -56,9 +56,12 @@ class StudySearchIdFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         settingRecyclerView()
+        /*
         tmpResult.add(VocData("단어장 이름1", mutableListOf("태그1", "태그2"), "7130"))
         tmpResult.add(VocData("단어장 이름2", mutableListOf("태그1", "태그2"), "7130"))
 
+
+         */
         //editText 리스너
         binding.searchidSearchEdt.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {

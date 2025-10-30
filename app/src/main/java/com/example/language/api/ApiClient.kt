@@ -129,11 +129,16 @@ object ApiClient {
 
     // --- 각 API 호출 함수들은 executeRequest를 호출할 때 자동으로 타입을 추론하므로 수정할 필요가 없습니다. ---
 
+
+
+    /**인증 관련**/
     suspend fun authenticate(context: Context, email: String, nickname: String): ApiResponse<AuthResponsePayload> {
         val payload = AuthRequestPayload(email, nickname, image = "null")
         val request = ClientRequest("Authentication", payload)
         return executeRequest(context, request)
     }
+
+    /**친구 관련**/
 
     suspend fun getFriendList(context: Context, uid: Int): ApiResponse<FriendListResponsePayload> {
         val payload = FriendListRequestPayload(uid)
@@ -172,6 +177,8 @@ object ApiClient {
     }
 
 
+    /**특정 파일 보내기 관련**/
+
     suspend fun sendVoiceForSTT(context: Context, fileBytes: ByteArray, fileName: String, answer: String): ApiResponse<SttResponsePayload> {
         val payload = SttRequestPayload(fileName, fileBytes.size.toLong(), answer)
         val request = ClientRequest("STT", payload)
@@ -196,6 +203,8 @@ object ApiClient {
         return executeRequest(context, request, combinedFileBytes)
     }
 
+    /**단어장 업데이트 및 태그 등록 관련**/
+
     suspend fun registerWordbook(context: Context, payload: WordbookRegisterRequestPayload): ApiResponse<WordbookRegisterResponsePayload> {
         val request = ClientRequest("Wordbook", payload)
         return executeRequest(context, request)
@@ -215,6 +224,88 @@ object ApiClient {
         val request = ClientRequest("TagUpdate", payload)
         return executeRequest(context, request)
     }
+    
+    /**단어장 get 관련 + tag 가져오기 관련**/
+
+    //단어장 ID로 단어장의 단어들을 얻는 함수
+    suspend fun getWordbook(context: Context, wid: Int): ApiResponse<GetWordbookResponsePayload> {
+        val payload = GetWordbookRequestPayload(wid)
+        val request = ClientRequest("GetWordbook", payload)
+        return executeRequest(context, request)
+    }
+    
+    //태그 String을 줄 때 -> 이에 매칭되는 태그가 있으면 태그 id를 주는 함수
+    suspend fun searchTag(context: Context, query: String): ApiResponse<SearchTagResponsePayload> {
+        val payload = SearchTagRequestPayload(query)
+        val request = ClientRequest("SearchTag", payload)
+        return executeRequest(context, request)
+    }
+
+    // 태그로 단어장 검색
+    suspend fun searchWordbook(context: Context, tids: List<Int>): ApiResponse<SearchWordbookResponsePayload> {
+        val payload = SearchWordbookRequestPayload(tids)
+        val request = ClientRequest("SearchWordbook", payload)
+        return executeRequest(context, request)
+    }
+    //단어장 구독(내 단어장 추가)
+    suspend fun subscribe(context: Context, wid: Int, subscriber: Int): ApiResponse<SimpleMessagePayload> {
+        val payload = SubscribeRequestPayload(wid, subscriber)
+        val request = ClientRequest("Subscribe", payload)
+        return executeRequest(context, request)
+    }
+
+    //단어장 구독 취소(내 단어장에서 삭제)
+    suspend fun cancelSubscription(context: Context, wid: Int, subscriber: Int): ApiResponse<SimpleMessagePayload> {
+        // SubscribeRequestPayload 재사용
+        val payload = SubscribeRequestPayload(wid, subscriber)
+        val request = ClientRequest("Cancel", payload)
+        return executeRequest(context, request)
+    }
+    
+    //구독된 단어장 목록 가져오기
+    suspend fun getSubscribedWordbooks(context: Context, uid: Int): ApiResponse<GetSubscribedWordbooksResponsePayload> {
+        // FriendListRequestPayload 재사용
+        val payload = FriendListRequestPayload(uid)
+        val request = ClientRequest("GetSubscribedWordbooks", payload)
+        return executeRequest(context, request)
+    }
+
+    //각 태그에 따라 유저의 좋아요 한 단어, 틀린 단어, 리뷰할 단어 get
+    suspend fun linkWordUser(context: Context, uid: Int, word_ids: List<Int>, status: String): ApiResponse<SimpleMessagePayload>{
+        // status : liked | wrong | review
+        // liked : 좋아요 한 단어
+        // wrong : 틀린 단어
+        // review : 리뷰할 단어
+
+        val payload = LinkUserWordRequestPayload(uid, word_ids, status)
+        val request = ClientRequest("LinkUserWord", payload)
+        return executeRequest(context, request)
+    }
+
+    suspend fun unlinkWordUser(context: Context, uid: Int, word_ids: List<Int>, status: String): ApiResponse<SimpleMessagePayload>{
+        // status : liked | wrong | review
+        // liked : 좋아요 한 단어
+        // wrong : 틀린 단어
+        // review : 리뷰할 단어
+
+        // LinkUserWordRequestPayload 재사용
+        val payload = LinkUserWordRequestPayload(uid, word_ids, status)
+        val request = ClientRequest("UnlinkUserWord", payload)
+        return executeRequest(context, request)
+    }
+
+    suspend fun getLinkedWordOfUser(context: Context, uid: Int, status: String): ApiResponse<GetLinkedWordOfUserResponsePayload>{
+        // status : liked | wrong | review
+        // liked : 좋아요 한 단어
+        // wrong : 틀린 단어
+        // review : 리뷰할 단어
+
+        val payload = GetLinkedWordOfUserRequestPayload(uid, status)
+        val request = ClientRequest("GetLinkedWordOfUser", payload)
+        return executeRequest(context, request)
+    }
+    
+    
 
 
     /**유저 ID 검색**/
@@ -223,6 +314,11 @@ object ApiClient {
         val request = ClientRequest("SearchUserByUid", payload)
         return executeRequest(context, request)
     }
+
+    //10.30자 추가
+
+    
+
 
 
 }

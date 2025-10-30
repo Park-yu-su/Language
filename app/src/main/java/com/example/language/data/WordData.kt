@@ -6,7 +6,9 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class WordData (
+    var wordId : Int,
     var word : String,
-    var meanings : MutableList<String>,
-    var example: String
+    val meanings: List<String>,
+    val distractors: List<String>,
+    val example: String
 ) : Parcelable
