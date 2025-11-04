@@ -14,6 +14,7 @@ import com.example.language.data.WordData
 import com.example.language.databinding.DialogEditWordBinding
 import com.example.language.databinding.FragmentAddVocInExitBinding
 import androidx.core.graphics.drawable.toDrawable
+import androidx.navigation.fragment.findNavController
 
 class AddVocInExitFragment : Fragment() {
 
@@ -113,6 +114,13 @@ class AddVocInExitFragment : Fragment() {
 
         binding.wordListRecyclerview.adapter = adapter
         binding.wordListRecyclerview.layoutManager = LinearLayoutManager(requireContext())
+
+        binding.addVocBtn.setOnClickListener {
+            val action = AddVocInExitFragmentDirections.actionAddVocInExitFragmentToSelectWayAddVocFragment(
+                vocName = "word"
+            )
+            findNavController().navigate(action)
+        }
 
     }
 }
