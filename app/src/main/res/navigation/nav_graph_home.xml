@@ -72,6 +72,16 @@
         <action
             android:id="@+id/action_selectWayAddVocFragment_to_addVocManuallyFragment"
             app:destination="@id/addVocManuallyFragment" />
+        <action
+        android:id="@+id/action_selectWayAddVocFragment_to_addVocFinalCheckFragment"
+        app:destination="@id/addVocFinalCheckFragment">
+
+            <argument
+                android:name="wordDataList"
+                app:argType="com.example.language.api.WordData[]"
+                app:nullable="false" />
+
+        </action>
         <argument
             android:name="vocName"
             app:argType="string" />
@@ -91,7 +101,13 @@
         android:id="@+id/addVocFinalCheckFragment"
         android:name="com.example.language.ui.makeVoc.AddVocFinalCheckFragment"
         android:label="단어 추가 완료"
-        tools:layout="@layout/fragment_add_voc_final_check" />
+        tools:layout="@layout/fragment_add_voc_final_check">
 
+        <argument
+            android:name="wordDataList"
+            app:argType="com.example.language.api.WordData[]"
+            app:nullable="false" />
+
+    </fragment>
 
 </navigation>

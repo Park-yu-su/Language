@@ -17,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.language.api.ApiClient.uploadImagesForDictionary
 import com.example.language.api.ApiResponse
 import com.example.language.databinding.FragmentSelectWayAddVocBinding
@@ -179,9 +180,14 @@ class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictur
 
                 when (response) {
                     is ApiResponse.Success -> {
-                        // 성공! response.data는 DictionaryResponsePayload 타입
                         val words = response.data.data // List<WordData>
                         showToast("업로드 성공! 단어 ${words.size}개 인식됨")
+                        val wordsArray = words.toTypedArray()
+
+                        val action = SelectWayAddVocFragmentDirections
+                            .actionSelectWayAddVocFragmentToAddVocFinalCheckFragment(wordsArray)
+
+                        findNavController().navigate(action)
                     }
                     is ApiResponse.Error -> {
                         // API 에러

@@ -20,7 +20,7 @@ sealed class ApiResponse<out T> {
 data class GenericServerResponse(
     val status: String,
     val code: String,
-    val payload: JsonElement // payload를 JsonElement로 받아 어떤 형태의 JSON 객체든 수용
+    val payload: JsonElement, // payload를 JsonElement로 받아 어떤 형태의 JSON 객체든 수용
 )
 
 /**
@@ -30,7 +30,7 @@ data class GenericServerResponse(
 @Serializable
 data class ClientRequest<T>(
     val intention: String,
-    val payload: T
+    val payload: T,
 )
 
 //--- 각 Intention 별 Payload 데이터 클래스 ---
@@ -40,7 +40,7 @@ data class ClientRequest<T>(
 data class AuthRequestPayload(
     val email: String,
     val nickname: String,
-    val image: String
+    val image: String,
 )
 
 @Serializable
@@ -48,20 +48,20 @@ data class AuthResponsePayload(
     val uid: String,
     val nickname: String,
     val email: String,
-    val image: String
+    val image: String,
 )
 
 // 4.2.1. 친구 목록 조회 (Friend)
 @Serializable
 data class FriendListRequestPayload(
-    val uid: Int
+    val uid: Int,
 )
 
 @Serializable
 data class FriendListResponsePayload(
     val uids: List<String>,
     val nicknames: List<String>,
-    val images: List<String>
+    val images: List<String>,
 )
 
 
@@ -69,14 +69,14 @@ data class FriendListResponsePayload(
 @Serializable
 data class FriendRequestPayload(
     val requester: Int,
-    val requestie: Int
+    val requestie: Int,
 )
 
 // 4.2.3. 대기중인 친구 요청 조회 (PendingRequests)
 @Serializable
 data class PendingRequestsPayload(
     val uid: Int,
-    val type: String // 서버에서 "sent" 또는 "received"를 구분하기 위함
+    val type: String, // 서버에서 "sent" 또는 "received"를 구분하기 위함
 )
 
 // 4.3. 단어장 사진 분석 (Dictionary)
@@ -84,12 +84,12 @@ data class PendingRequestsPayload(
 data class DictionaryRequestPayload(
     val cnt: String,
     val file_name: List<String>,
-    val file_size: List<Long>
+    val file_size: List<Long>,
 )
 
 @Serializable
 data class DictionaryResponsePayload(
-    val data: List<WordData>
+    val data: List<WordData>,
 )
 
 // 4.4. 발음 평가 (STT)

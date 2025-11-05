@@ -33,7 +33,7 @@
             android:id="@+id/select_way_add_voc_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="단어장 생성하기"
+            android:text="단어장 생성"
             style="@style/pretendard_22sp_semibold"
             android:textColor="@color/Black"
             android:layout_marginStart="5dp"
