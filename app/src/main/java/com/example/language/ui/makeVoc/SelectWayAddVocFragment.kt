@@ -1,9 +1,11 @@
 package com.example.language.ui.makeVoc
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -15,11 +17,16 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.language.api.ApiClient.uploadImagesForDictionary
 import com.example.language.api.ApiResponse
+import com.example.language.api.WordData as ApiWordData
+import com.example.language.data.WordData as AppWordData
+import com.example.language.databinding.DialogEditWordBinding
 import com.example.language.databinding.FragmentSelectWayAddVocBinding
 import com.example.language.ui.dialog.PictureSelectDialogFragment
 import kotlinx.coroutines.launch
@@ -29,6 +36,10 @@ class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictur
 
     private var _binding: FragmentSelectWayAddVocBinding? = null
     private val binding get() = _binding!!
+
+    private val args: SelectWayAddVocFragmentArgs by navArgs()
+
+    private lateinit var currentVocName: String
 
     val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         if (uri != null) {
@@ -98,12 +109,14 @@ class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictur
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        currentVocName = args.vocName
+
         binding.addToPictureBtn.setOnClickListener {
             showPictureDialog()
         }
 
         binding.addToManualBtn.setOnClickListener {
-            showToast("직접 입력 버튼 클릭됨")
+            showManualDialog()
         }
     }
 
@@ -118,6 +131,77 @@ class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictur
 
         // "tag"는 다이얼로그를 식별하는 이름표입니다.
         dialog.show(parentFragmentManager, "PictureSelectDialog")
+    }
+
+    private fun showManualDialog() {
+        val dialogBinding =
+            DialogEditWordBinding.inflate(LayoutInflater.from(requireContext()))
+        val dialogView = dialogBinding.root
+
+        val alertDialog = AlertDialog.Builder(requireContext())
+            .setTitle("단어 추가하기")
+            .setView(dialogView)
+            .setPositiveButton("추가") { dialog, _ ->
+                val newWord = dialogBinding.inputWord.text.toString().trim()
+                val newExample = dialogBinding.inputExample.text.toString().trim()
+
+                val newMeanings = mutableListOf<String>()
+                listOf(
+                    dialogBinding.inputMeaning1,
+                    dialogBinding.inputMeaning2,
+                    dialogBinding.inputMeaning3,
+                    dialogBinding.inputMeaning4
+                ).forEach { editText ->
+                    val meaning = editText.text.toString().trim()
+                    if (meaning.isNotEmpty()) {
+                        newMeanings.add(meaning)
+                    }
+                }
+
+                if (newWord.isNotEmpty() && newMeanings.isNotEmpty()) {
+
+                    val newAppWordData = AppWordData(
+                        word = newWord,
+                        example = newExample,
+                        meanings = newMeanings
+                    )
+
+                    val newApiWordData = ApiWordData(
+                        word = newAppWordData.word,
+                        meanings = newAppWordData.meanings.toList(),
+                        example = newAppWordData.example
+                    )
+
+                    val wordsArray = arrayOf(newApiWordData)
+
+                    val action = SelectWayAddVocFragmentDirections
+                        .actionSelectWayAddVocFragmentToAddVocFinalCheckFragment(
+                            wordsArray,
+                            vocName = currentVocName
+                        )
+
+                    findNavController().navigate(action)
+
+                    dialog.dismiss()
+
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "단어와 최소한 하나의 뜻은 필수입니다.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            .setNegativeButton("취소") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+
+        // 둥근 모서리를 표현하기 위해
+        alertDialog.window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
+
+        alertDialog.show()
+
     }
 
     private fun checkGalleryPermission() {
@@ -185,7 +269,10 @@ class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictur
                         val wordsArray = words.toTypedArray()
 
                         val action = SelectWayAddVocFragmentDirections
-                            .actionSelectWayAddVocFragmentToAddVocFinalCheckFragment(wordsArray)
+                            .actionSelectWayAddVocFragmentToAddVocFinalCheckFragment(
+                                wordsArray,
+                                vocName = currentVocName
+                            )
 
                         findNavController().navigate(action)
                     }
