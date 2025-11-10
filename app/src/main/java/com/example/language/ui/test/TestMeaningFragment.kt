@@ -288,7 +288,7 @@ class TestMeaningFragment : Fragment() {
         //이 이후에 버튼 or 시간 지나고 바꾸기
         nowBtn.apply {
             strokeWidth = 0
-            backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.Main1_5)
+            backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.Main1_4)
             nowCheckBtn.visibility = View.INVISIBLE
         }
     }

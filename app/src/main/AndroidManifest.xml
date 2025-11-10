@@ -78,7 +78,9 @@
         </activity>
         <activity
             android:name=".ui.home.MainActivity"
-            android:exported="true"></activity>
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize"
+            ></activity>
     </application>
 
 </manifest>

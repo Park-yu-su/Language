@@ -21,6 +21,8 @@
 
     <color name="redStroke">#F64242</color>
     <color name="redBackground">#FFEAEA</color>
+    <color name="chatColor">#427FF6</color>
+    <color name="charPressColor">#2753A1</color>
 
     <!-- 아래 꺼는 Depricated된 색깔들입니다. 삭제 시 오류 발생 위험을 위해 새로 추가합니다-->
 

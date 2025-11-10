@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/BG"
+    android:fitsSystemWindows="true"
     tools:context=".ui.chat.ChatFragment">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -12,6 +13,8 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:paddingHorizontal="16dp"
+        android:paddingVertical="5dp"
+        android:background="#F5F5F5"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/chat_input_cl"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,26 +25,25 @@
         android:id="@+id/chat_input_cl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:background="@color/Main1_4"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="12dp"
+        android:background="@color/transparent"
+        android:layout_marginBottom="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageButton
             android:id="@+id/chat_menu_btn"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_mic_recording"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="@null"
-            app:civ_circle_background_color="@color/Main1_1"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_memu_chatbot"
+            android:background="@drawable/bg_chat_rounded"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:contentDescription="메뉴"/>
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
 
         <EditText
             android:id="@+id/chat_text_edt"
@@ -55,26 +57,41 @@
             android:inputType="textCapSentences|textMultiLine"
             android:maxLines="5"
             android:textColor="@color/Black"
+            android:textColorHint="#AAAAAA"
             android:layout_marginHorizontal="8dp"
             app:layout_constraintStart_toEndOf="@id/chat_menu_btn"
             app:layout_constraintEnd_toStartOf="@id/chat_send_btn"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
-        <de.hdodenhof.circleimageview.CircleImageView
+
+        <View
+            android:id="@+id/chat_send_animate_view"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_chat_rounded_animate"
+            android:elevation="0dp"
+            app:layout_constraintTop_toTopOf="@id/chat_send_btn"
+            app:layout_constraintBottom_toBottomOf="@id/chat_send_btn"
+            app:layout_constraintStart_toStartOf="@id/chat_send_btn"
+            app:layout_constraintEnd_toEndOf="@id/chat_send_btn"
+            />
+
+        <ImageButton
             android:id="@+id/chat_send_btn"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:scaleType="centerCrop"
-            android:background="@null"
-            app:civ_circle_background_color="@color/Main1_1"
-            android:src="@drawable/ic_mic"
-            app:civ_border_width="0dp"
+            android:scaleType="centerInside"
+            android:background="@drawable/bg_chat_rounded"
+            android:src="@drawable/ic_mic_chat"
             android:layout_marginStart="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:contentDescription="보내기/녹음"/>
+            />
+
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
