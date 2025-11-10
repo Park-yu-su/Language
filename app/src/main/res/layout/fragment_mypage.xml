@@ -55,8 +55,8 @@
 
         <ImageView
             android:id="@+id/user_profile_image"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
+            android:layout_width="76dp"
+            android:layout_height="76dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:src="@drawable/img_default_user_image"
