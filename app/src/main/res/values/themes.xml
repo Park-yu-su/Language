@@ -149,4 +149,8 @@
         <item name="android:textColor">@color/colorFont</item>
     </style>
 
+    <!--힌트 폰트-->
+    <style name="MyHintText" parent="TextAppearance.AppCompat.Small">
+        <item name="android:fontFamily">@font/pretendard_semibold</item> </style>
+
 </resources>
