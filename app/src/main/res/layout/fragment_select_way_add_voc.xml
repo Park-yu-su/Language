@@ -1,23 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@color/BG"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.makeVoc.SelectWayAddVocFragment">
 
-    <Button
-        android:id="@+id/add_voc_to_picture_btn"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/select_way_add_voc_topbar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="사진으로 추가"
+        android:paddingVertical="20dp"
+        android:background="@color/white"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <Button
-        android:id="@+id/add_voc_manually_btn"
+        <ImageView
+            android:id="@+id/select_way_add_voc_back_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/ic_back_btn"
+            android:layout_marginStart="10dp"
+            android:visibility="visible"
+            style="@style/freesentation6_20sp_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/select_way_add_voc_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="단어장 생성"
+            style="@style/pretendard_22sp_semibold"
+            android:textColor="@color/Black"
+            android:layout_marginStart="5dp"
+            app:layout_constraintStart_toEndOf="@id/select_way_add_voc_back_btn"
+            app:layout_constraintTop_toTopOf="@id/select_way_add_voc_back_btn"
+            app:layout_constraintBottom_toBottomOf="@id/select_way_add_voc_back_btn"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/add_voca_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="직접 추가"
-        app:layout_constraintTop_toBottomOf="@id/add_voc_to_picture_btn"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/select_way_add_voc_topbar"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="단어 추가하기"
+        android:textSize="16sp"
+        android:fontFamily="@font/pretendard_semibold"
+        android:textColor="@color/Main1_1"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="20dp" />
+
+    <TextView
+        android:id="@+id/select_way_add_voc_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/add_voca_tv"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="단어 추가 방식을 선택하세요"
+        android:textSize="20sp"
+        android:fontFamily="@font/pretendard_semibold"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="20dp" />
+
+    <ImageButton
+        android:id="@+id/add_to_picture_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="add_to_picture"
+        app:layout_constraintTop_toBottomOf="@id/select_way_add_voc_tv"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/add_to_manual_btn"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/img_add_to_picture"
+        android:backgroundTint="@color/transparent" />
+
+    <ImageButton
+        android:id="@+id/add_to_manual_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="add_to_manual"
+        app:layout_constraintTop_toBottomOf="@id/select_way_add_voc_tv"
+        app:layout_constraintStart_toEndOf="@id/add_to_picture_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/img_add_to_manual"
+        android:backgroundTint="@color/transparent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

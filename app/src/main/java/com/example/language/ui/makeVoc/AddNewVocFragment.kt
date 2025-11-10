@@ -29,9 +29,10 @@ class AddNewVocFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val vocNameEt = binding.vocNameEt
-        val addNewVocWithNameBtn = binding.addNewVocWithNameBtn
-        addNewVocWithNameBtn.setOnClickListener {
+        val vocNameEt = binding.insertVocNameEt
+
+        val addNewVocNextBtn = binding.addNewVocNextBtn
+        addNewVocNextBtn.setOnClickListener {
             val action = AddNewVocFragmentDirections.
             actionAddNewVocFragmentToSelectWayAddVocFragment(vocNameEt.text.toString())
             findNavController().navigate(action)

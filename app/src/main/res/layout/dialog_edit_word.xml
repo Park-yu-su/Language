@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_rounded_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <EditText
+                android:id="@+id/inputWord"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:hint="단어"
+                android:inputType="textCapWords"
+                android:maxLength="50"
+                android:minHeight="48dp" />
+
+            <EditText
+                android:id="@+id/inputMeaning1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:hint="뜻 1"
+                android:inputType="text"
+                android:maxLength="100"
+                android:minHeight="48dp" />
+
+            <EditText
+                android:id="@+id/inputMeaning2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:hint="뜻 2(선택)"
+                android:inputType="text"
+                android:maxLength="100"
+                android:minHeight="48dp" />
+
+
+            <EditText
+                android:id="@+id/inputMeaning3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:hint="뜻 3(선택)"
+                android:inputType="text"
+                android:maxLength="100"
+                android:minHeight="48dp" />
+
+            <EditText
+                android:id="@+id/inputMeaning4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:hint="뜻 4(선택)"
+                android:inputType="text"
+                android:maxLength="100"
+                android:minHeight="48dp" />
+
+            <EditText
+                android:id="@+id/inputExample"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="예문"
+                android:inputType="textMultiLine"
+                android:maxLines="3"
+                android:minHeight="48dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/dialog_cancel_ll"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#FAFAFA"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/dialog_cancel_tv"
+                    style="@style/pretendard_16sp_semibold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="취소"
+                    android:textColor="@color/Gray1"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/dialog_ok_ll"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/Main1_1"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/dialog_ok_tv"
+                    style="@style/pretendard_16sp_semibold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="저장"
+                    android:textColor="@color/white" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>
