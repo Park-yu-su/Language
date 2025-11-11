@@ -1,6 +1,7 @@
 package com.example.language.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.language.data.ChatMessage
@@ -24,6 +25,7 @@ class ChatAdapter(private val messages: MutableList<ChatMessage>) :
         fun bind(message: ChatMessage, timeString: String) {
             binding.chatMessageTv.text = message.text
             binding.timestamp.text = timeString
+            binding.timestamp.visibility = View.INVISIBLE
         }
     }
 
@@ -33,6 +35,7 @@ class ChatAdapter(private val messages: MutableList<ChatMessage>) :
         fun bind(message: ChatMessage, timeString: String) {
             binding.chatMessageTv.text = message.text
             binding.timestamp.text = timeString
+            binding.timestamp.visibility = View.INVISIBLE
         }
     }
 

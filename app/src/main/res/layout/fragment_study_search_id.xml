@@ -54,6 +54,8 @@
                     style="@style/pretendard_16sp_medium"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
                     android:layout_weight="1"
                     android:background="@null"
                     android:ellipsize="end"

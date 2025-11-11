@@ -5,11 +5,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import com.example.language.R
+import com.example.language.adapter.WordListAdapter
 import com.example.language.adapter.WordPagerAdapter
+import com.example.language.api.login.UserPreference
+import com.example.language.api.study.StudyRepository
+import com.example.language.api.study.viewModel.StudyViewModel
+import com.example.language.api.study.viewModel.StudyViewModelFactory
 import com.example.language.data.WordData
 import com.example.language.databinding.FragmentStudyWordDetailBinding
 import com.example.language.ui.home.MainActivity
+import kotlin.getValue
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -28,11 +35,24 @@ class StudyWordDetailFragment : Fragment() {
 
     private lateinit var binding: FragmentStudyWordDetailBinding
 
+    private var wordList : MutableList<WordData> = mutableListOf()
+
+
+    //API 연결을 위한 수단
+    private val studyRepository = StudyRepository()
+    private val studyViewModel: StudyViewModel by activityViewModels(){
+        StudyViewModelFactory(studyRepository)
+    }
+    //유저 UID 가져오기
+    private lateinit var userPreference : UserPreference
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
+
         }
     }
 
@@ -50,16 +70,14 @@ class StudyWordDetailFragment : Fragment() {
 
         //상단 바 제거
         (activity as? MainActivity)?.setUIVisibility(false)
+        userPreference = UserPreference(requireContext())
 
-        //일단 임시 데이터
-        val wordList: MutableList<WordData> = mutableListOf(
-            WordData("word", mutableListOf("뜻1", "뜻2", "뜻3", "뜻4"), "This word is example."),
-            WordData("word2", mutableListOf("meanings", "meanings", "meanings", "meanings"), "example2"),
-            WordData("word3", mutableListOf("meanings", "meanings", "meanings", "meanings"), "example3"),
-            WordData("word4", mutableListOf("meanings", "meanings", "meanings", "meanings"), "example4"),
-            WordData("word5", mutableListOf("meanings", "meanings", "meanings", "meanings"), "example5")
-        )
-        val startIndex = 2 // 이건 차후 ViewModel로
+
+        for(word in studyViewModel.selectWordList){
+            wordList.add(word)
+        }
+
+        val startIndex = studyViewModel.selectWordIndex
 
         //viewpager 연결
         binding.wordViewPager.adapter = WordPagerAdapter(this, wordList)

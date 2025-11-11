@@ -10,14 +10,20 @@ import android.view.animation.AnimationUtils
 import android.view.animation.OvershootInterpolator
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.language.R
+import com.example.language.api.login.UserPreference
+import com.example.language.api.test.TestRepository
+import com.example.language.api.test.viewModel.TestViewModel
+import com.example.language.api.test.viewModel.TestViewModelFactory
 import com.example.language.data.WordData
 import com.example.language.databinding.FragmentTestMeaningBinding
 import com.example.language.ui.home.MainActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.getValue
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -36,21 +42,23 @@ class TestMeaningFragment : Fragment() {
 
     private lateinit var binding: FragmentTestMeaningBinding
 
+    private lateinit var testWords : MutableList<WordData>
+    private lateinit var nowTestWord : WordData
 
-    //임시 데이터
-    private var tmpData = mutableListOf(
-        WordData("APPLE", mutableListOf("사과", "사과2", "사과3", "사과4"), "An apple a day keeps the doctor away."),
-        WordData("EFFICIENT", mutableListOf("효율적인", "사과2", "사과3", "사과4"), "We need an efficient solution."),
-        WordData("PROGRAMMING", mutableListOf("프로그래밍", "사과2", "사과3", "사과4"), "I love programming."),
-        WordData("LANGUAGE", mutableListOf("언어", "사과2", "사과3", "사과4"), "English is a global language."),
-        WordData("DEVELOPMENT", mutableListOf("개발", "사과2", "사과3", "사과4"), "Software development is complex.")
-    )
     private var nowWordIndex = 0
-    private var totalWord = tmpData.size
+    private var totalWord = 0
     private var isLike = false
 
     //팝 애니메이션
     private lateinit var papAnim : Animation
+
+    private val testRepository = TestRepository()
+    private val testViewModel: TestViewModel by activityViewModels(){
+        TestViewModelFactory(testRepository)
+    }
+
+    //유저 UID 가져오기
+    private lateinit var userPreference : UserPreference
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,10 +86,18 @@ class TestMeaningFragment : Fragment() {
         (activity as? MainActivity)?.setUIVisibility(false)
         //애니메이션 로드
         papAnim = AnimationUtils.loadAnimation(requireContext(), R.anim.button_pop)
+        //userPref
+        userPreference = UserPreference(requireContext())
+
+        //먼저 값 불러오기
+        getWordDataWithShuffle()
 
         //UI 세팅
         updateUI()
         binding.meanProgressbar.max = totalWord
+        binding.meanNickanmeTv.text = userPreference.getName()
+
+
 
         //각 버튼 리스너
         binding.meanAnswer1Btn.setOnClickListener {
@@ -113,6 +129,58 @@ class TestMeaningFragment : Fragment() {
         }
     }
 
+    //일단 먼저 data를 한 번 섞을거야 그리고 개수도 맞추자.
+    private fun getWordDataWithShuffle(){
+        var tmpData = testViewModel.selectWordList
+        var shuffleData = tmpData.shuffled()
+        testWords = shuffleData.toMutableList()
+        totalWord = testWords.size
+    }
+    
+    //섞인 데이터셋에서 하나를 가져와 보기창을 만들기
+    private fun makeQuiz(): List<String>{
+
+        //일단 현재 테스트 할 거
+        nowTestWord = testWords[nowWordIndex]
+        //정답
+        val correctAnswer = nowTestWord.meanings.get(0)
+        //오답 3개
+        val wrongAnswers = nowTestWord.distractors.shuffled().take(3)
+
+        val options = mutableListOf<String>()
+        options.add(correctAnswer)
+        options.addAll(wrongAnswers)
+
+        return options.shuffled()
+    }
+
+    //인자로 받는 값 1=review | 2=liked | 3=wrong
+    private fun linkWordUser(status: Int){
+        //일단 내 UID
+        var stringUid = userPreference.getUid() ?: "0"
+        var uid = stringUid.toInt()
+        //타입 체크
+        var typeCheck = listOf<String>("review", "liked", "wrong")
+        var type = typeCheck[status - 1]
+        //단어 가져오기
+        var wordIds = listOf<Int>(nowTestWord.wordId)
+
+        testViewModel.linkWordUser(requireContext(), uid, wordIds, type)
+    }
+    private fun unlinkWordUser(status: Int){
+        //일단 내 UID
+        var stringUid = userPreference.getUid() ?: "0"
+        var uid = stringUid.toInt()
+        //타입 체크
+        var typeCheck = listOf<String>("review", "liked", "wrong")
+        var type = typeCheck[status - 1]
+        //단어 가져오기
+        var wordIds = listOf<Int>(nowTestWord.wordId)
+
+        testViewModel.unlinkWordUser(requireContext(), uid, wordIds, type)
+    }
+
+
     //홈 화면 이동
     fun navigateToHome(){
         requireActivity().onBackPressedDispatcher.onBackPressed()
@@ -125,18 +193,22 @@ class TestMeaningFragment : Fragment() {
         if(!isLike){
             isLike = true
             likeBtn.setImageResource(R.drawable.ic_like_heart)
+            linkWordUser(2) //like
 
         }
         else{
             isLike = false
             likeBtn.setImageResource(R.drawable.ic_like_heart2)
+            unlinkWordUser(3) //unlike
         }
 
     }
 
     private fun handleAnswer(select: String, numBtn: Int){
+        val correctAnswer = nowTestWord.meanings.get(0)
+
         //정답
-        if(select == tmpData.get(nowWordIndex).meanings.get(0)){
+        if(select == correctAnswer){
             showResult(true, numBtn)
         }
         else{
@@ -170,6 +242,8 @@ class TestMeaningFragment : Fragment() {
                 nowCheckBtn.visibility = View.VISIBLE
                 nowCheckBtn.setImageResource(R.drawable.ic_correct_blue)
             }
+            //정답이니 오늘 푼 문제 추가
+            linkWordUser(1) //review
         }
         //오답이면 바꾸기
         else{
@@ -180,6 +254,9 @@ class TestMeaningFragment : Fragment() {
                 nowCheckBtn.visibility = View.VISIBLE
                 nowCheckBtn.setImageResource(R.drawable.ic_correct_no_red)
             }
+            //오답이니 틀린 문제 추가
+            linkWordUser(1) //review
+            linkWordUser(3) //wrong
         }
 
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
@@ -211,7 +288,7 @@ class TestMeaningFragment : Fragment() {
         //이 이후에 버튼 or 시간 지나고 바꾸기
         nowBtn.apply {
             strokeWidth = 0
-            backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.Main1_5)
+            backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.Main1_4)
             nowCheckBtn.visibility = View.INVISIBLE
         }
     }
@@ -221,20 +298,26 @@ class TestMeaningFragment : Fragment() {
     private fun updateUI(){
         //아직 남으면 업뎃
         if(nowWordIndex < totalWord){
-            var nowWord = tmpData.get(nowWordIndex)
+            //현재 문제 생성
+            nowTestWord = testWords[nowWordIndex]
+            //퀴즈 보기 생성
+            val quizOptions = makeQuiz()
 
             //UI 적용
-            binding.meanWordTv.text = nowWord.word
-            binding.meanExampleTv.text = nowWord.example
+            binding.meanWordTv.text = nowTestWord.word
+            binding.meanExampleTv.text = nowTestWord.example
             binding.meanProgressTv.text = "${nowWordIndex + 1}/${totalWord}"
             binding.meanProgressbar.progress = nowWordIndex + 1
 
-            binding.meanAnswer1Tv.text = nowWord.meanings.get(0)
-            binding.meanAnswer2Tv.text = nowWord.meanings.get(1)
-            binding.meanAnswer3Tv.text = nowWord.meanings.get(2)
-            binding.meanAnswer4Tv.text = nowWord.meanings.get(3)
-
-
+            val answerButtons = listOf(
+                binding.meanAnswer1Tv,
+                binding.meanAnswer2Tv,
+                binding.meanAnswer3Tv,
+                binding.meanAnswer4Tv
+            )
+            quizOptions.forEachIndexed { index, text ->
+                answerButtons[index].text = text
+            }
 
         }
         //끝나면

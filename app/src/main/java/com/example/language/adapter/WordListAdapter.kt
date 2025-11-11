@@ -12,7 +12,7 @@ import java.util.Locale
 
 class WordListAdapter(
     private var wordList: MutableList<WordData>,
-    private var onItemClicked: (WordData) -> Unit,
+    private var onItemClicked: (WordData, Int) -> Unit,
     private var onTTSRequest: (String) -> Unit
 ) : RecyclerView.Adapter<WordListAdapter.WordListViewHolder>() {
 
@@ -21,10 +21,24 @@ class WordListAdapter(
                 fun bind(data: WordData){
                     binding.studyEnglishTv.text = data.word
                     binding.studyExampleTv.text = data.example
-                    binding.studyMeangins1Tv.text = data.meanings.get(0).toString()
+
+                    if(data.meanings.get(0) != ""){
+                        binding.studyMeangins1Tv.text = data.meanings.get(0).toString()
+
+                    }
+                    if(data.meanings.get(1) != ""){
+                        binding.studyMeangins2Tv.text = data.meanings.get(1).toString()
+                    }
+                    if(data.meanings.get(2) != ""){
+                        binding.studyMeangins3Tv.text = data.meanings.get(2).toString()
+                    }
+                    if(data.meanings.get(3) != ""){
+                        binding.studyMeangins4Tv.text = data.meanings.get(3).toString()
+                    }
+
 
                     binding.root.setOnClickListener {
-                        onItemClicked(data)
+                        onItemClicked(data, adapterPosition)
                     }
 
                     binding.studyListenImv.setOnClickListener {

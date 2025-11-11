@@ -1,5 +1,6 @@
 package com.example.language.api
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
 
@@ -64,7 +65,6 @@ data class FriendListResponsePayload(
     val images: List<String>,
 )
 
-
 // 4.2.2. 친구 요청/삭제 (Request/Reject)
 @Serializable
 data class FriendRequestPayload(
@@ -85,6 +85,11 @@ data class DictionaryRequestPayload(
     val cnt: String,
     val file_name: List<String>,
     val file_size: List<Long>,
+)
+
+@Serializable
+data class DictionaryTextRequestPayload(
+    val data: List<WordData>
 )
 
 @Serializable
@@ -148,6 +153,16 @@ data class WordbookDeleteRequestPayload(
 data class WordbookDeleteResponsePayload(
     val wid: String
 )
+// 4.5.4 단어장 조회 (GetWordbook)
+@Serializable
+data class GetWordbookRequestPayload(
+    val wid: Int
+)
+
+@Serializable
+data class GetWordbookResponsePayload(
+    val data: List<WordDataWithWordID>
+)
 
 // 4.6. 태그 관리 (TagUpdate)
 @Serializable
@@ -164,16 +179,102 @@ data class SearchUserResponsePayload(
     val image: String
 )
 
+// 4.8. 태그 검색 (SearchTag)
+@Serializable
+data class SearchTagRequestPayload(
+    val query: String
+)
+@Serializable
+data class SearchTagResponsePayload(
+    val data: List<TagData>
+)
+// 4.9. 단어장 검색 (SearchWordbook)
+@Serializable
+data class SearchWordbookRequestPayload(
+    val tids: List<Int>
+)
+
+@Serializable
+data class SearchWordbookResponsePayload(
+    val data: List<WordbookSearchResultData>
+)
+
+// 4.10. 단어장 구독 (Subscribe)
+@Serializable
+data class SubscribeRequestPayload(
+    val wid: Int,
+    val subscriber: Int
+)
+
+// 4.11. 구독중인 단어장 리스트 (GetSubscribedWordbooks)
+@Serializable
+data class GetSubscribedWordbooksResponsePayload(
+    val data: List<SubscribedWordbooksData>
+)
+
+// 4.12. 유저별 단어 상태 저장 (LinkUserWord)
+@Serializable
+data class LinkUserWordRequestPayload(
+    val uid: Int,
+    val word_ids: List<Int>,
+    val status: String
+)
+
+// 4.13. 유저의 상태별 단어 불러오기 (GetUserWordStatus)
+@Serializable
+data class GetLinkedWordOfUserRequestPayload(
+    // status : liked | wrong | review
+    // liked : 좋아요 한 단어
+    // wrong : 틀린 단어
+    // review : 리뷰할 단어
+    val uid: Int,
+    val status: String
+)
+@Serializable
+data class GetLinkedWordOfUserResponsePayload(
+    val data: List<WordDataWithWordID>
+)
 
 // 공통 사용 모델
+@Serializable
+data class SimpleMessagePayload(
+    val message: String
+)
+
 @Serializable
 data class WordData(
     val word: String,
     val meanings: List<String>,
+    val distractors: List<String>,
+    val example: String
+)
+@Serializable
+data class WordDataWithWordID(
+    @SerialName("word_id") val wordId: Int,
+    val word: String,
+    val meanings: List<String>,
+    val distractors: List<String>,
     val example: String
 )
 
 @Serializable
-data class SimpleMessagePayload(
-    val message: String
+data class TagData(
+    val tid: Int,
+    val name: String,
+    val reference_count: Int
+)
+
+@Serializable
+data class WordbookSearchResultData(
+    val wid: Int,
+    val title: String,
+    val tags: List<String>,
+    val subscription_count: Int
+)
+
+@Serializable
+data class SubscribedWordbooksData(
+    val wid: Int,
+    val title: String,
+    val tags: List<String>,
 )

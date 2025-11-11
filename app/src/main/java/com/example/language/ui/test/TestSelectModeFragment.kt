@@ -1,14 +1,23 @@
 package com.example.language.ui.test
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.example.language.R
+import com.example.language.api.ApiResponse
+import com.example.language.api.test.TestRepository
+import com.example.language.api.test.viewModel.TestViewModel
+import com.example.language.api.test.viewModel.TestViewModelFactory
+import com.example.language.data.WordData
 import com.example.language.databinding.FragmentTestSelectModeBinding
+import kotlin.getValue
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,6 +35,12 @@ class TestSelectModeFragment : Fragment() {
     private var param2: String? = null
 
     private lateinit var binding: FragmentTestSelectModeBinding
+
+    //API 연결을 위한 수단
+    private val testRepository = TestRepository()
+    private val testViewModel: TestViewModel by activityViewModels(){
+        TestViewModelFactory(testRepository)
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,6 +70,8 @@ class TestSelectModeFragment : Fragment() {
             .setLaunchSingleTop(true)
             .build()
 
+        observeWordList()
+        getWordsById()
 
         //버튼 클릭 리스너들
         binding.selectModeVoctestBtn.setOnClickListener {
@@ -68,6 +85,41 @@ class TestSelectModeFragment : Fragment() {
         }
 
     }
+
+
+    //단어 리스트 가져오기
+    private fun getWordsById(){
+        val wid = testViewModel.selectWordbookId
+        testViewModel.getWordbook(requireContext(), wid)
+    }
+    //단어 리스트 observe
+    private fun observeWordList(){
+        testViewModel.wordListResult.observe(viewLifecycleOwner) { response ->
+            when(response){
+                is ApiResponse.Success -> {
+                    testViewModel.selectWordList.clear()
+                    Log.d("log_test", "단어장 리스트 불러오기 성공 : ${response.data}")
+
+                    val words = response.data.data
+                    for(word in words){
+                        var tmpWord = WordData(word.wordId, word.word, word.meanings
+                            , word.distractors, word.example)
+                        testViewModel.selectWordList.add(tmpWord)
+                    }
+
+                }
+                is ApiResponse.Error -> {
+                    Log.d("log_test", "실패 : ${response.message}")
+                    Toast.makeText(context, "단어 리스트를 불러오지 못했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+
+        }
+
+    }
+
+
 
     companion object {
         /**

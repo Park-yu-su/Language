@@ -1,17 +1,23 @@
 package com.example.language.ui.study
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.language.R
 import com.example.language.adapter.VocListAdapter
+import com.example.language.api.ApiResponse
+import com.example.language.api.login.UserPreference
+import com.example.language.api.study.StudyRepository
 import com.example.language.api.study.viewModel.StudyViewModel
+import com.example.language.api.study.viewModel.StudyViewModelFactory
 import com.example.language.data.VocData
 import com.example.language.databinding.FragmentStudyVoclistBinding
 import com.example.language.ui.home.MainActivity
@@ -33,7 +39,18 @@ class StudyVoclistFragment : Fragment() {
 
     private lateinit var binding: FragmentStudyVoclistBinding
 
-    private val studyViewModel: StudyViewModel by activityViewModels() // Activity 스코프 공유
+    private lateinit var adapter: VocListAdapter
+    private var vocList : MutableList<VocData> = mutableListOf()
+
+    
+    //API 연결을 위한 수단
+    private val studyRepository = StudyRepository()
+    private val studyViewModel: StudyViewModel by activityViewModels(){
+        StudyViewModelFactory(studyRepository)
+    }
+
+    //유저 UID 가져오기
+    private lateinit var userPreference : UserPreference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,7 +78,10 @@ class StudyVoclistFragment : Fragment() {
         (activity as MainActivity).setTopBar("공부하기", false, true)
         (activity as MainActivity).showToprightIcon(true, 1)
 
-        //검색 버튼 관찰
+        userPreference = UserPreference(requireContext())
+
+
+        //검색 버튼 관찰 -> 리스트냐 검색이냐
         studyViewModel.searchEventStart.observe(viewLifecycleOwner) { start ->
             if (start) {
                 //이동
@@ -74,18 +94,9 @@ class StudyVoclistFragment : Fragment() {
 
         }
 
-
-
-        //임시 데이터
-        var vocList = mutableListOf(
-            VocData("고등 필수 단어 100", mutableListOf("고등"), "owner1"),
-            VocData("토익 필수 단어", mutableListOf("토익", "커스텀"), "owner1"),
-            VocData("내 중등 단어장", mutableListOf("중등", "커스텀"), "owner2"),
-            VocData("IT 개발 용어", mutableListOf("업무", "커스텀", "어려움"), "owner3")
-        )
-
-        val adapter = VocListAdapter(vocList,
-            onItemClicked = {
+        adapter = VocListAdapter(vocList,
+            onItemClicked = { data ->
+                studyViewModel.selectWordbookId = data.wid
                 val action = StudyVoclistFragmentDirections.actionStudyVoclistFragmentToStudyWordlistFragment()
                 findNavController().navigate(action)
             })
@@ -93,8 +104,47 @@ class StudyVoclistFragment : Fragment() {
         binding.studyRecyclerview.layoutManager = LinearLayoutManager(requireContext())
         binding.studyRecyclerview.adapter = adapter
 
+        //세팅 시작
+        observeMyWordbook()
+        getMyWordbook()
+
+
 
     }
+
+    //내 단어장 가져오기
+    private fun getMyWordbook(){
+        var stringUid = userPreference.getUid() ?: "0"
+        var uid = stringUid.toInt()
+        studyViewModel.getSubscribedWordbooks(requireContext(), uid)
+    }
+    //내 단어장 리스트 observe
+    private fun observeMyWordbook(){
+        studyViewModel.wordbookListResult.observe(viewLifecycleOwner) {response ->
+            when(response){
+                is ApiResponse.Success -> {
+                    vocList.clear()
+                    Log.d("log_study", "단어장 리스트 불러오기 성공 : ${response.data}")
+
+                    val words = response.data.data
+                    for(word in words){
+                        vocList.add(VocData(word.wid, word.title, word.tags, ""))
+                    }
+                    adapter.notifyDataSetChanged()
+
+
+                }
+                is ApiResponse.Error -> {
+                    Log.d("log_study", "실패 : ${response.message}")
+                    Toast.makeText(context, "단어장 목록을 불러오지 못했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()

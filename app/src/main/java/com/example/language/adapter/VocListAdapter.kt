@@ -19,6 +19,12 @@ class VocListAdapter(
             //단어 바인딩
             binding.stduyVocNameTv.text = data.title
 
+            var tags = ""
+            for(tag in data.tags){
+                tags += "#$tag  "
+            }
+            binding.stduyVocTagTv.text = tags
+
 
             //해당 단어 누를 때 함수 콜백
             binding.root.setOnClickListener {

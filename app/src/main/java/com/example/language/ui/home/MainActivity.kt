@@ -25,7 +25,7 @@ import com.kakao.sdk.common.util.Utility
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    lateinit var binding: ActivityMainBinding
     private var bottomInset = 0
 
     //검색용 ViewModel
