@@ -25,7 +25,7 @@ import com.example.language.R
 import com.example.language.api.ApiResponse
 import com.example.language.api.login.UserPreference
 import com.example.language.data.repository.WordbookRepository
-import com.example.language.data.WordData as AppWordData
+import com.example.language.viewModel.AppWordData
 import com.example.language.databinding.DialogEditWordBinding
 import com.example.language.databinding.FragmentSelectWayAddVocBinding
 import com.example.language.ui.dialog.PictureSelectDialogFragment
@@ -106,10 +106,6 @@ class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictur
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -155,9 +151,9 @@ class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictur
             .setTitle("단어 추가하기")
             .setView(dialogView)
             .setPositiveButton("추가") { dialog, _ ->
+                // (새로운 단어/뜻 파싱...)
                 val newWord = dialogBinding.inputWord.text.toString().trim()
                 val newExample = dialogBinding.inputExample.text.toString().trim()
-
                 val newMeanings = mutableListOf<String>()
                 listOf(
                     dialogBinding.inputMeaning1,
@@ -173,26 +169,26 @@ class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictur
 
                 if (newWord.isNotEmpty() && newMeanings.isNotEmpty()) {
 
+                    // [ ✨ 핵심 ✨ ]
+                    // 1. UI용 AppWordData 생성 (새 단어이므로 wordId = 0)
                     val newAppWordData = AppWordData(
+                        wordId = 0, // [!] 새 단어
                         word = newWord,
                         example = newExample,
-                        meanings = newMeanings
+                        meanings = newMeanings,
+                        distractors = emptyList() // (기본값)
                     )
 
-                    // 1. ViewModel에 수동 추가된 단어 저장
+                    // 2. ViewModel에 단어 추가
                     viewModel.addManualWord(newAppWordData)
 
-                    // 2. Safe Args 없이 다음 화면으로 이동 (R.id.action...은 NavGraph에 따름)
+                    // 3. Safe Args 없이 다음 화면으로 이동
                     findNavController().navigate(R.id.action_selectWayAddVocFragment_to_addVocFinalCheckFragment)
 
                     dialog.dismiss()
 
                 } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "단어와 최소한 하나의 뜻은 필수입니다.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(requireContext(), "단어와 최소한 하나의 뜻은 필수입니다.", Toast.LENGTH_SHORT).show()
                 }
             }
             .setNegativeButton("취소") { dialog, _ ->
@@ -200,11 +196,8 @@ class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictur
             }
             .create()
 
-        // 둥근 모서리를 표현하기 위해
         alertDialog.window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
-
         alertDialog.show()
-
     }
 
     private fun checkGalleryPermission() {
@@ -253,11 +246,13 @@ class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictur
         checkCameraPermission()
     }
 
+    /**
+     * [ ✨ 6. 사진 분석 API 호출✨ ]
+     * (ViewModel 호출)
+     */
     private fun callUploadApi(fileNames: List<String>, fileSizes: List<Long>, fileBytes: ByteArray) {
         showToast("업로드 시작...")
-
-        // ViewModel의 함수를 호출
-        // (Context는 ApplicationContext를 넘겨 메모리 누수 방지)
+        // ViewModel의 함수를 호출 (Context는 ApplicationContext 전달)
         viewModel.uploadDictionaryImages(
             context = requireContext().applicationContext,
             fileNames = fileNames,
@@ -266,32 +261,33 @@ class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictur
         )
     }
 
-    // API 호출의 "결과" (isLoading, analysisStatus)는 여기서 처리
+    /**
+     * [ ✨ 7. ViewModel 관찰 ✨ ]
+     * (사진 분석 API 결과 처리)
+     */
     private fun observeViewModel() {
+        // (isLoading 관찰은 필요시 추가)
 
         // API 분석 결과 상태 관찰
         viewModel.analysisStatus.observe(viewLifecycleOwner) { response ->
-            // null이 아니면 (새로운 이벤트가 도착하면) 처리
-            if (response != null) {
-                when (response) {
-                    is ApiResponse.Success -> {
-                        val words = response.data.data // List<WordData> (API 모델)
-                        showToast("업로드 성공! 단어 ${words.size}개 인식됨")
+            response ?: return@observe // 이벤트가 없으면 리턴
 
-                        // ViewModel의 wordList는 이미 갱신되었음
-                        // Safe Args 없이 다음 화면으로 이동
-                        findNavController().navigate(R.id.action_selectWayAddVocFragment_to_addVocFinalCheckFragment)
-                    }
-                    is ApiResponse.Error -> {
-                        // API 에러
-                        showToast("업로드 실패: ${response.message} (코드: ${response.code})")
-                    }
+            when (response) {
+                is ApiResponse.Success -> {
+                    val words = response.data.data
+                    showToast("업로드 성공! 단어 ${words.size}개 인식됨")
+
+                    // [ ✨ 핵심 ✨ ]
+                    // ViewModel의 wordList는 이미 갱신되었음
+                    // Safe Args 없이 다음 화면으로 이동
+                    findNavController().navigate(R.id.action_selectWayAddVocFragment_to_addVocFinalCheckFragment)
                 }
-
-                // [ 중요 ] 처리 완료 후, ViewModel의 상태를 null로 리셋
-                // (화면 회전 시 이벤트가 다시 실행되는 것을 방지)
-                viewModel.resetAnalysisStatus()
+                is ApiResponse.Error -> {
+                    showToast("업로드 실패: ${response.message} (코드: ${response.code})")
+                }
             }
+            // [!] 이벤트 소비 후 리셋
+            viewModel.resetAnalysisStatus()
         }
     }
 

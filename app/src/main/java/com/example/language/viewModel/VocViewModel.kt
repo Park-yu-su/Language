@@ -8,17 +8,25 @@ import androidx.lifecycle.viewModelScope
 import com.example.language.api.ApiResponse
 import com.example.language.api.DictionaryResponsePayload
 import com.example.language.api.SimpleMessagePayload
-import com.example.language.api.TagUpdateRequestPayload
-import com.example.language.api.WordData
+import com.example.language.api.WordData as ApiRegisterWordData
 import com.example.language.api.WordbookDeleteResponsePayload
 import com.example.language.api.WordbookRegisterRequestPayload
 import com.example.language.api.WordbookRegisterResponsePayload
 import com.example.language.api.WordbookUpdateRequestPayload
 import com.example.language.api.WordbookUpdateResponsePayload
-import com.example.language.api.WordData as ApiWordData
-import com.example.language.data.WordData as AppWordData
+import com.example.language.api.WordDataWithWordID
+import com.example.language.data.VocData
 import com.example.language.data.repository.WordbookRepository
 import kotlinx.coroutines.launch
+
+// UI용 데이터 클래스
+data class AppWordData(
+    var wordId : Int,
+    var word : String,
+    val meanings: MutableList<String>,
+    val distractors: List<String>,
+    val example: String
+)
 
 class VocViewModel(
     private val repository: WordbookRepository
@@ -51,6 +59,9 @@ class VocViewModel(
     private val _analysisStatus = MutableLiveData<ApiResponse<DictionaryResponsePayload>?>()
     val analysisStatus: LiveData<ApiResponse<DictionaryResponsePayload>?> = _analysisStatus
 
+    private val _linkWordStatus = MutableLiveData<ApiResponse<SimpleMessagePayload>?>()
+    val linkWordStatus: LiveData<ApiResponse<SimpleMessagePayload>?> = _linkWordStatus
+
     // API 호출 로딩 상태
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
@@ -77,57 +88,51 @@ class VocViewModel(
     // --- 4. 단어장 데이터 로드/설정 함수 ---
 
     /**
-     * AddVocInExitFragment에서 호출.
-     * vocId를 사용해 Repository에서 단어장의 *모든 정보* (이름, 태그, 단어 목록)를
-     * 불러와 ViewModel 상태를 초기화합니다.
-     *
-     * (가정: repository.getWordbookDetails(vocId)가
-     * WordbookDetails(title, tags, words) 같은 객체를 반환)
+     * [MakeVocFragment에서 호출]
+     * 단어장의 기본 정보(ID, 이름, 태그)를 ViewModel에 설정합니다.
+     * 이어서 loadVocabookDetails를 호출하여 단어 목록을 불러옵니다.
+     */
+    fun loadVocabookForEditing(context: Context, vocData: VocData) {
+        _currentVocId.value = vocData.wid.toString()
+        title.value = vocData.title
+        tags.value = vocData.tags.joinToString(", ")
+        _wordList.value = emptyList() // (일단 비우고, 로드 시작)
+
+        // 단어 목록(words) 로드
+        loadVocabookDetails(context, vocData.wid.toString())
+    }
+
+    /**
+     * [새 단어장 흐름 시작]
+     * AddNewVocFragment에서 호출.
+     */
+    fun setupForNewVocabook(newTitle: String, newTags: List<String>) {
+        _currentVocId.value = null // 새 단어장이므로 ID 없음
+        title.value = newTitle
+        tags.value = newTags.joinToString(", ")
+        _wordList.value = emptyList() // 단어 목록 비어있음
+    }
+
+    /**
+     * [✨ 7. (수정) 단어 목록만 불러오기]
+     * Repository에서 실제 단어장 단어 목록을 불러옵니다.
      */
     fun loadVocabookDetails(context: Context, vocId: String) {
         viewModelScope.launch {
             _isLoading.value = true
+            // Repository는 String -> Int 변환을 담당
+            val response = repository.getWordbook(context.applicationContext, vocId)
 
-            // (이 부분은 Repository 구현에 따라 달라집니다)
-            // 1. Repository에서 단어장 상세 정보 가져오기
-            // val response = repository.getWordbookDetails(context, vocId)
-
-            // (임시 하드코딩 예시)
-            // -------------------------------------------------------------------
-            val tempWords = listOf(
-                AppWordData("apple", mutableListOf("사과"), "ex1"),
-                AppWordData("banana", mutableListOf("바나나"), "ex2")
-            )
-            val response = object { // (실제로는 API 응답 객체여야 함)
-                val title = "임시 단어장 제목"
-                val tags = listOf("태그1", "태그2")
-                val words = tempWords
-            }
-            // -------------------------------------------------------------------
-
-            // 2. ViewModel 상태 업데이트
-            if (response != null) { // (실제로는 response is ApiResponse.Success)
-                _currentVocId.value = vocId
-                title.value = response.title
-                tags.value = response.tags.joinToString(", ")
-                _wordList.value = response.words
-            } else {
-                // (에러 처리)
+            if (response is ApiResponse.Success) {
+                // API 응답: List<WordDataWithWordID>
+                val apiWordList = response.data.data
+                // [!] API 모델 -> UI 모델로 변환
+                _wordList.value = apiWordList.map { mapApiWordToAppWord(it) }
+            } else if (response is ApiResponse.Error) {
+                // (로드 실패 처리)
+                _wordList.value = emptyList() // 실패 시 빈 리스트
             }
             _isLoading.value = false
-        }
-    }
-
-    /**
-     * AddVocFinalCheckFragment에서 NavArgs로 받은 데이터를 동기화할 때 사용.
-     * (ViewModel 중심 흐름에서는 이 함수의 필요성이 낮아질 수 있습니다.)
-     */
-    fun setInitialData(initialTitle: String, initialWords: List<AppWordData>) {
-        if (title.value == null) {
-            title.value = initialTitle
-        }
-        if (_wordList.value == null) {
-            _wordList.value = initialWords
         }
     }
 
@@ -161,11 +166,19 @@ class VocViewModel(
             _analysisStatus.value = response
 
             if (response is ApiResponse.Success) {
+                // (response.data.data가 List<WordData> - ID 없는 모델 - 라고 가정)
                 val newApiWords = response.data.data
-                val newAppWords = newApiWords.map { mapWordDataToAppWordData(it) }
-
-                val currentList = _wordList.value ?: emptyList()
-                _wordList.value = currentList + newAppWords
+                val newAppWords = newApiWords.map { apiWord ->
+                    // [!] '등록'용 모델(WordData) -> UI 모델(AppWordData)로 변환
+                    AppWordData(
+                        wordId = 0, // 새 단어
+                        word = apiWord.word,
+                        meanings = apiWord.meanings.toMutableList(),
+                        distractors = apiWord.distractors,
+                        example = apiWord.example
+                    )
+                }
+                _wordList.value = (_wordList.value ?: emptyList()) + newAppWords
             }
             _isLoading.value = false
         }
@@ -185,21 +198,35 @@ class VocViewModel(
      * [생성] 새 단어장을 서버에 등록합니다.
      * (참고: 현재 흐름은 '수정' 위주이지만, '새 단어장 만들기' 흐름에서 사용)
      */
-    fun registerNewWordbook(context: Context, title: String, tags: List<String>, data: List<ApiWordData>) {
+    fun registerNewWordbook(context: Context) {
         viewModelScope.launch {
             _isLoading.value = true
+            val title = title.value
             val ownerUid = _ownerUid.value
-            if (ownerUid.isNullOrEmpty()) {
-                _registerStatus.value = ApiResponse.Error("VIEWMODEL_ERROR", "UID가 없습니다.")
+            val tagsList = tags.value.orEmpty().split(",").map { it.trim() }.filter { it.isNotEmpty() }
+            val words = _wordList.value ?: emptyList() // List<AppWordData>
+
+            if (title.isNullOrEmpty() || ownerUid.isNullOrEmpty()) {
+                _registerStatus.value = ApiResponse.Error("VIEWMODEL_ERROR", "제목 또는 UID가 없습니다.")
                 _isLoading.value = false
                 return@launch
             }
 
+            // [!] UI 모델 -> '등록'용 API 모델 (ApiRegisterWordData)로 변환
+            val finalApiData = words.map { appWord ->
+                ApiRegisterWordData( // (ID가 없는 WordData 모델)
+                    word = appWord.word,
+                    meanings = appWord.meanings.toList(), // MutableList -> List
+                    distractors = appWord.distractors,
+                    example = appWord.example
+                )
+            }
+
             val payload = WordbookRegisterRequestPayload(
                 title = title,
-                tags = tags,
+                tags = tagsList,
                 owner_uid = ownerUid,
-                data = data
+                data = finalApiData
             )
             _registerStatus.value = repository.registerWordbook(context.applicationContext, payload)
             _isLoading.value = false
@@ -228,16 +255,19 @@ class VocViewModel(
                 return@launch
             }
 
-            // 3. 데이터 변환 (AppWordData -> ApiWordData)
+            // [ ✨ 3. 데이터 변환 (오류 수정) ✨ ]
+            // 'update' 요청도 'register'와 동일하게 ID가 없는 모델을 사용합니다.
+            // (AppWordData -> ApiRegisterWordData)
             val finalApiData = words.map { appWord ->
-                ApiWordData(
+                ApiRegisterWordData( // [!] WordDataWithWordID -> ApiRegisterWordData (WordData 별칭)로 변경
+                    // wordId = appWord.wordId, // <-- 이 줄 삭제
                     word = appWord.word,
-                    meanings = appWord.meanings.toList(), // MutableList -> List
+                    meanings = appWord.meanings.toList(),
+                    distractors = appWord.distractors,
                     example = appWord.example
                 )
             }
 
-            // 4. Payload 생성
             val payload = WordbookUpdateRequestPayload(
                 wid = wid,
                 title = title,
@@ -259,38 +289,60 @@ class VocViewModel(
         viewModelScope.launch {
             val wid = _currentVocId.value
             val ownerUid = _ownerUid.value
-
             if (wid.isNullOrEmpty() || ownerUid.isNullOrEmpty()) {
                 _deleteStatus.value = ApiResponse.Error("VIEWMODEL_ERROR", "ID 또는 UID가 없습니다.")
                 return@launch
             }
-
             _isLoading.value = true
+            // [!] Repository가 String ID를 받도록 수정됨 (이전 대화)
             _deleteStatus.value = repository.deleteWordbook(context.applicationContext, wid, ownerUid)
             _isLoading.value = false
         }
     }
 
+    // --- [ ✨ 단어-유저 연결 함수 ✨ ] ---
+
     /**
-     * AddNewVocFragment에서 "새 단어장 만들기"를 시작할 때 호출됩니다.
-     * ViewModel의 상태를 '새 단어장'에 맞게 초기화합니다.
+     * 단어에 '좋아요', '틀림', '리뷰' 상태를 연결합니다.
+     * (status: "liked" | "wrong" | "review")
      */
-    fun setupForNewVocabook(newTitle: String, newTags: List<String>) {
-        _currentVocId.value = null // [중요] 새 단어장이므로 ID는 null
-        title.value = newTitle
-        tags.value = newTags.joinToString(", ")
-        _wordList.value = emptyList() // [중요] 단어 목록은 비어있음
+    fun linkWordToUser(context: Context, wordId: Int, status: String) {
+        viewModelScope.launch {
+            if (wordId <= 0) { // 0(새 단어)이거나 음수면 API 호출 방지
+                _linkWordStatus.value = ApiResponse.Error("VIEWMODEL_ERROR", "저장되지 않은 단어입니다.")
+                return@launch
+            }
+            _isLoading.value = true
+            _linkWordStatus.value = repository.linkWordUser(context.applicationContext, listOf(wordId), status)
+            _isLoading.value = false
+        }
+    }
+
+    /**
+     * 단어의 '좋아요', '틀림', '리뷰' 상태 연결을 해제합니다.
+     */
+    fun unlinkWordFromUser(context: Context, wordId: Int, status: String) {
+        viewModelScope.launch {
+            if (wordId <= 0) return@launch // 0(새 단어)이면 무시
+
+            _isLoading.value = true
+            _linkWordStatus.value = repository.unlinkWordUser(context.applicationContext, listOf(wordId), status)
+            _isLoading.value = false
+        }
     }
 
     // --- 7. 유틸리티 및 리셋 함수 ---
 
+    // [ ✨ 4. (필수) 변환 헬퍼 함수 ✨ ]
     /**
-     * API 응답(WordData)을 UI 모델(AppWordData)로 변환합니다. (List -> MutableList)
+     * API *응답* (ApiWordData, ID 있음) -> UI 모델 (AppWordData)
      */
-    private fun mapWordDataToAppWordData(apiWord: WordData): AppWordData {
+    private fun mapApiWordToAppWord(apiWord: WordDataWithWordID): AppWordData {
         return AppWordData(
+            wordId = apiWord.wordId,
             word = apiWord.word,
-            meanings = apiWord.meanings.toMutableList(), // .toMutableList()로 변환
+            meanings = apiWord.meanings.toMutableList(), // List -> MutableList
+            distractors = apiWord.distractors,
             example = apiWord.example
         )
     }
@@ -304,5 +356,5 @@ class VocViewModel(
     fun resetDeleteStatus() { _deleteStatus.value = null }
     fun resetTagUpdateStatus() { _tagUpdateStatus.value = null }
     fun resetAnalysisStatus() { _analysisStatus.value = null }
-
+    fun resetLinkWordStatus() { _linkWordStatus.value = null }
 }
