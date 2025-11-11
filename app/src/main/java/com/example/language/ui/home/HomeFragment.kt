@@ -1,6 +1,7 @@
 package com.example.language.ui.home
 
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.navigation.fragment.findNavController
@@ -41,6 +43,7 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var userPreference: UserPreference
 
+    private lateinit var textToSpeech: TextToSpeech
 
     //달력 관련
     private lateinit var selectedDate: CalendarDay
@@ -84,6 +87,13 @@ class HomeFragment : Fragment() {
         selectedDec = SelectedDecorator(requireContext())
         initCalendar()
 
+        //TTS 세팅
+        textToSpeech = TextToSpeech(requireContext()) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                textToSpeech.language = Locale.US
+            }
+        }
+
 
         //단어 테스트 로직
         binding.homeTestBtn.setOnClickListener {
@@ -93,11 +103,31 @@ class HomeFragment : Fragment() {
 
         }
 
-        // 단어장 만들기 로직
+        //단어장 만들기 로직
         binding.homeMakeVocBtn.setOnClickListener {
             val navController = findNavController()
             navController.navigate(R.id.action_homeFragment_to_makeVocFragment)
         }
+
+        //단어 발음 로직
+        binding.homeTodaywordListenBtn.setOnClickListener {
+            val nowWord = binding.homeTodaywordEnglishTv.text.toString()
+            binding.homeTodaywordListenBtn.startAnimation(
+                AnimationUtils.loadAnimation(requireContext(), R.anim.button_pop))
+
+            textToSpeech.speak(nowWord, TextToSpeech.QUEUE_FLUSH, null, null)
+        }
+
+    }
+
+
+    //랜덤 단어 페이지 보여주기
+    private fun showTodayWord(){
+
+    }
+
+    //quiz process 정의
+    private fun handleQuiz(){
 
     }
 

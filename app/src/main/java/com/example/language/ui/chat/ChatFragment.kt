@@ -28,10 +28,17 @@ import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.language.R
 import com.example.language.adapter.ChatAdapter
+import com.example.language.api.chat.ChatRepository
+import com.example.language.api.chat.viewModel.ChatViewModel
+import com.example.language.api.chat.viewModel.ChatViewModelFactory
+import com.example.language.api.friend.FriendRepository
+import com.example.language.api.friend.viewModel.FriendViewModel
+import com.example.language.api.friend.viewModel.FriendViewModelFactory
 import com.example.language.data.ChatMessage
 import com.example.language.databinding.FragmentChatBinding
 import com.example.language.ui.home.MainActivity
@@ -46,6 +53,7 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
+import kotlin.getValue
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -58,6 +66,12 @@ class ChatFragment : Fragment(), ChatMenuListener {
     private lateinit var binding: FragmentChatBinding
     private lateinit var chatAdapter: ChatAdapter
     private val messageList = mutableListOf<ChatMessage>()
+
+    //viewModel
+    private val chatRepository = ChatRepository()
+    private val chatViewModel: ChatViewModel by activityViewModels() {
+        ChatViewModelFactory(chatRepository)
+    }
 
 
     //녹음 관련
