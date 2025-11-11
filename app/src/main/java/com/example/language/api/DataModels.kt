@@ -41,7 +41,7 @@ data class ClientRequest<T>(
 data class AuthRequestPayload(
     val email: String,
     val nickname: String,
-    val image: String,
+    val image: String
 )
 
 @Serializable
@@ -49,34 +49,34 @@ data class AuthResponsePayload(
     val uid: String,
     val nickname: String,
     val email: String,
-    val image: String,
+    val image: String
 )
 
 // 4.2.1. 친구 목록 조회 (Friend)
 @Serializable
 data class FriendListRequestPayload(
-    val uid: Int,
+    val uid: Int
 )
 
 @Serializable
 data class FriendListResponsePayload(
     val uids: List<String>,
     val nicknames: List<String>,
-    val images: List<String>,
+    val images: List<String>
 )
 
 // 4.2.2. 친구 요청/삭제 (Request/Reject)
 @Serializable
 data class FriendRequestPayload(
     val requester: Int,
-    val requestie: Int,
+    val requestie: Int
 )
 
 // 4.2.3. 대기중인 친구 요청 조회 (PendingRequests)
 @Serializable
 data class PendingRequestsPayload(
     val uid: Int,
-    val type: String, // 서버에서 "sent" 또는 "received"를 구분하기 위함
+    val type: String // 서버에서 "sent" 또는 "received"를 구분하기 위함
 )
 
 // 4.3. 단어장 사진 분석 (Dictionary)
@@ -84,7 +84,7 @@ data class PendingRequestsPayload(
 data class DictionaryRequestPayload(
     val cnt: String,
     val file_name: List<String>,
-    val file_size: List<Long>,
+    val file_size: List<Long>
 )
 
 @Serializable
@@ -94,7 +94,7 @@ data class DictionaryTextRequestPayload(
 
 @Serializable
 data class DictionaryResponsePayload(
-    val data: List<WordData>,
+    val data: List<WordData>
 )
 
 // 4.4. 발음 평가 (STT)
@@ -153,7 +153,6 @@ data class WordbookDeleteRequestPayload(
 data class WordbookDeleteResponsePayload(
     val wid: String
 )
-
 // 4.5.4 단어장 조회 (GetWordbook)
 @Serializable
 data class GetWordbookRequestPayload(
@@ -236,6 +235,12 @@ data class GetLinkedWordOfUserResponsePayload(
     val data: List<WordDataWithWordID>
 )
 
+// 4.14. 단어장 ID로 단어장 metadata 불러오기 (getWordbookInfoWithID)
+@Serializable
+data class GetWordbookInfoWithIDResponsePayload(
+    val data: WordbookMeta
+)
+
 // 공통 사용 모델
 @Serializable
 data class SimpleMessagePayload(
@@ -249,6 +254,7 @@ data class WordData(
     val distractors: List<String>,
     val example: String
 )
+
 @Serializable
 data class WordDataWithWordID(
     @SerialName("word_id") val wordId: Int,
@@ -271,6 +277,12 @@ data class WordbookSearchResultData(
     val title: String,
     val tags: List<String>,
     val subscription_count: Int
+)
+@Serializable
+data class WordbookMeta(
+    val wid: Int,
+    val title: String,
+    val tags: List<String>
 )
 
 @Serializable
