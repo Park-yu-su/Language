@@ -16,8 +16,7 @@
         android:background="@color/white"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        >
+        app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
             android:id="@+id/make_voc_back_btn"
@@ -28,8 +27,7 @@
             android:visibility="visible"
             style="@style/freesentation6_20sp_title"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/make_voc_title_tv"
@@ -41,7 +39,7 @@
             android:layout_marginStart="5dp"
             app:layout_constraintStart_toEndOf="@id/make_voc_back_btn"
             app:layout_constraintTop_toTopOf="@id/make_voc_back_btn"
-            app:layout_constraintBottom_toBottomOf="@id/make_voc_back_btn"/>
+            app:layout_constraintBottom_toBottomOf="@id/make_voc_back_btn" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -9,27 +9,27 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.language.adapter.WordListEditAdapter
 import com.example.language.api.ApiResponse
-import com.example.language.databinding.DialogEditWordBinding
-import com.example.language.api.WordData as ApiWordData
-import com.example.language.data.WordData as AppWordData
-import com.example.language.databinding.FragmentAddVocFinalCheckBinding
 import com.example.language.api.login.UserPreference
 import com.example.language.data.repository.WordbookRepository
+import com.example.language.databinding.DialogEditWordBinding
+import com.example.language.data.WordData as AppWordData
+import com.example.language.databinding.FragmentAddVocFinalCheckBinding
 import com.example.language.viewModel.VocViewModel
 import com.example.language.viewModel.VocViewModelFactory
+import kotlin.getValue
 
 class AddVocFinalCheckFragment : Fragment() {
 
     private var _binding: FragmentAddVocFinalCheckBinding? = null
     private val binding get() = _binding!!
 
-    // --- 1. ViewModel 및 Factory 주입 ---
+    // --- [ ✨ 1. Factory, Repository, Preference 선언 ✨ ] ---
+    // (ViewModel 선언보다 *먼저* 선언해야 합니다)
     private val userPreference by lazy {
         UserPreference(requireContext().applicationContext)
     }
@@ -39,15 +39,14 @@ class AddVocFinalCheckFragment : Fragment() {
     private val viewModelFactory by lazy {
         VocViewModelFactory(repository)
     }
-    private val viewModel: VocViewModel by viewModels { viewModelFactory }
 
-    // --- 2. Safe Args ---
-    private val args: AddVocFinalCheckFragmentArgs by navArgs()
+    // --- [ ✨ 2. ViewModel 선언 (수정) ✨ ] ---
+    // 팩토리를 람다로 전달합니다.
+    private val viewModel: VocViewModel by activityViewModels<VocViewModel> { viewModelFactory }
 
-    // --- 3. Adapter ---
+    // --- Adapter ---
     private lateinit var adapter: WordListEditAdapter
-
-    private lateinit var wordList: MutableList<AppWordData>
+    private var wordList: MutableList<AppWordData> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,31 +64,16 @@ class AddVocFinalCheckFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val vocName: String = args.vocName
-
-        val apiWordList: Array<ApiWordData> = args.wordDataList
-
-        wordList = apiWordList.map { apiWord ->
-            AppWordData(
-                word = apiWord.word,
-                meanings = apiWord.meanings.toMutableList(),
-                example = apiWord.example
-            )
-        }.toMutableList()
-
-        // 2. ViewModel 초기화
-        viewModel.setInitialData(args.vocName, wordList)
-
-        // 3. 어댑터 설정
+        // 1. 어댑터 설정
         setupRecyclerView()
 
-        // 4. ViewModel <-> UI 바인딩 설정
+        // 2. ViewModel <-> UI 바인딩 설정
         setupDataBinding()
 
-        // 5. 버튼 리스너 설정
+        // 3. 버튼 리스너 설정
         setupClickListeners()
 
-        // 6. API 결과 관찰 설정
+        // 4. API 결과 관찰 설정
         observeApiResults()
     }
 
@@ -148,13 +132,15 @@ class AddVocFinalCheckFragment : Fragment() {
                         meanings = newMeanings
                     )
 
-                    // 원본 리스트에서 현재 아이템의 인덱스를 찾습니다.
                     val index = wordList.indexOf(wordData)
                     if (index != -1) {
-                        // 리스트의 데이터를 업데이트합니다.
+                        // 1. 로컬 리스트(wordList) 업데이트
                         wordList[index] = updatedWordData
-                        // 어댑터에 해당 아이템이 변경되었음을 알립니다.
+                        // 2. 어댑터 UI 업데이트
                         adapter.notifyItemChanged(index)
+
+                        // 3. ViewModel의 wordList도 갱신 (동기화)
+                        viewModel.updateWordList(wordList)
                     }
 
                 } else {
@@ -185,9 +171,12 @@ class AddVocFinalCheckFragment : Fragment() {
         // ViewModel의 wordList (데이터) -> UI (어댑터)
         // (updateWord 함수가 호출될 때 어댑터를 갱신하기 위함)
         viewModel.wordList.observe(viewLifecycleOwner) { updatedList ->
-            wordList.clear()
-            wordList.addAll(updatedList)
-            adapter.notifyDataSetChanged() // ⭐️ ListAdapter.submitList가 더 효율적입니다.
+            // (setInitialData 호출 시에도 여기가 실행됨)
+            if (wordList != updatedList) { // 불필요한 갱신 방지
+                wordList.clear()
+                wordList.addAll(updatedList)
+                adapter.notifyDataSetChanged()
+            }
         }
     }
 
@@ -196,53 +185,30 @@ class AddVocFinalCheckFragment : Fragment() {
      */
     private fun setupClickListeners() {
         binding.saveVocBtn.setOnClickListener {
-            val title = viewModel.title.value?.trim()
-            val ownerUid = viewModel.ownerUid.value?.trim()
-            val tagsString = viewModel.tags.value
+            // ViewModel의 updateCurrentWordbook() 함수는
+            // wid, title, tags, uid, data를 모두 ViewModel 내부에서 가져옵니다.
+            // 따라서 Fragment는 유효성 검사 없이 호출만 하면 됩니다.
 
-            val tagsList: List<String> = tagsString.orEmpty()
-                .split(",")
-                .map { it.trim() }
-                .filter { it.isNotEmpty() }
+            // (만약 버튼 클릭 전에 유효성 검사가 필요하다면 ViewModel의 값을 체크)
+            val title = viewModel.title.value
+            val wid = viewModel.currentVocId.value
+            val words = viewModel.wordList.value
 
-            // 1. [핵심] Safe Args에서 WID를 가져옵니다.
-            val currentWid = "1"
-
-            // 유효성 검사
-            if (currentWid.isNullOrEmpty()) {
-                showToast("수정할 단어장 ID(WID)가 없습니다.")
-                return@setOnClickListener
-            }
             if (title.isNullOrEmpty()) {
-                showToast("단어장 제목을 입력해주세요.")
+                showToast("단어장 제목이 없습니다.")
                 return@setOnClickListener
             }
-            if (ownerUid.isNullOrEmpty()) {
-                showToast("사용자 정보(UID)가 없습니다.")
+            if (wid.isNullOrEmpty()) {
+                showToast("단어장 ID가 없습니다.")
                 return@setOnClickListener
             }
-            if (wordList.isEmpty()) {
+            if (words.isNullOrEmpty()) {
                 showToast("단어가 하나 이상 있어야 합니다.")
                 return@setOnClickListener
             }
 
-            // [핵심] 데이터 변환 (AppWordData -> ApiWordData)
-            val finalApiData = wordList.map { appWord ->
-                ApiWordData(
-                    word = appWord.word,
-                    meanings = appWord.meanings.toList(),
-                    example = appWord.example
-                )
-            }
-
-            viewModel.updateWordbook(
-                context = requireContext(),
-                wid = currentWid,
-                title = title,
-                tags = tagsList,
-                owner_uid = ownerUid,
-                data = finalApiData
-            )
+            // ViewModel에 '현재 상태로 저장'하라고 명령
+            viewModel.updateCurrentWordbook(requireContext().applicationContext)
         }
     }
 
@@ -250,24 +216,6 @@ class AddVocFinalCheckFragment : Fragment() {
      * ViewModel의 API 호출 결과 LiveData를 관찰합니다.
      */
     private fun observeApiResults() {
-        /* 생성(Register) 결과 관찰
-        viewModel.registerStatus.observe(viewLifecycleOwner) { response ->
-            // ⭐️ null 체크 추가 (초기 상태이거나, 다른 LiveData가 방금 사용된 경우)
-            response ?: return@observe
-
-            when (response) {
-                is ApiResponse.Success -> {
-                    showToast("'${response.data.title}' 생성 성공!")
-                    findNavController().popBackStack()
-                }
-                is ApiResponse.Error -> {
-                    showToast("생성 실패: ${response.message}")
-                }
-            }
-            //  중요: 이벤트를 한 번만 소비하도록 LiveData를 null로 리셋
-            viewModel.registerStatus.value = null
-        } */
-
         // 수정(Update) 결과 관찰
         viewModel.updateStatus.observe(viewLifecycleOwner) { response ->
             response ?: return@observe
@@ -275,13 +223,15 @@ class AddVocFinalCheckFragment : Fragment() {
             when (response) {
                 is ApiResponse.Success -> {
                     showToast("'${response.data.title}' 수정 성공!")
-                    findNavController().popBackStack()
+                    findNavController().popBackStack() // 이전 화면으로 돌아가기
                 }
 
                 is ApiResponse.Error -> {
                     showToast("수정 실패: ${response.message}")
                 }
             }
+            // [중요] 이벤트 소비 후 리셋
+            viewModel.resetUpdateStatus()
         }
     }
 
