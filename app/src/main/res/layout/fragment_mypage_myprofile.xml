@@ -141,7 +141,7 @@
             android:fontFamily="@font/pretendard_semibold"
             android:textSize="16sp"
             app:layout_constraintTop_toTopOf="@id/self_introduce_bg"
-            app:layout_constraintBottom_toBottomOf=""
+            app:layout_constraintBottom_toBottomOf="@id/border_line"
             app:layout_constraintStart_toStartOf="@id/self_introduce_bg"
             android:layout_marginStart="12dp"
             android:layout_marginTop="8dp" />

@@ -19,17 +19,18 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
-import com.example.language.api.ApiClient.uploadImagesForDictionary
+import com.example.language.R
 import com.example.language.api.ApiResponse
-import com.example.language.api.WordData as ApiWordData
+import com.example.language.api.login.UserPreference
+import com.example.language.data.repository.WordbookRepository
 import com.example.language.data.WordData as AppWordData
 import com.example.language.databinding.DialogEditWordBinding
 import com.example.language.databinding.FragmentSelectWayAddVocBinding
 import com.example.language.ui.dialog.PictureSelectDialogFragment
-import kotlinx.coroutines.launch
+import com.example.language.viewModel.VocViewModel
+import com.example.language.viewModel.VocViewModelFactory
 import java.io.ByteArrayOutputStream
 
 class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictureSelectListener {
@@ -37,9 +38,21 @@ class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictur
     private var _binding: FragmentSelectWayAddVocBinding? = null
     private val binding get() = _binding!!
 
-    private val args: SelectWayAddVocFragmentArgs by navArgs()
+    // --- [ ✨ 1. Factory, Repository, Preference 선언 ✨ ] ---
+    // (ViewModel 선언보다 *먼저* 선언해야 합니다)
+    private val userPreference by lazy {
+        UserPreference(requireContext().applicationContext)
+    }
+    private val repository by lazy {
+        WordbookRepository(userPreference)
+    }
+    private val viewModelFactory by lazy {
+        VocViewModelFactory(repository)
+    }
 
-    private lateinit var currentVocName: String
+    // --- [ ✨ 2. ViewModel 선언 (수정) ✨ ] ---
+    // 팩토리를 람다로 전달합니다.
+    private val viewModel: VocViewModel by activityViewModels<VocViewModel> { viewModelFactory }
 
     val galleryLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         if (uri != null) {
@@ -109,8 +122,6 @@ class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictur
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        currentVocName = args.vocName
-
         binding.addToPictureBtn.setOnClickListener {
             showPictureDialog()
         }
@@ -118,6 +129,8 @@ class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictur
         binding.addToManualBtn.setOnClickListener {
             showManualDialog()
         }
+
+        observeViewModel()
     }
 
     override fun onDestroyView() {
@@ -166,21 +179,11 @@ class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictur
                         meanings = newMeanings
                     )
 
-                    val newApiWordData = ApiWordData(
-                        word = newAppWordData.word,
-                        meanings = newAppWordData.meanings.toList(),
-                        example = newAppWordData.example
-                    )
+                    // 1. ViewModel에 수동 추가된 단어 저장
+                    viewModel.addManualWord(newAppWordData)
 
-                    val wordsArray = arrayOf(newApiWordData)
-
-                    val action = SelectWayAddVocFragmentDirections
-                        .actionSelectWayAddVocFragmentToAddVocFinalCheckFragment(
-                            wordsArray,
-                            vocName = currentVocName
-                        )
-
-                    findNavController().navigate(action)
+                    // 2. Safe Args 없이 다음 화면으로 이동 (R.id.action...은 NavGraph에 따름)
+                    findNavController().navigate(R.id.action_selectWayAddVocFragment_to_addVocFinalCheckFragment)
 
                     dialog.dismiss()
 
@@ -251,39 +254,43 @@ class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictur
     }
 
     private fun callUploadApi(fileNames: List<String>, fileSizes: List<Long>, fileBytes: ByteArray) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            try {
-                showToast("업로드 시작...")
+        showToast("업로드 시작...")
 
-                val response = uploadImagesForDictionary(
-                    context = requireContext(),
-                    fileNames = fileNames,
-                    fileSizes = fileSizes,
-                    combinedFileBytes = fileBytes
-                )
+        // ViewModel의 함수를 호출
+        // (Context는 ApplicationContext를 넘겨 메모리 누수 방지)
+        viewModel.uploadDictionaryImages(
+            context = requireContext().applicationContext,
+            fileNames = fileNames,
+            fileSizes = fileSizes,
+            combinedFileBytes = fileBytes
+        )
+    }
 
+    // API 호출의 "결과" (isLoading, analysisStatus)는 여기서 처리
+    private fun observeViewModel() {
+
+        // API 분석 결과 상태 관찰
+        viewModel.analysisStatus.observe(viewLifecycleOwner) { response ->
+            // null이 아니면 (새로운 이벤트가 도착하면) 처리
+            if (response != null) {
                 when (response) {
                     is ApiResponse.Success -> {
-                        val words = response.data.data // List<WordData>
+                        val words = response.data.data // List<WordData> (API 모델)
                         showToast("업로드 성공! 단어 ${words.size}개 인식됨")
-                        val wordsArray = words.toTypedArray()
 
-                        val action = SelectWayAddVocFragmentDirections
-                            .actionSelectWayAddVocFragmentToAddVocFinalCheckFragment(
-                                wordsArray,
-                                vocName = currentVocName
-                            )
-
-                        findNavController().navigate(action)
+                        // ViewModel의 wordList는 이미 갱신되었음
+                        // Safe Args 없이 다음 화면으로 이동
+                        findNavController().navigate(R.id.action_selectWayAddVocFragment_to_addVocFinalCheckFragment)
                     }
                     is ApiResponse.Error -> {
                         // API 에러
                         showToast("업로드 실패: ${response.message} (코드: ${response.code})")
                     }
                 }
-            } catch (e: Exception) {
-                showToast("업로드 중 오류 발생: ${e.message}")
-                Log.e("SelectWayAddVocFragment", "Upload failed", e)
+
+                // [ 중요 ] 처리 완료 후, ViewModel의 상태를 null로 리셋
+                // (화면 회전 시 이벤트가 다시 실행되는 것을 방지)
+                viewModel.resetAnalysisStatus()
             }
         }
     }

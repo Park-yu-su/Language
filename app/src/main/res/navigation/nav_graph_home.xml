@@ -35,9 +35,11 @@
         <action
             android:id="@+id/action_makeVocFragment_to_addNewVocFragment"
             app:destination="@id/addNewVocFragment" />
+
         <action
             android:id="@+id/action_makeVocFragment_to_addVocInExitFragment"
-            app:destination="@id/addVocInExitFragment" />
+            app:destination="@id/addVocInExitFragment"/>
+
     </fragment>
 
     <fragment
@@ -45,20 +47,22 @@
         android:name="com.example.language.ui.makeVoc.AddNewVocFragment"
         android:label="새 단어장 만들기"
         tools:layout="@layout/fragment_add_new_voc" >
+
         <action
             android:id="@+id/action_addNewVocFragment_to_selectWayAddVocFragment"
-            app:destination="@id/selectWayAddVocFragment" >
-            <argument
-                android:name="vocName"
-                app:argType="string" />
-        </action>
+            app:destination="@id/selectWayAddVocFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/addVocInExitFragment"
         android:name="com.example.language.ui.makeVoc.AddVocInExitFragment"
         android:label="기존 단어장에 추가하기"
-        tools:layout="@layout/fragment_add_voc_in_exit" >
+        tools:layout="@layout/fragment_add_voc_in_exit">
+
+        <argument
+            android:name="vocId"
+            app:argType="string" />
+
         <action
             android:id="@+id/action_addVocInExitFragment_to_selectWayAddVocFragment"
             app:destination="@id/selectWayAddVocFragment" />
@@ -71,20 +75,8 @@
         tools:layout="@layout/fragment_select_way_add_voc" >
 
         <action
-        android:id="@+id/action_selectWayAddVocFragment_to_addVocFinalCheckFragment"
-        app:destination="@id/addVocFinalCheckFragment">
-
-            <argument
-                android:name="wordDataList"
-                app:argType="com.example.language.api.WordData[]"
-                app:nullable="false" />
-
-        </action>
-
-        <argument
-            android:name="vocName"
-            app:argType="string" />
-
+            android:id="@+id/action_selectWayAddVocFragment_to_addVocFinalCheckFragment"
+            app:destination="@id/addVocFinalCheckFragment"/>
     </fragment>
 
     <fragment
@@ -92,15 +84,6 @@
         android:name="com.example.language.ui.makeVoc.AddVocFinalCheckFragment"
         android:label="단어 추가 완료"
         tools:layout="@layout/fragment_add_voc_final_check">
-
-        <argument
-            android:name="wordDataList"
-            app:argType="com.example.language.api.WordData[]"
-            app:nullable="false" />
-
-        <argument
-            android:name="vocName"
-            app:argType="string" />
 
     </fragment>
 
