@@ -52,6 +52,13 @@ class AddNewVocFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // [ ✨ 화면 진입 시 ViewModel 상태 초기화 ✨ ]
+        // '새 단어장 만들기' 화면에 들어오는 즉시,
+        // ViewModel의 ID, 제목, 태그, *단어 목록*을 모두 비웁니다.
+        // 이렇게 하면 이전 작업(단어장 수정)의 단어 목록이 누적되지 않습니다.
+        tagList.clear() // 프래그먼트의 로컬 태그 리스트도 비움
+        viewModel.setupForNewVocabook("", emptyList())
+
         // [ ✨ 태그 입력 및 '다음' 버튼 리스너 설정 ✨ ]
         setupTagInputListener()
         setupNextButtonListener()
