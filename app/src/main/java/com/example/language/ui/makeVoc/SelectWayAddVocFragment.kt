@@ -31,6 +31,7 @@ import com.example.language.databinding.FragmentSelectWayAddVocBinding
 import com.example.language.ui.dialog.PictureSelectDialogFragment
 import com.example.language.viewModel.VocViewModel
 import com.example.language.viewModel.VocViewModelFactory
+import android.view.WindowManager
 import java.io.ByteArrayOutputStream
 
 class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictureSelectListener {
@@ -131,6 +132,7 @@ class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictur
 
     override fun onDestroyView() {
         super.onDestroyView()
+        unblockScreenTouch()
         _binding = null
     }
 
@@ -266,7 +268,16 @@ class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictur
      * (사진 분석 API 결과 처리)
      */
     private fun observeViewModel() {
-        // (isLoading 관찰은 필요시 추가)
+        // [ ✨ 로딩 상태 관찰 (화면 터치 제어) ✨ ]
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) {
+                // 로딩 중일 때 화면 터치 막기
+                blockScreenTouch()
+            } else {
+                // 로딩이 끝나면 화면 터치 풀기
+                unblockScreenTouch()
+            }
+        }
 
         // API 분석 결과 상태 관찰
         viewModel.analysisStatus.observe(viewLifecycleOwner) { response ->
@@ -289,6 +300,25 @@ class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictur
             // [!] 이벤트 소비 후 리셋
             viewModel.resetAnalysisStatus()
         }
+    }
+
+    // --- [ ✨ 화면 터치 제어 헬퍼 함수 ✨ ] ---
+
+    /**
+     * Activity의 Window에 Flag를 설정하여 화면 전체의 터치를 막습니다.
+     */
+    private fun blockScreenTouch() {
+        activity?.window?.setFlags(
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+        )
+    }
+
+    /**
+     * 설정했던 Flag를 제거하여 화면 터치를 다시 활성화합니다.
+     */
+    private fun unblockScreenTouch() {
+        activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
 
     private fun getBytesFromUri(context: Context, uri: Uri): ByteArray? {
