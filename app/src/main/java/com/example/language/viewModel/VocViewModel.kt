@@ -19,14 +19,6 @@ import com.example.language.data.VocData
 import com.example.language.data.repository.WordbookRepository
 import kotlinx.coroutines.launch
 
-// '등록'시 wordId가 없는 API 요청용 데이터 클래스
-data class ApiNewWordData(
-    var word : String,
-    val meanings: List<String>,
-    val distractors: List<String>,
-    val example: String
-)
-
 // UI용 데이터 클래스
 data class AppWordData(
     var wordId : Int,
