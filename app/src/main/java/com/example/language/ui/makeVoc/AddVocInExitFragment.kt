@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.language.adapter.WordListEditAdapter
+import com.example.language.viewModel.AppWordData
 import com.example.language.databinding.DialogEditWordBinding
 import com.example.language.databinding.FragmentAddVocInExitBinding
 import androidx.core.graphics.drawable.toDrawable
@@ -22,7 +23,7 @@ import com.example.language.data.repository.WordbookRepository
 import com.example.language.viewModel.VocViewModel
 import com.example.language.viewModel.VocViewModelFactory
 import kotlin.getValue
-import com.example.language.data.WordData as AppWordData
+
 
 class AddVocInExitFragment : Fragment() {
 
@@ -91,6 +92,7 @@ class AddVocInExitFragment : Fragment() {
      * RecyclerView와 어댑터를 초기화합니다.
      */
     private fun setupRecyclerView() {
+        // [!] 어댑터가 AppWordData를 사용하도록 수정됨 (이전 단계)
         adapter = WordListEditAdapter(fragmentWordList, // 비어있는 로컬 리스트로 어댑터 생성
             onItemClicked = { wordData ->
                 // (클릭 로직)
@@ -108,17 +110,21 @@ class AddVocInExitFragment : Fragment() {
      * ViewModel의 LiveData를 관찰하여 UI를 업데이트합니다.
      */
     private fun observeViewModel() {
+        // 로딩 상태 관찰
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            // (ProgressBar가 있다면)
+            // binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
 
-        // 단어장 제목 관찰
+        // 단어장 제목 관찰 (UI에 제목 TextView가 있다면)
         viewModel.title.observe(viewLifecycleOwner) { title ->
-            // (단어장 제목을 표시할 TextView가 있다면)
             // binding.vocTitleTextView.text = title
         }
 
-        // [ ✨ 핵심 ✨ ] 단어 목록 관찰
+        // [ ✨ 8. 핵심: 단어 목록 관찰 ✨ ]
         viewModel.wordList.observe(viewLifecycleOwner) { wordsFromViewModel ->
-            // ViewModel의 리스트가 변경되면, 프래그먼트의 로컬 리스트를 갱신하고
-            // 어댑터에게 데이터가 변경되었음을 알립니다.
+            // ViewModel의 리스트가 변경되면(API 로드 완료)
+            // 프래그먼트의 로컬 리스트를 갱신하고 어댑터에게 알립니다.
             fragmentWordList.clear()
             fragmentWordList.addAll(wordsFromViewModel)
             adapter.notifyDataSetChanged()
@@ -133,7 +139,7 @@ class AddVocInExitFragment : Fragment() {
             DialogEditWordBinding.inflate(LayoutInflater.from(requireContext()))
         val dialogView = dialogBinding.root
 
-        // (기존 데이터로 다이얼로그 필드 채우기)
+        // (기존 데이터 채우기...)
         dialogBinding.inputWord.setText(wordData.word)
         dialogBinding.inputExample.setText(wordData.example)
         dialogBinding.inputMeaning1.setText(wordData.meanings.getOrNull(0))
@@ -145,7 +151,7 @@ class AddVocInExitFragment : Fragment() {
             .setTitle("단어 수정하기: ${wordData.word}")
             .setView(dialogView)
             .setPositiveButton("저장") { dialog, _ ->
-                // (새로운 단어/뜻 파싱 - 동일)
+                // (새로운 단어/뜻 파싱...)
                 val newWord = dialogBinding.inputWord.text.toString().trim()
                 val newExample = dialogBinding.inputExample.text.toString().trim()
                 val newMeanings = mutableListOf<String>()
@@ -168,24 +174,18 @@ class AddVocInExitFragment : Fragment() {
                         meanings = newMeanings
                     )
 
-                    // 1. 프래그먼트의 로컬 리스트(fragmentWordList)에서 아이템 갱신
+                    // [ ✨ 9. 로컬 리스트 및 ViewModel 갱신 ✨ ]
                     val index = fragmentWordList.indexOf(wordData)
                     if (index != -1) {
+                        // 1. 로컬 리스트(fragmentWordList) 갱신
                         fragmentWordList[index] = updatedWordData
-
-                        // 2. 어댑터에 갱신 알림
+                        // 2. 어댑터 UI 갱신
                         adapter.notifyItemChanged(index)
-
-                        // 3. 갱신된 로컬 리스트를 ViewModel에 다시 전달 (동기화)
+                        // 3. 갱신된 리스트를 ViewModel에 전달 (동기화)
                         viewModel.updateWordList(fragmentWordList)
                     }
-
                 } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "단어와 최소한 하나의 뜻은 필수입니다.",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    Toast.makeText(requireContext(), "단어와 최소한 하나의 뜻은 필수입니다.", Toast.LENGTH_SHORT).show()
                 }
                 dialog.dismiss()
             }

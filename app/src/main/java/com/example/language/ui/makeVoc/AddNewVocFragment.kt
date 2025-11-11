@@ -41,10 +41,6 @@ class AddNewVocFragment : Fragment() {
     // 프래그먼트에서 임시로 관리할 태그 리스트
     private val tagList = mutableListOf<String>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -69,13 +65,9 @@ class AddNewVocFragment : Fragment() {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 val tagText = textView.text.toString().trim()
 
-                // 유효성 검사 (빈 값, 4개 미만)
                 if (tagText.isNotEmpty() && tagList.size < 4) {
-                    // 1. 로컬 리스트에 추가
                     tagList.add(tagText)
-                    // 2. UI에 Chip 추가
                     addChipToGroup(tagText)
-                    // 3. 입력창 비우기
                     textView.text = ""
                 } else if (tagList.size >= 4) {
                     showToast("태그는 4개까지 추가할 수 있습니다.")
@@ -91,9 +83,8 @@ class AddNewVocFragment : Fragment() {
      */
     private fun addChipToGroup(tagText: String) {
         val chip = Chip(requireContext()).apply {
-            text = "#$tagText" // 예: #태그
-            isCloseIconVisible = true // 닫기 아이콘
-
+            text = "#$tagText"
+            isCloseIconVisible = true
             // 닫기 버튼 리스너 (UI와 로컬 리스트에서 제거)
             setOnCloseIconClickListener {
                 binding.tagChipGroup.removeView(it)

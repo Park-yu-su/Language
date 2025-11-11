@@ -153,6 +153,7 @@ data class WordbookDeleteRequestPayload(
 data class WordbookDeleteResponsePayload(
     val wid: String
 )
+
 // 4.5.4 단어장 조회 (GetWordbook)
 @Serializable
 data class GetWordbookRequestPayload(
