@@ -55,9 +55,9 @@ class MakeVocFragment : Fragment() {
         val tempVocIdList = listOf("voc_id_1", "voc_id_2", "voc_id_3")
 
         val vocList = mutableListOf(
-            VocData("고등 필수 단어 100", mutableListOf("고등"), "owner1"),
-            VocData("토익 필수 단어", mutableListOf("토익", "커스텀"), "owner1"),
-            VocData("내 중등 단어장", mutableListOf("중등", "커스텀"), "owner2")
+            VocData(11,"고등 필수 단어 100", mutableListOf("고등"), "owner1"),
+            VocData(22,"토익 필수 단어", mutableListOf("토익", "커스텀"), "owner1"),
+            //VocData("내 중등 단어장", mutableListOf("중등", "커스텀"), "owner2")
         )
 
         // 어댑터가 클릭된 아이템의 'vocId' (또는 position)를 반환해야 합니다.
