@@ -9,6 +9,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.OpenableColumns
 import android.util.Log
 import android.view.LayoutInflater
@@ -32,12 +33,20 @@ import com.example.language.ui.dialog.PictureSelectDialogFragment
 import com.example.language.viewModel.VocViewModel
 import com.example.language.viewModel.VocViewModelFactory
 import android.view.WindowManager
+import androidx.core.content.FileProvider
 import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictureSelectListener {
 
     private var _binding: FragmentSelectWayAddVocBinding? = null
     private val binding get() = _binding!!
+
+    private var tempImageUri: Uri? = null
 
     // --- [ ✨ 1. Factory, Repository, Preference 선언 ✨ ] ---
     // (ViewModel 선언보다 *먼저* 선언해야 합니다)
@@ -76,18 +85,35 @@ class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictur
         }
     }
 
-    val cameraThumbnailLauncher = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap: Bitmap? ->
-        if (bitmap != null) {
-            // Bitmap에서 바이트 배열 가져오기
-            val fileBytes = getBytesFromBitmap(bitmap)
-            val fileSize = fileBytes.size.toLong()
-            val fileName = "camera_${System.currentTimeMillis()}.jpg" // 임시 파일명 생성
+    val cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success: Boolean ->
+        if (success) {
+            // 사진 촬영에 성공하면, 멤버 변수에 저장해둔 tempImageUri를 사용합니다.
+            tempImageUri?.let { uri ->
+                try {
+                    // Uri에서 InputStream을 열어 바이트 배열(ByteArray)을 읽어옵니다.
+                    val fileBytes = requireContext().contentResolver.openInputStream(uri)?.readBytes()
+                    val fileSize = fileBytes?.size?.toLong() ?: 0L
+                    val fileName = "camera_${System.currentTimeMillis()}.jpg"
 
-            callUploadApi(
-                fileNames = listOf(fileName),
-                fileSizes = listOf(fileSize),
-                fileBytes = fileBytes
-            )
+                    if (fileBytes != null && fileSize > 0) {
+                        // 원본 코드의 업로드 API 호출
+                        callUploadApi(
+                            fileNames = listOf(fileName),
+                            fileSizes = listOf(fileSize),
+                            fileBytes = fileBytes
+                        )
+                    }
+
+                    // 사용이 끝난 임시 Uri 변수 정리 (선택적)
+                    tempImageUri = null
+
+                } catch (e: Exception) {
+                    Log.e("CameraUpload", "Failed to read image bytes from URI", e)
+                }
+            }
+        } else {
+            // 사용자가 카메라를 취소했거나 오류가 발생한 경우
+            Log.d("CameraUpload", "Camera capture cancelled or failed")
         }
     }
 
@@ -231,7 +257,41 @@ class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictur
     }
 
     private fun launchCamera() {
-        cameraThumbnailLauncher.launch(null)
+        try {
+            // 1. 사진을 저장할 임시 파일을 생성합니다.
+            val photoFile: File = createImageFile()
+
+            // 2. FileProvider를 사용하여 파일에 대한 content:// URI를 생성합니다.
+            //    (AndroidManifest.xml 및 filepaths.xml에 FileProvider 설정이 되어있어야 합니다.)
+            val photoURI: Uri = FileProvider.getUriForFile(
+                requireContext(),
+                "${requireContext().packageName}.fileprovider",
+                photoFile
+            )
+
+            // 3. 생성된 URI를 나중에 콜백에서 사용할 수 있도록 멤버 변수에 저장합니다.
+            tempImageUri = photoURI
+
+            // 4. Launcher를 실행하며 저장할 위치(URI)를 전달합니다.
+            cameraLauncher.launch(photoURI)
+
+        } catch (ex: IOException) {
+            Log.e("CameraUpload", "Failed to create image file", ex)
+            showToast("이미지 파일 생성에 실패했습니다.")
+        }
+    }
+
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        // 타임스탬프를 사용하여 고유한 파일 이름 생성
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(Date())
+        val storageDir: File? = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+
+        return File.createTempFile(
+            "JPEG_${timeStamp}_", /* 접두사 */
+            ".jpg",               /* 접미사 */
+            storageDir            /* 디렉토리 */
+        )
     }
 
     private fun showToast(message: String) {
