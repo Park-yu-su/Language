@@ -1,17 +1,18 @@
 package com.example.language.ui.mypage
 
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
-import android.os.VibrationEffect
 import android.os.Vibrator
-import android.os.VibratorManager
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import androidx.navigation.fragment.findNavController
 import com.example.language.databinding.FragmentMypageSettingBinding
+import com.example.language.ui.mypage.PrefsConstants.PREFS_NAME
+import com.example.language.ui.mypage.PrefsConstants.PREF_TTS_VOLUME
+import com.example.language.ui.mypage.PrefsConstants.PREF_VIBE_STATUS
 
 class MypageSettingFragment : Fragment() {
 
@@ -36,8 +37,18 @@ class MypageSettingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // SharedPreferences 인스턴스 가져오기
+        val prefs = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+
+        binding.settingBackBtn.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
         val volumeSeekBar = binding.volumeSeekBar
         val volumeTxt = binding.volumeTxt
+
+        val savedVolume = prefs.getInt(PREF_TTS_VOLUME, 0)
+        volumeSeekBar.progress = savedVolume
 
         // 텍스트 위치를 업데이트하는 함수
         val updateTextPosition = { seekBar: SeekBar ->
@@ -64,7 +75,11 @@ class MypageSettingFragment : Fragment() {
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) { /* 필요시 구현 */ }
-            override fun onStopTrackingTouch(seekBar: SeekBar?) { /* 필요시 구현 */ }
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                seekBar?.let {
+                    prefs.edit().putInt(PREF_TTS_VOLUME, it.progress).apply()
+                }
+            }
         })
 
         // 초기 로드 시 텍스트 위치 설정
@@ -73,42 +88,14 @@ class MypageSettingFragment : Fragment() {
             updateTextPosition(volumeSeekBar)
         }
 
-        // 시스템에서 Vibrator 서비스 가져오기
-        vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            // Android 12 (API 31) 이상
-            val vibratorManager = requireContext().getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
-            vibratorManager.defaultVibrator
-        } else {
-            // Android 12 미만 (Deprecated)
-            @Suppress("DEPRECATION")
-            requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        }
+        // 저장된 Vibe 상태 불러오기 (기본값: false/OFF)
+        val savedVibeStatus = prefs.getBoolean(PREF_VIBE_STATUS, false)
+        binding.vibeSwitch.isChecked = savedVibeStatus
 
-        val vibeSwitch = binding.vibeSwitch
-        // 초기 상태 설정
-        vibeSwitch.isChecked = false
-
-        // 스위치 리스너 설정
-        vibeSwitch.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                // --- ON: 기기 진동 실행 ---
-                // 진동기가 있는지 확인
-                if (vibrator?.hasVibrator() == true) {
-                    // 예시: 500ms(0.5초) 동안 한 번 진동
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        // Android 8.0 (API 26) 이상
-                        val effect = VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE)
-                        vibrator?.vibrate(effect)
-                    } else {
-                        // Android 8.0 미만 (Deprecated)
-                        @Suppress("DEPRECATION")
-                        vibrator?.vibrate(500)
-                    }
-                }
-            } else {
-                // --- OFF: 현재 진행 중인 진동 취소 ---
-                vibrator?.cancel()
-            }
+        // Switch 리스너 설정
+        binding.vibeSwitch.setOnCheckedChangeListener { _, isChecked ->
+            // 상태 변경 시 SharedPreferences에 저장
+            prefs.edit().putBoolean(PREF_VIBE_STATUS, isChecked).apply()
         }
     }
 

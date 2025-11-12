@@ -50,8 +50,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="24dp"
         android:layout_marginStart="20dp"
-        android:fontFamily="@font/pretendard_semibold"
-        android:textSize="16sp" />
+        style="@style/pretendard_16sp_semibold" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/tts_volume_layout"
@@ -111,8 +110,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="24dp"
         android:layout_marginStart="20dp"
-        android:fontFamily="@font/pretendard_semibold"
-        android:textSize="16sp" />
+        style="@style/pretendard_16sp_semibold" />
 
     <androidx.appcompat.widget.SwitchCompat
         android:id="@+id/vibe_switch"
