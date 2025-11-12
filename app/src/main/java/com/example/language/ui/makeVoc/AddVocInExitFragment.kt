@@ -86,6 +86,10 @@ class AddVocInExitFragment : Fragment() {
             // Safe Args 없이 다음 화면으로 이동
             findNavController().navigate(R.id.action_addVocInExitFragment_to_selectWayAddVocFragment)
         }
+
+        binding.addVocInExitBackBtn.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     /**

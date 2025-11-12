@@ -154,6 +154,10 @@ class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictur
         }
 
         observeViewModel()
+
+        binding.selectWayAddVocBackBtn.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     override fun onDestroyView() {

@@ -73,6 +73,10 @@ class AddVocFinalCheckFragment : Fragment() {
 
         // 4. API 결과 관찰 설정
         observeApiResults()
+
+        binding.addVocFinalCheckBackBtn.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     /**
