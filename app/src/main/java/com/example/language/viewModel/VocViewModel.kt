@@ -162,25 +162,39 @@ class VocViewModel(
     ) {
         viewModelScope.launch {
             _isLoading.value = true
-            val response = repository.uploadDictionaryImages(context, fileNames, fileSizes, combinedFileBytes)
-            _analysisStatus.value = response
 
-            if (response is ApiResponse.Success) {
-                // (response.data.data가 List<WordData> - ID 없는 모델 - 라고 가정)
-                val newApiWords = response.data.data
-                val newAppWords = newApiWords.map { apiWord ->
-                    // [!] '등록'용 모델(WordData) -> UI 모델(AppWordData)로 변환
-                    AppWordData(
-                        wordId = 0, // 새 단어
-                        word = apiWord.word,
-                        meanings = apiWord.meanings.toMutableList(),
-                        distractors = apiWord.distractors,
-                        example = apiWord.example
-                    )
+            try {
+                val response = repository.uploadDictionaryImages(
+                    context,
+                    fileNames,
+                    fileSizes,
+                    combinedFileBytes
+                )
+                _analysisStatus.value = response
+
+                if (response is ApiResponse.Success) {
+                    // (response.data.data가 List<WordData> - ID 없는 모델 - 라고 가정)
+                    val newApiWords = response.data.data
+                    val newAppWords = newApiWords.map { apiWord ->
+                        // [!] '등록'용 모델(WordData) -> UI 모델(AppWordData)로 변환
+                        AppWordData(
+                            wordId = 0, // 새 단어
+                            word = apiWord.word,
+                            meanings = apiWord.meanings.toMutableList(),
+                            distractors = apiWord.distractors,
+                            example = apiWord.example
+                        )
+                    }
+                    _wordList.value = (_wordList.value ?: emptyList()) + newAppWords
                 }
-                _wordList.value = (_wordList.value ?: emptyList()) + newAppWords
+            // (실패 시 response가 Error 상태이므로 analysisStatus가 관찰함)
+            } catch (e: Exception) {
+                // [2. 예외 처리] (네트워크 오류 등)
+                _analysisStatus.value = ApiResponse.Error("VM_ERROR", e.message ?: "Upload failed")
+            } finally {
+                // [3. (중요) 항상 로딩 종료] (화면 터치 방지 해제)
+                _isLoading.value = false
             }
-            _isLoading.value = false
         }
     }
 
