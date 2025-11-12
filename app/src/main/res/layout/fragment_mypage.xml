@@ -30,7 +30,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/mypage_setting_btn"
             android:layout_width="32dp"
             android:layout_height="32dp"
@@ -38,6 +38,7 @@
             android:layout_marginEnd="18dp"
             android:visibility="visible"
             style="@style/freesentation6_20sp_title"
+            android:backgroundTint="@color/transparent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
