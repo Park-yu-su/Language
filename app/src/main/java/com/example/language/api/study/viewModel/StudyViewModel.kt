@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.language.api.ApiResponse
 import com.example.language.api.GetSubscribedWordbooksResponsePayload
+import com.example.language.api.GetWordbookInfoWithIDResponsePayload
 import com.example.language.api.GetWordbookResponsePayload
 import com.example.language.api.SearchTagResponsePayload
 import com.example.language.api.SearchWordbookResponsePayload
@@ -30,7 +31,14 @@ class StudyViewModel(private val repository: StudyRepository) : ViewModel() {
     //태그 검색 결과 단어장 리스트
     private val _searchTagWordbookResult = MutableLiveData<ApiResponse<SearchWordbookResponsePayload>>()
     val searchTagWordbookResult = _searchTagWordbookResult
+    //ID 검색 결과 단어장 리스트
+    private val _searchIdWordbookResult = MutableLiveData<ApiResponse<GetWordbookInfoWithIDResponsePayload>>()
+    val searchIdwordbookResult = _searchIdWordbookResult
 
+    //랜덤 단어 가져온 결과
+    //단어 리스트 가져오는 lvie
+    private val _randomWordListResult = MutableLiveData<ApiResponse<GetWordbookResponsePayload>>()
+    val randomWordListResult = _randomWordListResult
 
 
     //단어장 리스트에서 내가 고른 단어장(편하게 하자)
@@ -69,15 +77,32 @@ class StudyViewModel(private val repository: StudyRepository) : ViewModel() {
     //4. 태그 검색
     fun searchWordbookByTag(context: Context, tids: List<Int>){
         viewModelScope.launch{
-            val response = repository.searchWordbookbyTag(context, tids)
+            val response = repository.searchWordbookbyTagOR(context, tids)
             _searchTagWordbookResult.value = response
         }
     }
+
+    //4.5. ID 검색
+    fun searchWordbookById(context: Context, wid: Int){
+        viewModelScope.launch{
+            val response = repository.searchWordbookbyId(context, wid)
+            _searchIdWordbookResult.value = response
+        }
+    }
+
 
     //5. 단어장 추가하기
     fun subscribeWordbook(context: Context, wid: Int, subscriber: Int){
         viewModelScope.launch {
             val response = repository.subscribeWordbook(context, wid, subscriber)
+        }
+    }
+
+    //6. 랜덤 단어
+    fun getRandomWord(context: Context, uid: Int){
+        viewModelScope.launch {
+            val response = repository.getRandomWord(context, uid)
+            _randomWordListResult.value = response
         }
     }
 

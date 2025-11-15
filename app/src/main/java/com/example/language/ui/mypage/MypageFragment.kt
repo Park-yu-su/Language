@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.example.language.R
 import com.example.language.databinding.FragmentMypageBinding
+import com.example.language.ui.home.MainActivity
 
 class MypageFragment : Fragment() {
 
@@ -24,6 +25,8 @@ class MypageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        
+        (activity as MainActivity).setUIVisibilityOnlyTopbar()
 
 //        binding.searchFriendBtn.setOnClickListener {
 //            findNavController().navigate(R.id.action_mypageFragment_to_friendAddFragment)

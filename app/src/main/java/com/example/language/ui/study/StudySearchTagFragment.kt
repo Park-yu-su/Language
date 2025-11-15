@@ -52,6 +52,8 @@ class StudySearchTagFragment : Fragment() {
     //임시 data
     private var inputString : String = ""
 
+    private var sequenceTagSearch = false //태그 연속 검색
+
 
     //API 연결을 위한 수단
     private val studyRepository = StudyRepository()

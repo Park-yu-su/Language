@@ -1,5 +1,6 @@
 package com.example.language.ui.home
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.text.SpannableString
@@ -13,9 +14,15 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.language.R
+import com.example.language.api.ApiResponse
+import com.example.language.api.WordDataWithWordID
 import com.example.language.api.login.UserPreference
+import com.example.language.api.study.StudyRepository
+import com.example.language.api.study.viewModel.StudyViewModel
+import com.example.language.api.study.viewModel.StudyViewModelFactory
 import com.example.language.databinding.FragmentHomeBinding
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.CalendarMode
@@ -23,6 +30,7 @@ import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import java.util.Locale
+import kotlin.getValue
 import kotlin.toString
 
 // TODO: Rename parameter arguments, choose names that match
@@ -51,6 +59,14 @@ class HomeFragment : Fragment() {
     private lateinit var todayDec: TodayDecorator
     private lateinit var selectedDec: SelectedDecorator
     private lateinit var sundayDec: SundayDecorator
+
+    //API 연결을 위한 수단
+    private val studyRepository = StudyRepository()
+    private val studyViewModel: StudyViewModel by activityViewModels(){
+        StudyViewModelFactory(studyRepository)
+    }
+    private var todayQuizAnswer : Boolean = false
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,6 +110,12 @@ class HomeFragment : Fragment() {
             }
         }
 
+        //그 후 화면 세팅을 위한 단어 가져오기
+        observeRandomWord()
+        var stringUid = userPreference.getUid() ?: "0"
+        var uid = stringUid.toInt()
+        studyViewModel.getRandomWord(requireContext(), uid)
+
 
         //단어 테스트 로직
         binding.homeTestBtn.setOnClickListener {
@@ -118,17 +140,102 @@ class HomeFragment : Fragment() {
             textToSpeech.speak(nowWord, TextToSpeech.QUEUE_FLUSH, null, null)
         }
 
+
+        //퀴즈 버튼 리스너 달기
+        binding.homeQuizTrueBtn.setOnClickListener {
+            handleTodayQuiz(true)
+        }
+        binding.homeQuizFalseBtn.setOnClickListener {
+            handleTodayQuiz(false)
+        }
+
+    }
+
+    //랜덤 단어 observe
+    private fun observeRandomWord(){
+        studyViewModel.randomWordListResult.observe(viewLifecycleOwner) { response ->
+            when(response){
+                is ApiResponse.Success -> {
+                    Log.d("log_study", "랜덤 단어 불러오기 성공 : ${response.data}")
+                    var words = response.data.data
+
+                    //여기서 랜덤으로 2개 뽑아서 처리하자
+                    var randomWord1 = words.random()
+                    var randomWord2 = words.random()
+                    Log.d("log_study", "랜덤 단어 1 : ${randomWord1}")
+                    Log.d("log_study", "랜덤 단어 2 : ${randomWord2}")
+
+                    showTodayWord(randomWord1)
+                    showhandleQuiz(randomWord2)
+
+                }
+                is ApiResponse.Error -> {
+                    Log.d("log_study", "랜덤 단어 불러오기 실패 : ${response.message}")
+
+                }
+            }
+        }
     }
 
 
     //랜덤 단어 페이지 보여주기
-    private fun showTodayWord(){
-
+    private fun showTodayWord(word: WordDataWithWordID){
+        binding.homeTodaywordEnglishTv.text = word.word
+        binding.homeTodaywordKoearnTv.text = word.meanings.get(0)
+        binding.homeTodaywordExampleTv.text = word.example
     }
 
     //quiz process 정의
-    private fun handleQuiz(){
+    private fun showhandleQuiz(word: WordDataWithWordID){
+        //퀴즈 질문 생성
+        binding.homeQuizExampleTv.text = word.example
+        var randNum = (0..1).random()
+        var quiz = ""
+        if(randNum == 0){
+            todayQuizAnswer = true
+            quiz += "아래 예문에서 '${word.word}'는 '${word.meanings.get(0)}'라는 의미로 사용되었다."
+        }
+        else{
+            todayQuizAnswer = false
+            quiz += "아래 예문에서 '${word.word}'는 '${word.distractors.get((0..2).random())}'라는 의미로 사용되었다."
+        }
+        binding.homeQuizQuestionTv.text = quiz
 
+
+    }
+    private fun handleTodayQuiz(choose: Boolean){
+        val rightStrokeColorInt = ContextCompat.getColor(requireContext(), R.color.Main1_1)
+        val rightBackgroundColorInt = ContextCompat.getColor(requireContext(), R.color.Main1_5)
+
+        val wrongStrokeColorInt = ContextCompat.getColor(requireContext(), R.color.redStroke)
+        val wrongBackgroundColorInt = ContextCompat.getColor(requireContext(), R.color.redBackground)
+
+        //정답
+        if(todayQuizAnswer == choose) {
+            if(choose){
+                binding.homeQuizTrueBtn.strokeColor = ColorStateList.valueOf(rightStrokeColorInt)
+                binding.homeQuizTrueBtn.backgroundTintList = ColorStateList.valueOf(rightBackgroundColorInt)
+
+            }
+            else{
+                binding.homeQuizFalseBtn.strokeColor = ColorStateList.valueOf(rightStrokeColorInt)
+                binding.homeQuizFalseBtn.backgroundTintList = ColorStateList.valueOf(rightBackgroundColorInt)
+            }
+        }
+        //오답
+        else{
+            if(choose){
+                binding.homeQuizTrueBtn.strokeColor = ColorStateList.valueOf(wrongStrokeColorInt)
+                binding.homeQuizTrueBtn.backgroundTintList = ColorStateList.valueOf(wrongBackgroundColorInt)
+            }
+            else{
+                binding.homeQuizFalseBtn.strokeColor = ColorStateList.valueOf(wrongStrokeColorInt)
+                binding.homeQuizFalseBtn.backgroundTintList = ColorStateList.valueOf(wrongBackgroundColorInt)
+            }
+        }
+        //버튼 비활성화
+        binding.homeQuizTrueBtn.isEnabled = false
+        binding.homeQuizFalseBtn.isEnabled = false
     }
 
 

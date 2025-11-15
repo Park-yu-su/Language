@@ -58,7 +58,6 @@ class AddNewVocFragment : Fragment() {
         // 이렇게 하면 이전 작업(단어장 수정)의 단어 목록이 누적되지 않습니다.
         tagList.clear() // 프래그먼트의 로컬 태그 리스트도 비움
         viewModel.setupForNewVocabook("", emptyList())
-
         // [ ✨ 태그 입력 및 '다음' 버튼 리스너 설정 ✨ ]
         setupTagInputListener()
         setupNextButtonListener()
