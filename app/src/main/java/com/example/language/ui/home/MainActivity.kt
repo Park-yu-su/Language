@@ -137,6 +137,13 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    //상단 바만 안보이게 하기
+    fun setUIVisibilityOnlyTopbar(){
+        val fragmentParams = binding.mainFragmentContainer.layoutParams as ConstraintLayout.LayoutParams
+        binding.mainTopbar.visibility = View.GONE
+        binding.mainFragmentContainer.layoutParams = fragmentParams
+    }
+
     /** 상단 바 관련 로직 **/
     //특정 fragment에서 상단/하단 바 제어
     fun setUIVisibility(visible: Boolean) {

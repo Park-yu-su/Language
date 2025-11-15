@@ -14,6 +14,7 @@ import com.example.language.api.login.UserPreference
 import com.example.language.data.VocData
 import com.example.language.data.repository.WordbookRepository
 import com.example.language.databinding.FragmentMakeVocBinding
+import com.example.language.ui.home.MainActivity
 import com.example.language.viewModel.VocViewModel
 import com.example.language.viewModel.VocViewModelFactory
 
@@ -51,6 +52,9 @@ class MakeVocFragment : Fragment() {
 
         // [ ✨ 2. (가정) API 대신 임시 데이터 사용 ✨ ]
         // (실제로는 ViewModel.getSubscribedWordbooks() 등을 호출해야 함)
+
+        //상단 바 지우기
+        (activity as MainActivity).setUIVisibility(false)
         val vocList = mutableListOf(
             VocData(1, "고등 필수 단어 100", listOf("고등"), "owner1"),
             VocData(2, "토익 필수 단어", listOf("토익", "커스텀"), "owner1"),
