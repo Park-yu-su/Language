@@ -84,6 +84,10 @@ class MakeVocFragment : Fragment() {
             // '새 단어장' 흐름(AddNewVocFragment)으로 이동
             findNavController().navigate(R.id.action_makeVocFragment_to_addNewVocFragment)
         }
+
+        binding.makeVocBackBtn.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     override fun onDestroyView() {

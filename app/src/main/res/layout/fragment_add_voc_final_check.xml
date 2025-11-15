@@ -50,8 +50,7 @@
         app:layout_constraintTop_toBottomOf="@id/add_voc_final_check_topbar"
         app:layout_constraintStart_toStartOf="parent"
         android:text="단어 확인하기"
-        android:textSize="16sp"
-        android:fontFamily="@font/pretendard_semibold"
+        style="@style/pretendard_16sp_semibold"
         android:textColor="@color/Main1_1"
         android:layout_marginTop="24dp"
         android:layout_marginStart="20dp" />
@@ -93,8 +92,7 @@
             android:paddingStart="20dp"
             android:paddingEnd="10dp"
             android:text="단어장 저장하기"
-            android:fontFamily="@font/pretendard_semibold"
-            android:textSize="16sp"
+            style="@style/pretendard_16sp_semibold"
             android:background="@drawable/btn_custom_bottom"
             app:backgroundTint="@color/Main1_1" />
 

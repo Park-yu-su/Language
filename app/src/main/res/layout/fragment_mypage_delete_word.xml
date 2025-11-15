@@ -6,10 +6,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/BG"
-    tools:context=".ui.mypage.MypageMyvocFragment">
+    tools:context=".ui.mypage.MypageDeleteWordFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/manage_my_voc_topbar"
+        android:id="@+id/delete_word_topbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingVertical="20dp"
@@ -19,7 +19,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
-            android:id="@+id/manage_my_voc_back_btn"
+            android:id="@+id/delete_word_back_btn"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:src="@drawable/ic_back_btn"
@@ -30,27 +30,40 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/manage_my_voc_title_tv"
+            android:id="@+id/delete_word_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="내 단어장 관리"
+            android:text="단어 삭제하기"
             style="@style/pretendard_22sp_semibold"
             android:textColor="@color/Black"
             android:layout_marginStart="5dp"
-            app:layout_constraintStart_toEndOf="@id/manage_my_voc_back_btn"
-            app:layout_constraintTop_toTopOf="@id/manage_my_voc_back_btn"
-            app:layout_constraintBottom_toBottomOf="@id/manage_my_voc_back_btn" />
+            app:layout_constraintStart_toEndOf="@id/delete_word_back_btn"
+            app:layout_constraintTop_toTopOf="@id/delete_word_back_btn"
+            app:layout_constraintBottom_toBottomOf="@id/delete_word_back_btn"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/manage_my_voc_recyclerview"
+        android:id="@+id/mypage_delete_word_list_recyclerview"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="10dp"
+        android:clipToPadding="false"
+        android:paddingVertical="20dp"
+        android:scrollbars="vertical"
+        app:layout_constraintTop_toBottomOf="@id/delete_word_topbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageButton
+        android:id="@+id/delete_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_delete_btn_selected"
+        android:backgroundTint="@color/transparent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/manage_my_voc_topbar"/>
+        android:layout_marginBottom="32dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

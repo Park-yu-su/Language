@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/tag_bg"
+        android:layout_width="61dp"
+        android:layout_height="29dp"
+        android:background="@drawable/bg_tag"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tag_id_tv"
+        style="@style/pretendard_14sp_medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="# 태그"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/tag_bg"
+        app:layout_constraintEnd_toEndOf="@id/tag_bg"
+        app:layout_constraintStart_toStartOf="@id/tag_bg"
+        app:layout_constraintTop_toTopOf="@id/tag_bg" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

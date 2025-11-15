@@ -50,8 +50,7 @@
         app:layout_constraintTop_toBottomOf="@id/add_new_voc_topbar"
         app:layout_constraintStart_toStartOf="parent"
         android:text="정보 입력하기"
-        android:textSize="16sp"
-        android:fontFamily="@font/pretendard_semibold"
+        style="@style/pretendard_16sp_semibold"
         android:textColor="@color/Main1_1"
         android:layout_marginTop="24dp"
         android:layout_marginStart="20dp" />
@@ -63,8 +62,7 @@
         app:layout_constraintTop_toBottomOf="@id/insert_info_tv"
         app:layout_constraintStart_toStartOf="parent"
         android:text="단어장 이름을 입력하세요"
-        android:textSize="20sp"
-        android:fontFamily="@font/pretendard_semibold"
+        style="@style/pretendard_20sp_semibold"
         android:layout_marginTop="40dp"
         android:layout_marginStart="20dp" />
 
@@ -94,8 +92,7 @@
         app:layout_constraintTop_toBottomOf="@id/text_input_layout_outlined"
         app:layout_constraintStart_toStartOf="parent"
         android:text="단어장에 태그를 추가하세요"
-        android:textSize="20sp"
-        android:fontFamily="@font/pretendard_semibold"
+        style="@style/pretendard_20sp_semibold"
         android:layout_marginTop="20dp"
         android:layout_marginStart="20dp" />
 

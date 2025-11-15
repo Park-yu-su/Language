@@ -61,6 +61,10 @@ class AddNewVocFragment : Fragment() {
         // [ ✨ 태그 입력 및 '다음' 버튼 리스너 설정 ✨ ]
         setupTagInputListener()
         setupNextButtonListener()
+
+        binding.addNewVocBackBtn.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     /**

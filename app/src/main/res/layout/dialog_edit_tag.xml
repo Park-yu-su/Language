@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="50dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white">
+
+        <TextView
+            android:id="@+id/tag_dialog_title_tv"
+            style="@style/pretendard_20sp_semibold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:text="태그 이름 변경"
+            android:textColor="@android:color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout_outlined"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="24dp"
+            android:hint="태그"
+            app:hintTextAppearance="@style/MyHintText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tag_dialog_title_tv"
+            app:layout_constraintBottom_toTopOf="@id/tag_dialog_cancel_cdv">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tag_dialog_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/tag_dialog_cancel_cdv"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:backgroundTint="#FAFAFA"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tag_dialog_ok_cdv"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_input_layout_outlined"
+            app:strokeWidth="0dp">
+
+            <TextView
+                android:id="@+id/tag_dialog_cancel_tv"
+                style="@style/pretendard_16sp_semibold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="취소"
+                android:textColor="@color/Gray1"
+                android:textSize="18sp" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/tag_dialog_ok_cdv"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:backgroundTint="@color/Main1_1"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            app:cardCornerRadius="0dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tag_dialog_cancel_cdv"
+            app:layout_constraintTop_toTopOf="@id/tag_dialog_cancel_cdv"
+            app:strokeWidth="0dp">
+
+            <TextView
+                android:id="@+id/tag_dialog_ok_tv"
+                style="@style/pretendard_16sp_semibold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="확인"
+                android:textColor="@color/white" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>
