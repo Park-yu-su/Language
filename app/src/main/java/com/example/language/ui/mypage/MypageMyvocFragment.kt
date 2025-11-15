@@ -7,11 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.language.R
 import com.example.language.adapter.VocListAdapter
 import com.example.language.data.VocData
 import com.example.language.databinding.FragmentMypageMyvocBinding
-import com.example.language.ui.makeVoc.MakeVocFragmentDirections
 
 class MypageMyvocFragment : Fragment() {
 

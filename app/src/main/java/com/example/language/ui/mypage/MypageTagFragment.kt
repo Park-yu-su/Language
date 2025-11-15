@@ -80,8 +80,8 @@ class MypageTagFragment : Fragment() {
 
         // 2. 커스텀 뷰 내부의 EditText를 찾습니다.
         val editText = dialogView.findViewById<EditText>(R.id.tag_dialog_et)
-        val okButton = dialogView.findViewById<LinearLayout>(R.id.tag_dialog_ok_ll)
-        val cancelButton = dialogView.findViewById<LinearLayout>(R.id.tag_dialog_cancel_ll)
+        val okButton = dialogView.findViewById<LinearLayout>(R.id.tag_dialog_ok_cdv)
+        val cancelButton = dialogView.findViewById<LinearLayout>(R.id.tag_dialog_cancel_cdv)
 
         // 3. EditText에 기존 텍스트(originalTagText)를 설정합니다.
         editText.setText(originalTagText)
