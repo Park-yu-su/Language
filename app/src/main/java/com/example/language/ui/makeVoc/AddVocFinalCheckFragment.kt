@@ -94,6 +94,9 @@ class AddVocFinalCheckFragment : Fragment() {
         binding.wordListRecyclerview.layoutManager = LinearLayoutManager(requireContext())
     }
 
+    /**
+     * 단어 수정 다이얼로그를 표시합니다.
+     */
     private fun showEditDialog(wordData: AppWordData) {
         val dialogBinding =
             DialogEditWordBinding.inflate(LayoutInflater.from(requireContext()))
@@ -108,54 +111,57 @@ class AddVocFinalCheckFragment : Fragment() {
         dialogBinding.inputMeaning4.setText(wordData.meanings.getOrNull(3))
 
         val alertDialog = AlertDialog.Builder(requireContext())
-            .setTitle("단어 수정하기: ${wordData.word}")
+            .setTitle("단어 수정하기")
             .setView(dialogView)
-            .setPositiveButton("저장") { dialog, _ ->
-                // (새로운 단어/뜻 파싱...)
-                val newWord = dialogBinding.inputWord.text.toString().trim()
-                val newExample = dialogBinding.inputExample.text.toString().trim()
-                val newMeanings = mutableListOf<String>()
-                listOf(
-                    dialogBinding.inputMeaning1,
-                    dialogBinding.inputMeaning2,
-                    dialogBinding.inputMeaning3,
-                    dialogBinding.inputMeaning4
-                ).forEach { editText ->
-                    val meaning = editText.text.toString().trim()
-                    if (meaning.isNotEmpty()) {
-                        newMeanings.add(meaning)
-                    }
-                }
-
-                if (newWord.isNotEmpty() && newMeanings.isNotEmpty()) {
-                    // [!] UI 모델(AppWordData) 업데이트
-                    val updatedWordData = wordData.copy(
-                        word = newWord,
-                        example = newExample,
-                        meanings = newMeanings
-                    )
-
-                    val index = fragmentWordList.indexOf(wordData)
-                    if (index != -1) {
-                        // 1. 로컬 리스트(fragmentWordList) 갱신
-                        fragmentWordList[index] = updatedWordData
-                        // 2. 어댑터 UI 갱신
-                        adapter.notifyItemChanged(index)
-
-                        // [ ✨ 6. ViewModel 동기화 ✨ ]
-                        // 수정된 로컬 리스트를 ViewModel에 전달
-                        viewModel.updateWordList(fragmentWordList)
-                    }
-
-                } else {
-                    Toast.makeText(requireContext(), "단어와 최소한 하나의 뜻은 필수입니다.", Toast.LENGTH_SHORT).show()
-                }
-                dialog.dismiss()
-            }
-            .setNegativeButton("취소") { dialog, _ ->
-                dialog.dismiss()
-            }
             .create()
+
+        dialogBinding.dialogOkLl.setOnClickListener {
+            // (새로운 단어/뜻 파싱...)
+            val newWord = dialogBinding.inputWord.text.toString().trim()
+            val newExample = dialogBinding.inputExample.text.toString().trim()
+            val newMeanings = mutableListOf<String>()
+            listOf(
+                dialogBinding.inputMeaning1,
+                dialogBinding.inputMeaning2,
+                dialogBinding.inputMeaning3,
+                dialogBinding.inputMeaning4
+            ).forEach { editText ->
+                val meaning = editText.text.toString().trim()
+                if (meaning.isNotEmpty()) {
+                    newMeanings.add(meaning)
+                }
+            }
+
+            if (newWord.isNotEmpty() && newMeanings.isNotEmpty()) {
+                // [!] UI 모델(AppWordData) 업데이트
+                val updatedWordData = wordData.copy(
+                    word = newWord,
+                    example = newExample,
+                    meanings = newMeanings
+                )
+
+                val index = fragmentWordList.indexOf(wordData)
+                if (index != -1) {
+                    // 1. 로컬 리스트(fragmentWordList) 갱신
+                    fragmentWordList[index] = updatedWordData
+                    // 2. 어댑터 UI 갱신
+                    adapter.notifyItemChanged(index)
+
+                    // [ ✨ 6. ViewModel 동기화 ✨ ]
+                    // 수정된 로컬 리스트를 ViewModel에 전달
+                    viewModel.updateWordList(fragmentWordList)
+                }
+
+            } else {
+                Toast.makeText(requireContext(), "단어와 최소한 하나의 뜻은 필수입니다.", Toast.LENGTH_SHORT).show()
+            }
+
+            alertDialog.dismiss()
+        }
+
+        dialogBinding.dialogCancelLl.setOnClickListener {
+            alertDialog.dismiss()
+        }
 
         alertDialog.window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
         alertDialog.show()

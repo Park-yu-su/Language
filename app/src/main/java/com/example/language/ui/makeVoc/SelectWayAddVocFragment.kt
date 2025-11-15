@@ -34,6 +34,7 @@ import com.example.language.viewModel.VocViewModel
 import com.example.language.viewModel.VocViewModelFactory
 import android.view.WindowManager
 import androidx.core.content.FileProvider
+import androidx.navigation.fragment.navArgs
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
@@ -45,6 +46,8 @@ class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictur
 
     private var _binding: FragmentSelectWayAddVocBinding? = null
     private val binding get() = _binding!!
+
+    private val args: SelectWayAddVocFragmentArgs by navArgs()
 
     private var tempImageUri: Uri? = null
 
@@ -180,53 +183,66 @@ class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictur
         val dialogView = dialogBinding.root
 
         val alertDialog = AlertDialog.Builder(requireContext())
-            .setTitle("단어 추가하기")
             .setView(dialogView)
-            .setPositiveButton("추가") { dialog, _ ->
-                // (새로운 단어/뜻 파싱...)
-                val newWord = dialogBinding.inputWord.text.toString().trim()
-                val newExample = dialogBinding.inputExample.text.toString().trim()
-                val newMeanings = mutableListOf<String>()
-                listOf(
-                    dialogBinding.inputMeaning1,
-                    dialogBinding.inputMeaning2,
-                    dialogBinding.inputMeaning3,
-                    dialogBinding.inputMeaning4
-                ).forEach { editText ->
-                    val meaning = editText.text.toString().trim()
-                    if (meaning.isNotEmpty()) {
-                        newMeanings.add(meaning)
-                    }
+            .create()
+
+        dialogBinding.dialogOkLl.setOnClickListener {
+            // (새로운 단어/뜻 파싱...)
+            val newWord = dialogBinding.inputWord.text.toString().trim()
+            val newExample = dialogBinding.inputExample.text.toString().trim()
+            val newMeanings = mutableListOf<String>()
+            listOf(
+                dialogBinding.inputMeaning1,
+                dialogBinding.inputMeaning2,
+                dialogBinding.inputMeaning3,
+                dialogBinding.inputMeaning4
+            ).forEach { editText ->
+                val meaning = editText.text.toString().trim()
+                if (meaning.isNotEmpty()) {
+                    newMeanings.add(meaning)
                 }
+            }
 
-                if (newWord.isNotEmpty() && newMeanings.isNotEmpty()) {
+            if (newWord.isNotEmpty() && newMeanings.isNotEmpty()) {
 
-                    // [ ✨ 핵심 ✨ ]
-                    // 1. UI용 AppWordData 생성 (새 단어이므로 wordId = 0)
-                    val newAppWordData = AppWordData(
-                        wordId = 0, // [!] 새 단어
-                        word = newWord,
-                        example = newExample,
-                        meanings = newMeanings,
-                        distractors = emptyList() // (기본값)
-                    )
+                // [ ✨ 핵심 ✨ ]
+                // 1. UI용 AppWordData 생성 (새 단어이므로 wordId = 0)
+                val newAppWordData = AppWordData(
+                    wordId = 0, // [!] 새 단어
+                    word = newWord,
+                    example = newExample,
+                    meanings = newMeanings,
+                    distractors = emptyList() // (기본값)
+                )
 
-                    // 2. ViewModel에 단어 추가
-                    viewModel.addManualWord(newAppWordData)
+                // 2. ViewModel에 단어 추가
+                viewModel.addManualWord(newAppWordData)
+
+                if (args.isReturnMode) {
+                    // [MyPage 흐름]
+                    // 1. 이전 화면(MypageVocDetail)에 "완료" 신호 보내기
+                    findNavController().previousBackStackEntry
+                        ?.savedStateHandle?.set("dialog_completed", true)
+
+                    // 2. 현재 Fragment(SelectWay...) 닫기
+                    findNavController().popBackStack()
+                } else {
 
                     // 3. Safe Args 없이 다음 화면으로 이동
                     findNavController().navigate(R.id.action_selectWayAddVocFragment_to_addVocFinalCheckFragment)
-
-                    dialog.dismiss()
-
-                } else {
-                    Toast.makeText(requireContext(), "단어와 최소한 하나의 뜻은 필수입니다.", Toast.LENGTH_SHORT).show()
                 }
+
+                // ⭐️ 4. [수정] 수동으로 다이얼로그 닫기
+                alertDialog.dismiss()
+
+            } else {
+                Toast.makeText(requireContext(), "단어와 최소한 하나의 뜻은 필수입니다.", Toast.LENGTH_SHORT).show()
             }
-            .setNegativeButton("취소") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .create()
+        }
+
+        dialogBinding.dialogCancelLl.setOnClickListener {
+            alertDialog.dismiss()
+        }
 
         alertDialog.window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
         alertDialog.show()
@@ -352,10 +368,20 @@ class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictur
                     val words = response.data.data
                     showToast("업로드 성공! 단어 ${words.size}개 인식됨")
 
-                    // [ ✨ 핵심 ✨ ]
-                    // ViewModel의 wordList는 이미 갱신되었음
-                    // Safe Args 없이 다음 화면으로 이동
-                    findNavController().navigate(R.id.action_selectWayAddVocFragment_to_addVocFinalCheckFragment)
+                    if (args.isReturnMode) {
+                        // [MyPage 흐름]
+                        // 1. 이전 화면(MypageVocDetail)에 "완료" 신호 보내기
+                        findNavController().previousBackStackEntry
+                            ?.savedStateHandle?.set("dialog_completed", true)
+
+                        // 2. 현재 Fragment(SelectWay...) 닫기
+                        findNavController().popBackStack()
+                    } else {
+                        // [ ✨ 핵심 ✨ ]
+                        // ViewModel의 wordList는 이미 갱신되었음
+                        // Safe Args 없이 다음 화면으로 이동
+                        findNavController().navigate(R.id.action_selectWayAddVocFragment_to_addVocFinalCheckFragment)
+                    }
                 }
                 is ApiResponse.Error -> {
                     showToast("업로드 실패: ${response.message} (코드: ${response.code})")

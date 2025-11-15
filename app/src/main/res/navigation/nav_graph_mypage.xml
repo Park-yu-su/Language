@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph_mypage"
-    app:startDestination="@id/mypageFragment"
-    >
+    app:startDestination="@id/mypageFragment">
 
     <fragment
         android:id="@+id/mypageFragment"
@@ -23,6 +22,10 @@
         <action
             android:id="@+id/action_mypageFragment_to_mypageMyvocFragment"
             app:destination="@id/mypageMyvocFragment" />
+
+<!--        <action-->
+<!--            android:id="@+id/action_mypageFragment_to_friendAddFragment"-->
+<!--            app:destination="@id/friendAddFragment" />-->
 
     </fragment>
 
@@ -54,6 +57,43 @@
         android:id="@+id/mypageMyvocDetailFragment"
         android:name="com.example.language.ui.mypage.MypageMyvocDetailFragment"
         android:label="단어장 상세"
-        tools:layout="@layout/fragment_mypage_myvoc_detail"/>
+        tools:layout="@layout/fragment_mypage_myvoc_detail">
+
+        <argument
+            android:name="vocId"
+            app:argType="string" />
+
+        <action
+            android:id="@+id/action_mypageMyvocDetailFragment_to_selectWayAddVocFragment"
+            app:destination="@id/selectWayAddVocFragment" />
+
+        <action
+            android:id="@+id/action_mypageMyVocDetailFragment_to_mypageTagFragment"
+            app:destination="@id/mypageTagFragment" />
+
+        <action
+            android:id="@+id/action_mypageMyvocDetailFragment_to_mypageDeleteWordFragment"
+            app:destination="@id/mypageDeleteWordFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/mypageTagFragment"
+        android:name="com.example.language.ui.mypage.MypageTagFragment"
+        android:label="태그 관리"
+        tools:layout="@layout/fragment_mypage_tag">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/mypageDeleteWordFragment"
+        android:name="com.example.language.ui.mypage.MypageDeleteWordFragment"
+        android:label="단어 삭제"
+        tools:layout="@layout/fragment_mypage_delete_word">
+
+    </fragment>
+
+    <include app:graph="@navigation/nav_graph_friend" />
+    <include app:graph="@navigation/nav_graph_home" />
 
 </navigation>
