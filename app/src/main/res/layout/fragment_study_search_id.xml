@@ -40,8 +40,9 @@
                 <!--검색 이미지-->
                 <ImageView
                     android:id="@+id/searchid_search_imv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="5dp"
                     android:src="@drawable/ic_search_gray"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -136,7 +137,7 @@
                 style="@style/pretendard_14sp_semibold"
                 android:text="검색 결과가 없습니다."
                 android:textColor="#999999"
-                android:visibility="invisible"
+                android:visibility="visible"
                 android:textSize="14sp" />
         </LinearLayout>
 

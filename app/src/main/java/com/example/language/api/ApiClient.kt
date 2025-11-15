@@ -247,6 +247,16 @@ object ApiClient {
         val request = ClientRequest("SearchWordbook", payload)
         return executeRequest(context, request)
     }
+
+    // 태그로 단어장 검색 (OR)
+    suspend fun searchWordbookOr(context: Context, tids: List<Int>): ApiResponse<SearchWordbookResponsePayload>{
+        val payload = SearchWordbookRequestPayload(tids)
+        val request = ClientRequest("SearchWordbookOr", payload)
+        return executeRequest(context, request)
+    }
+
+
+
     //단어장 구독(내 단어장 추가)
     suspend fun subscribe(context: Context, wid: Int, subscriber: Int): ApiResponse<SimpleMessagePayload> {
         val payload = SubscribeRequestPayload(wid, subscriber)
@@ -315,8 +325,26 @@ object ApiClient {
         return executeRequest(context, request)
     }
 
+    //11.11일자 추가
+    //랜덤으로 단어 가져오기
+    suspend fun getRandomSubscribedWord(context: Context, uid: Int): ApiResponse<GetWordbookResponsePayload>{
+        // GetWordbookResponsePayload 재사용
+        // FriendListRequestPayload 재사용
 
+        val payload = FriendListRequestPayload(uid)
+        val request = ClientRequest("GetRandomSubscribedWord", payload)
+        return executeRequest(context, request)
+    }
     
+    //단어장 ID로 검색
+    suspend fun getWordbookInfoWithID(context: Context, wid: Int): ApiResponse<GetWordbookInfoWithIDResponsePayload>{
+        // GetWordbookRequestPayload 재사용
+        val payload = GetWordbookRequestPayload(wid)
+        val request = ClientRequest("GetWordbookInfoWithID", payload)
+        return executeRequest(context, request)
+    }
+
+
 
 
 
