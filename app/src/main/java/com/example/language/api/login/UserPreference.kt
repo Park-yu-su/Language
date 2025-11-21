@@ -31,6 +31,18 @@ class UserPreference(context: Context) {
         return prefs.getString(KEY_NICKNAME, null) ?: ""
     }
 
+    fun updateName(name: String){
+        prefs.edit().apply {
+            putString(KEY_NICKNAME, name)
+            apply()
+        }
+    }
+
+    //이메일 가져오기
+    fun getEmail(): String{
+        return prefs.getString(KEY_EMAIL, null) ?: ""
+    }
+
     //그레이트리셋
     fun clearAll() {
         prefs.edit().clear().apply()

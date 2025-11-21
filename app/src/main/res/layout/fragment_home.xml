@@ -37,7 +37,7 @@
                     android:id="@+id/home_profile_imv"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:src="@color/Gray3"
+                    android:src="@drawable/img_default_user_image"
                     android:scaleType="centerCrop"
                     app:civ_border_width="0dp"
                     app:civ_border_color="@color/black"
@@ -186,7 +186,7 @@
                 app:cardElevation="2dp"
                 app:strokeWidth="1dp"
                 app:strokeColor="@color/Main1_1"
-                app:layout_constraintDimensionRatio="1:1.2"
+                app:layout_constraintDimensionRatio="1:1.1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/home_makeVoc_btn"
                 app:layout_constraintTop_toTopOf="parent"
@@ -216,10 +216,11 @@
                         android:layout_height="wrap_content"
                         android:text="단어 테스트"
                         style="@style/pretendard_20sp_semibold"
+                        android:textSize="18sp"
                         android:textColor="@color/Main1_1"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/home_test_imv"
                         />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -236,7 +237,7 @@
                 app:cardElevation="2dp"
                 app:strokeWidth="1dp"
                 app:strokeColor="@color/Main1_1"
-                app:layout_constraintDimensionRatio="1:1.2"
+                app:layout_constraintDimensionRatio="1:1.1"
                 app:layout_constraintStart_toEndOf="@id/home_test_btn"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -264,10 +265,11 @@
                         android:layout_height="wrap_content"
                         android:text="단어장 만들기"
                         style="@style/pretendard_20sp_semibold"
+                        android:textSize="18sp"
                         android:textColor="@color/Main1_1"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"/>
+                        app:layout_constraintTop_toBottomOf="@id/home_makeVoc_imv"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>

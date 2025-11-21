@@ -108,124 +108,167 @@
         android:layout_marginTop="32dp"
         android:layout_marginEnd="20dp" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/mypage_voc_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
         app:layout_constraintTop_toBottomOf="@id/manage_my_voc_tv"
         app:layout_constraintBottom_toTopOf="@id/search_friend_tv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="12dp">
 
-        <ImageView
-            android:id="@+id/mypage_voc1_iv"
+        <TextView
+            android:id="@+id/myapge_vocno_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/pretendard_16sp_medium"
+            android:text="단어장이 존재하지 않습니다."
+            android:visibility="gone"
+            />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/myapge_voc1_cl"
             android:layout_width="152dp"
             android:layout_height="99dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/mypage_voc2_iv"
-            android:src="@drawable/bg_voc_rounded"
-            android:clickable="true"
-            android:focusable="true" />
-        
-        <ImageView
-            android:id="@+id/vocbook1_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_vocbook"
-            app:layout_constraintTop_toTopOf="@id/mypage_voc1_iv"
-            app:layout_constraintStart_toStartOf="@id/mypage_voc1_iv"
-            app:layout_constraintEnd_toEndOf="@id/mypage_voc1_iv"
-            android:layout_marginTop="12dp" />
+            >
 
-        <TextView
-            android:id="@+id/voc_name1_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="단어장 이름"
-            style="@style/pretendard_14sp_semibold"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@id/vocbook1_iv"
-            app:layout_constraintStart_toStartOf="@id/mypage_voc1_iv"
-            app:layout_constraintEnd_toEndOf="@id/mypage_voc1_iv" />
+            <ImageView
+                android:id="@+id/mypage_voc1_iv"
+                android:layout_width="152dp"
+                android:layout_height="99dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:src="@drawable/bg_voc_rounded"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <ImageView
+                android:id="@+id/vocbook1_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_vocbook"
+                app:layout_constraintTop_toTopOf="@id/mypage_voc1_iv"
+                app:layout_constraintStart_toStartOf="@id/mypage_voc1_iv"
+                app:layout_constraintEnd_toEndOf="@id/mypage_voc1_iv"
+                android:layout_marginTop="12dp" />
+
+            <TextView
+                android:id="@+id/voc_name1_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="단어장 이름"
+                style="@style/pretendard_14sp_semibold"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/vocbook1_iv"
+                app:layout_constraintStart_toStartOf="@id/mypage_voc1_iv"
+                app:layout_constraintEnd_toEndOf="@id/mypage_voc1_iv" />
+
+            <View
+                android:id="@+id/border_line"
+                android:layout_width="128dp"
+                android:layout_height="1dp"
+                android:background="@color/colorStoreBoxIcon"
+                app:layout_constraintTop_toBottomOf="@id/voc_name1_tv"
+                app:layout_constraintStart_toStartOf="@id/mypage_voc1_iv"
+                app:layout_constraintEnd_toEndOf="@id/mypage_voc1_iv"
+                android:layout_marginTop="4dp" />
+
+            <TextView
+                android:id="@+id/voc_tag1_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NN"
+                android:textColor="@color/Main1_1"
+                style="@style/pretendard_12sp_medium"
+                android:layout_marginTop="4dp"
+                app:layout_constraintTop_toBottomOf="@id/border_line"
+                app:layout_constraintStart_toStartOf="@id/mypage_voc1_iv"
+                app:layout_constraintEnd_toEndOf="@id/mypage_voc1_iv" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <View
-            android:id="@+id/border_line"
-            android:layout_width="128dp"
+            android:id="@+id/myapge_view"
+            android:layout_width="7dp"
             android:layout_height="1dp"
-            android:background="@color/colorStoreBoxIcon"
-            app:layout_constraintTop_toBottomOf="@id/voc_name1_tv"
-            app:layout_constraintStart_toStartOf="@id/mypage_voc1_iv"
-            app:layout_constraintEnd_toEndOf="@id/mypage_voc1_iv"
-            android:layout_marginTop="4dp" />
+            android:background="@color/transparent"/>
 
-        <TextView
-            android:id="@+id/voc_tag1_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="NN"
-            style="@style/pretendard_12sp_medium"
-            android:layout_marginTop="4dp"
-            app:layout_constraintTop_toBottomOf="@id/border_line"
-            app:layout_constraintStart_toStartOf="@id/mypage_voc1_iv"
-            app:layout_constraintEnd_toEndOf="@id/mypage_voc1_iv" />
 
-        <ImageView
-            android:id="@+id/mypage_voc2_iv"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/myapge_voc2_cl"
             android:layout_width="152dp"
             android:layout_height="99dp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/mypage_voc1_iv"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:src="@drawable/bg_voc_rounded"
-            android:clickable="true"
-            android:focusable="true" />
+            app:layout_constraintStart_toStartOf="parent"
+            >
 
-        <ImageView
-            android:id="@+id/vocbook2_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_vocbook"
-            app:layout_constraintTop_toTopOf="@id/mypage_voc2_iv"
-            app:layout_constraintStart_toStartOf="@id/mypage_voc2_iv"
-            app:layout_constraintEnd_toEndOf="@id/mypage_voc2_iv"
-            android:layout_marginTop="12dp" />
+            <ImageView
+                android:id="@+id/mypage_voc2_iv"
+                android:layout_width="152dp"
+                android:layout_height="99dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:src="@drawable/bg_voc_rounded"
+                android:clickable="true"
+                android:focusable="true" />
 
-        <TextView
-            android:id="@+id/voc_name2_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="단어장 이름"
-            style="@style/pretendard_14sp_semibold"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@id/vocbook2_iv"
-            app:layout_constraintStart_toStartOf="@id/mypage_voc2_iv"
-            app:layout_constraintEnd_toEndOf="@id/mypage_voc2_iv" />
+            <ImageView
+                android:id="@+id/vocbook2_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_vocbook"
+                app:layout_constraintTop_toTopOf="@id/mypage_voc2_iv"
+                app:layout_constraintStart_toStartOf="@id/mypage_voc2_iv"
+                app:layout_constraintEnd_toEndOf="@id/mypage_voc2_iv"
+                android:layout_marginTop="12dp" />
 
-        <View
-            android:id="@+id/border_line2"
-            android:layout_width="128dp"
-            android:layout_height="1dp"
-            android:background="@color/colorStoreBoxIcon"
-            app:layout_constraintTop_toBottomOf="@id/voc_name2_tv"
-            app:layout_constraintStart_toStartOf="@id/mypage_voc2_iv"
-            app:layout_constraintEnd_toEndOf="@id/mypage_voc2_iv"
-            android:layout_marginTop="4dp" />
+            <TextView
+                android:id="@+id/voc_name2_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="단어장 이름"
+                style="@style/pretendard_14sp_semibold"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/vocbook2_iv"
+                app:layout_constraintStart_toStartOf="@id/mypage_voc2_iv"
+                app:layout_constraintEnd_toEndOf="@id/mypage_voc2_iv" />
 
-        <TextView
-            android:id="@+id/voc_tag2_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="NN"
-            style="@style/pretendard_12sp_medium"
-            android:layout_marginTop="4dp"
-            app:layout_constraintTop_toBottomOf="@id/border_line2"
-            app:layout_constraintStart_toStartOf="@id/mypage_voc2_iv"
-            app:layout_constraintEnd_toEndOf="@id/mypage_voc2_iv" />
+            <View
+                android:id="@+id/border_line2"
+                android:layout_width="128dp"
+                android:layout_height="1dp"
+                android:background="@color/colorStoreBoxIcon"
+                app:layout_constraintTop_toBottomOf="@id/voc_name2_tv"
+                app:layout_constraintStart_toStartOf="@id/mypage_voc2_iv"
+                app:layout_constraintEnd_toEndOf="@id/mypage_voc2_iv"
+                android:layout_marginTop="4dp" />
+
+            <TextView
+                android:id="@+id/voc_tag2_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NN"
+                android:textColor="@color/Main1_1"
+                style="@style/pretendard_12sp_medium"
+                android:layout_marginTop="4dp"
+                app:layout_constraintTop_toBottomOf="@id/border_line2"
+                app:layout_constraintStart_toStartOf="@id/mypage_voc2_iv"
+                app:layout_constraintEnd_toEndOf="@id/mypage_voc2_iv" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/search_friend_tv"
@@ -244,7 +287,8 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_friend_search"
         android:backgroundTint="@color/transparent"
-        app:layout_constraintTop_toBottomOf="@id/mypage_voc_layout"
+        app:layout_constraintTop_toTopOf="@id/search_friend_tv"
+        app:layout_constraintBottom_toBottomOf="@id/search_friend_tv"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="14dp"
         android:layout_marginEnd="20dp" />

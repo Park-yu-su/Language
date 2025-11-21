@@ -178,8 +178,17 @@ class LoginActivity : AppCompatActivity() {
                 Log.d("log_login", "이메일: $email")
                 Log.d("log_login", "프로필 이미지: $profileImageUrl")
 
+                var existNickName = userPreference.getName() ?: ""
+
                 /**API 시작**/
-                LoginViewModel.requestLogin(this, email!!, nickname!!)
+                if(existNickName == null || existNickName == ""){
+                    LoginViewModel.requestLogin(this, email!!, nickname!!)
+                }
+                else{
+                    LoginViewModel.requestLogin(this, email!!, existNickName)
+                }
+
+
 
                 /*
                 val intent = Intent(this, MainActivity::class.java)
