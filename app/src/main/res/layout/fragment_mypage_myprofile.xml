@@ -63,6 +63,8 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="18dp"/>
 
+
+
     <ImageButton
         android:id="@+id/user_nickname_edit_btn"
         android:layout_width="wrap_content"
@@ -71,7 +73,8 @@
         android:backgroundTint="@color/transparent"
         android:layout_marginTop="8dp"
         android:layout_marginStart="3dp"
-        app:layout_constraintTop_toBottomOf="@id/user_profile_image"
+        app:layout_constraintTop_toTopOf="@id/user_profile_nickname_tv"
+        app:layout_constraintBottom_toBottomOf="@id/user_profile_nickname_tv"
         app:layout_constraintStart_toEndOf="@id/user_profile_nickname_tv" />
 
     <ImageView
@@ -102,7 +105,6 @@
         android:layout_height="wrap_content"
         android:text="a123456789"
         style="@style/pretendard_16sp_medium"
-        android:textColor="@color/Gray1"
         app:layout_constraintTop_toTopOf="@id/my_id_bg"
         app:layout_constraintBottom_toBottomOf="@id/my_id_bg"
         app:layout_constraintEnd_toStartOf="@id/id_copy_btn"
@@ -163,6 +165,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
+            android:textColor="@color/Black"
+            android:textColorHint="@color/Gray1"
             android:hint="자기소개를 입력해주세요"
             android:background="@null"/>
 

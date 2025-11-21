@@ -160,14 +160,15 @@ class HomeFragment : Fragment() {
                     var words = response.data.data
 
                     //여기서 랜덤으로 2개 뽑아서 처리하자
-                    var randomWord1 = words.random()
-                    var randomWord2 = words.random()
-                    Log.d("log_study", "랜덤 단어 1 : ${randomWord1}")
-                    Log.d("log_study", "랜덤 단어 2 : ${randomWord2}")
+                    if(words.size > 1) {
+                        var randomWord1 = words.random()
+                        var randomWord2 = words.random()
+                        Log.d("log_study", "랜덤 단어 1 : ${randomWord1}")
+                        Log.d("log_study", "랜덤 단어 2 : ${randomWord2}")
 
-                    showTodayWord(randomWord1)
-                    showhandleQuiz(randomWord2)
-
+                        showTodayWord(randomWord1)
+                        showhandleQuiz(randomWord2)
+                    }
                 }
                 is ApiResponse.Error -> {
                     Log.d("log_study", "랜덤 단어 불러오기 실패 : ${response.message}")
