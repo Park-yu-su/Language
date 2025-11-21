@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -93,6 +94,8 @@ class AddNewVocFragment : Fragment() {
      */
     private fun addChipToGroup(tagText: String) {
         val chip = Chip(requireContext()).apply {
+            setChipBackgroundColorResource(R.color.Main1_1)
+            setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
             text = "#$tagText"
             isCloseIconVisible = true
             // 닫기 버튼 리스너 (UI와 로컬 리스트에서 제거)
@@ -108,7 +111,6 @@ class AddNewVocFragment : Fragment() {
      * '다음' 버튼 리스너를 설정합니다.
      */
     private fun setupNextButtonListener() {
-        // (레이아웃 XML에 <Button android:id="@+id/next_button" ... />가 있다고 가정)
         binding.addNewVocNextBtn.setOnClickListener {
 
             // [ ✨ 3. Safe Args 로직 변경 ✨ ]

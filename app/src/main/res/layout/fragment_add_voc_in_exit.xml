@@ -80,6 +80,7 @@
             android:paddingStart="20dp"
             android:paddingEnd="10dp"
             android:text="단어 추가하기"
+            android:textColor="@color/white"
             style="@style/pretendard_16sp_semibold"
             android:background="@drawable/btn_custom_bottom"
             app:backgroundTint="@color/Main1_1" />

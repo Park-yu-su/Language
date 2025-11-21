@@ -72,14 +72,15 @@ class AddVocInExitFragment : Fragment() {
         // (fragmentWordList는 현재 비어있음)
         setupRecyclerView()
 
-        // [ ✨ 4. ViewModel 관찰 시작 ✨ ]
-        // (데이터 로드, UI 업데이트)
-        observeViewModel()
-
         // [ ✨ 5. ViewModel 로드 ✨ ]
         // Safe Args로 받은 vocId를 사용해 ViewModel에 데이터 로드 명령
         val vocId = args.vocId
-        viewModel.loadVocabookDetails(requireContext().applicationContext, vocId)
+        viewModel.setVocId(vocId)
+        viewModel.setVocTitle(args.vocTitle)
+
+        // [ ✨ 4. ViewModel 관찰 시작 ✨ ]
+        // (데이터 로드, UI 업데이트)
+        observeViewModel()
 
         // [ ✨ 6. '단어 추가' 버튼 리스너 ✨ ]
         binding.addVocBtn.setOnClickListener {
@@ -120,18 +121,15 @@ class AddVocInExitFragment : Fragment() {
             // binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
         }
 
-        // 단어장 제목 관찰 (UI에 제목 TextView가 있다면)
-        viewModel.title.observe(viewLifecycleOwner) { title ->
-            // binding.vocTitleTextView.text = title
-        }
-
         // [ ✨ 8. 핵심: 단어 목록 관찰 ✨ ]
         viewModel.wordList.observe(viewLifecycleOwner) { wordsFromViewModel ->
             // ViewModel의 리스트가 변경되면(API 로드 완료)
             // 프래그먼트의 로컬 리스트를 갱신하고 어댑터에게 알립니다.
-            fragmentWordList.clear()
-            fragmentWordList.addAll(wordsFromViewModel)
-            adapter.notifyDataSetChanged()
+            if (wordsFromViewModel != null) {
+                fragmentWordList.clear()
+                fragmentWordList.addAll(wordsFromViewModel)
+                adapter.updateData(wordsFromViewModel)
+            }
         }
     }
 
