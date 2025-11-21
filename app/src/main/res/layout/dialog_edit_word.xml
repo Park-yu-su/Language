@@ -14,6 +14,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="14dp"
             android:padding="16dp">
 
             <EditText
@@ -22,6 +24,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:hint="단어"
+                android:textColor="@color/Black"
+                android:textColorHint="@color/Gray2"
                 android:inputType="textCapWords"
                 android:maxLength="50"
                 android:minHeight="48dp" />
@@ -32,6 +36,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:hint="뜻 1"
+                android:textColor="@color/Black"
+                android:textColorHint="@color/Gray2"
                 android:inputType="text"
                 android:maxLength="100"
                 android:minHeight="48dp" />
@@ -42,6 +48,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:hint="뜻 2(선택)"
+                android:textColor="@color/Black"
+                android:textColorHint="@color/Gray2"
                 android:inputType="text"
                 android:maxLength="100"
                 android:minHeight="48dp" />
@@ -53,6 +61,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:hint="뜻 3(선택)"
+                android:textColor="@color/Black"
+                android:textColorHint="@color/Gray2"
                 android:inputType="text"
                 android:maxLength="100"
                 android:minHeight="48dp" />
@@ -63,6 +73,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:hint="뜻 4(선택)"
+                android:textColor="@color/Black"
+                android:textColorHint="@color/Gray2"
                 android:inputType="text"
                 android:maxLength="100"
                 android:minHeight="48dp" />
@@ -72,6 +84,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="예문"
+                android:textColor="@color/Black"
+                android:textColorHint="@color/Gray2"
                 android:inputType="textMultiLine"
                 android:maxLines="3"
                 android:minHeight="48dp" />

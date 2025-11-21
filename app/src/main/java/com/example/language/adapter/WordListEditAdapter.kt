@@ -19,7 +19,7 @@ class WordListEditAdapter(
         fun bind(data: AppWordData) {
             binding.englishTv.text = data.word
             binding.exampleTv.text = data.example
-            binding.meangins1Tv.text = data.meanings.get(0).toString()
+            binding.meangins1Tv.text = data.meanings.firstOrNull() ?: "뜻 없음"
 
             binding.root.setOnClickListener {
                 onItemClicked(data)
@@ -52,5 +52,11 @@ class WordListEditAdapter(
 
     override fun getItemCount(): Int {
         return wordList.size
+    }
+
+    fun updateData(newItems: List<AppWordData>) {
+        this.wordList.clear()
+        this.wordList.addAll(newItems)
+        notifyDataSetChanged()      // 새로 고침!
     }
 }

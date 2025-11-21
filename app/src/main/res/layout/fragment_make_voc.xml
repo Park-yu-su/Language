@@ -90,6 +90,7 @@
             android:paddingEnd="10dp"
             android:text="새 단어장 만들기"
             style="@style/pretendard_16sp_semibold"
+            android:textColor="@color/white"
             android:background="@drawable/btn_custom_bottom"
             app:backgroundTint="@null" />
 

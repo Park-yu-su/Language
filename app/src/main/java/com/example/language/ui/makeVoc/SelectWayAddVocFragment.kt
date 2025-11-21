@@ -34,6 +34,7 @@ import com.example.language.viewModel.VocViewModel
 import com.example.language.viewModel.VocViewModelFactory
 import android.view.WindowManager
 import androidx.core.content.FileProvider
+import androidx.core.view.isVisible
 import androidx.navigation.fragment.navArgs
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -350,6 +351,7 @@ class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictur
     private fun observeViewModel() {
         // [ ✨ 로딩 상태 관찰 (화면 터치 제어) ✨ ]
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
+            binding.loadingLayout.isVisible = isLoading
             if (isLoading) {
                 // 로딩 중일 때 화면 터치 막기
                 blockScreenTouch()

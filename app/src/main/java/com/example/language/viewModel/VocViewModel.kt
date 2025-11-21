@@ -1,13 +1,16 @@
 package com.example.language.viewModel
 
 import android.content.Context
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.example.language.api.ApiResponse
 import com.example.language.api.DictionaryResponsePayload
 import com.example.language.api.SimpleMessagePayload
+import com.example.language.api.SubscribedWordbooksData
 import com.example.language.api.WordData as ApiRegisterWordData
 import com.example.language.api.WordbookDeleteResponsePayload
 import com.example.language.api.WordbookRegisterRequestPayload
@@ -17,6 +20,7 @@ import com.example.language.api.WordbookUpdateResponsePayload
 import com.example.language.api.WordDataWithWordID
 import com.example.language.data.VocData
 import com.example.language.data.repository.WordbookRepository
+import com.example.language.data.repository.toVocDataList
 import kotlinx.coroutines.launch
 
 // UI용 데이터 클래스
@@ -32,8 +36,13 @@ class VocViewModel(
     private val repository: WordbookRepository
 ) : ViewModel() {
 
+    // --- User Data ---
+    private val _ownerUid = MutableLiveData<String?>()
+    val ownerUid: LiveData<String?> = _ownerUid
+
     // --- UI State (LiveData) ---
-    val title = MutableLiveData<String>()
+    private val _title = MutableLiveData<String>()
+    val title = _title
     val tags = MutableLiveData<String>()
 
     // 최종 단어 목록
@@ -42,6 +51,13 @@ class VocViewModel(
 
     private val _currentVocId = MutableLiveData<String?>()
     val currentVocId: LiveData<String?> = _currentVocId
+
+    // 단어장 목록
+    private val _vocaBookList = MutableLiveData<List<SubscribedWordbooksData>>()
+    val vocaBookList: LiveData<List<SubscribedWordbooksData>> = _vocaBookList
+
+    private val _transformedVocList = MutableLiveData<List<VocData>>()
+    val transformedVocList: LiveData<List<VocData>> = _transformedVocList
 
     // --- API State ---
     private val _registerStatus = MutableLiveData<ApiResponse<WordbookRegisterResponsePayload>?>()
@@ -66,10 +82,6 @@ class VocViewModel(
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    // --- User Data ---
-    private val _ownerUid = MutableLiveData<String?>()
-    val ownerUid: LiveData<String?> = _ownerUid
-
     init {
         // 3. ViewModel이 생성되자마자 UID 로드
         loadUid()
@@ -85,7 +97,30 @@ class VocViewModel(
         }
     }
 
+    fun setVocTitle(title: String) {
+        _title.value = title
+    }
+
+    fun setVocId(vocId: String) {
+        _currentVocId.value = vocId
+    }
+
     // --- 4. 단어장 데이터 로드/설정 함수 ---
+
+    fun getSubscribedWordbooks(context: Context) {
+        viewModelScope.launch {
+            val response = repository.getSubscribedWordbooks(context)
+            if (response is ApiResponse.Success) {
+                val dataList = response.data.data
+
+                _vocaBookList.value = dataList
+                _transformedVocList.value = dataList.toVocDataList(_ownerUid.value.toString())
+            } else {
+                _vocaBookList.value = emptyList()
+                _transformedVocList.value = emptyList()
+            }
+        }
+    }
 
     /**
      * [MakeVocFragment에서 호출]
@@ -94,7 +129,7 @@ class VocViewModel(
      */
     fun loadVocabookForEditing(context: Context, vocData: VocData) {
         _currentVocId.value = vocData.wid.toString()
-        title.value = vocData.title
+        _title.value = vocData.title
         tags.value = vocData.tags.joinToString(", ")
         _wordList.value = emptyList() // (일단 비우고, 로드 시작)
 
@@ -108,7 +143,7 @@ class VocViewModel(
      */
     fun setupForNewVocabook(newTitle: String, newTags: List<String>) {
         _currentVocId.value = null // 새 단어장이므로 ID 없음
-        title.value = newTitle
+        _title.value = newTitle
         tags.value = newTags.joinToString(", ")
         _wordList.value = emptyList() // 단어 목록 비어있음
     }
@@ -187,7 +222,7 @@ class VocViewModel(
                     }
                     _wordList.value = (_wordList.value ?: emptyList()) + newAppWords
                 }
-            // (실패 시 response가 Error 상태이므로 analysisStatus가 관찰함)
+                // (실패 시 response가 Error 상태이므로 analysisStatus가 관찰함)
             } catch (e: Exception) {
                 // [2. 예외 처리] (네트워크 오류 등)
                 _analysisStatus.value = ApiResponse.Error("VM_ERROR", e.message ?: "Upload failed")

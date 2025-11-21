@@ -50,7 +50,13 @@ class VocListAdapter(
         return vocList.size
     }
 
+    fun updateData(newItemList: List<VocData>) {
+        // 기존 리스트(vocList)를 싹 지우고 새 데이터를 넣습니다.
+        this.vocList.clear()
+        this.vocList.addAll(newItemList)
 
-
+        // 데이터가 바뀌었으니 화면을 새로 고침합니다.
+        notifyDataSetChanged()
+    }
 
 }

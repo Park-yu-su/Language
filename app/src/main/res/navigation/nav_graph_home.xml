@@ -63,6 +63,10 @@
             android:name="vocId"
             app:argType="string" />
 
+        <argument
+            android:name="vocTitle"
+            app:argType="string" />
+
         <action
             android:id="@+id/action_addVocInExitFragment_to_selectWayAddVocFragment"
             app:destination="@id/selectWayAddVocFragment" />

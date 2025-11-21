@@ -34,7 +34,6 @@ class MypageFragment : Fragment() {
 
         binding.manageMyVocBtn.setOnClickListener {
             findNavController().navigate(R.id.action_mypageFragment_to_mypageMyvocFragment)
-
         }
     }
 

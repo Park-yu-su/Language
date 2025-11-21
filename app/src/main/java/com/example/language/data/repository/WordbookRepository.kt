@@ -10,12 +10,14 @@ import com.example.language.api.GetWordbookResponsePayload
 import com.example.language.api.SearchTagResponsePayload
 import com.example.language.api.SearchWordbookResponsePayload
 import com.example.language.api.SimpleMessagePayload
+import com.example.language.api.SubscribedWordbooksData
 import com.example.language.api.WordbookDeleteResponsePayload
 import com.example.language.api.WordbookRegisterRequestPayload
 import com.example.language.api.WordbookRegisterResponsePayload
 import com.example.language.api.WordbookUpdateRequestPayload
 import com.example.language.api.WordbookUpdateResponsePayload
 import com.example.language.api.login.UserPreference
+import com.example.language.data.VocData
 
 class WordbookRepository(
     private val userPreference: UserPreference
@@ -152,5 +154,16 @@ class WordbookRepository(
     suspend fun getLinkedWordOfUser(context: Context, status: String): ApiResponse<GetLinkedWordOfUserResponsePayload> {
         val uidInt = getUidAsInt() ?: return ApiResponse.Error("REPO_ERROR", "Invalid UID")
         return ApiClient.getLinkedWordOfUser(context, uidInt, status)
+    }
+}
+
+fun List<SubscribedWordbooksData>.toVocDataList(ownerUid: String): List<VocData> {
+    return this.map { voc ->
+        VocData(
+            title = voc.title,
+            wid = voc.wid,
+            tags = voc.tags,
+            owner_uid = ownerUid
+        )
     }
 }

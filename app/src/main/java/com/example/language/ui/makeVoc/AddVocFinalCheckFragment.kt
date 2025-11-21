@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.language.R
 import com.example.language.adapter.WordListEditAdapter
 import com.example.language.api.ApiResponse
 import com.example.language.api.login.UserPreference
@@ -201,6 +202,8 @@ class AddVocFinalCheckFragment : Fragment() {
                 showToast("단어장 수정 중...")
                 viewModel.updateCurrentWordbook(requireContext().applicationContext)
             }
+
+            findNavController().popBackStack(R.id.makeVocFragment, false)
         }
     }
 
