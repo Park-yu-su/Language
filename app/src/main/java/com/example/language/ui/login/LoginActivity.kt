@@ -179,13 +179,15 @@ class LoginActivity : AppCompatActivity() {
                 Log.d("log_login", "프로필 이미지: $profileImageUrl")
 
                 var existNickName = userPreference.getName() ?: ""
+                var existImage = userPreference.getImage() ?: "0"
+                var existoneline = userPreference.getOneline() ?: "안녕하세요"
 
                 /**API 시작**/
                 if(existNickName == null || existNickName == ""){
-                    LoginViewModel.requestLogin(this, email!!, nickname!!)
+                    LoginViewModel.requestLogin(this, email!!, nickname!!, "0", "안녕하세요")
                 }
                 else{
-                    LoginViewModel.requestLogin(this, email!!, existNickName)
+                    LoginViewModel.requestLogin(this, email!!, existNickName, existImage, existoneline)
                 }
 
 
