@@ -12,7 +12,7 @@ class LoginRepository {
     : ApiResponse<AuthResponsePayload> {
         // ApiClient의 함수를 호출하고 결과를 반환합니다.
         // ApiClient는 Dispatchers.IO에서 실행되므로, 여기서도 suspend 함수가 됩니다.
-        return ApiClient.authenticate(context, email, nickname)
+        return ApiClient.authenticate(context, email, nickname, "0", "안녕하세요!")
     }
 
 }

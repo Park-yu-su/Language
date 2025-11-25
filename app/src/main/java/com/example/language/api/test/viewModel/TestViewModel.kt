@@ -76,4 +76,12 @@ class TestViewModel(private val repository: TestRepository) : ViewModel() {
         }
     }
 
+    fun submitQuiz(context: Context, uid: Int,
+                   wordId: Int, wordText: String, question: String,
+                   userAnswer: String, correctAnswer: String){
+        viewModelScope.launch {
+            repository.quizSubmit(context, uid, wordId, wordText, question, userAnswer, correctAnswer)
+        }
+    }
+
 }

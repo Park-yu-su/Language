@@ -132,11 +132,12 @@ object ApiClient {
 
 
     /**인증 관련**/
-    suspend fun authenticate(context: Context, email: String, nickname: String): ApiResponse<AuthResponsePayload> {
-        val payload = AuthRequestPayload(email, nickname, image = "null")
+    suspend fun authenticate(context: Context, email: String, nickname: String, image: String, oneline: String): ApiResponse<AuthResponsePayload> {
+        val payload = AuthRequestPayload(email, nickname, image, oneline)
         val request = ClientRequest("Authentication", payload)
         return executeRequest(context, request)
     }
+
 
     /**친구 관련**/
 
@@ -344,6 +345,45 @@ object ApiClient {
         return executeRequest(context, request)
     }
 
+
+    //11.25일자 추가
+    suspend fun startSession(context: Context, uid: Int, name: String): ApiResponse<SessionStartResponsePayload>{
+        val payload = SessionStartRequestPayload(uid, name)
+        val request = ClientRequest("SessionStart", payload)
+        return executeRequest(context, request)
+    }
+    suspend fun chatInput(context: Context, uid: Int, sessionId: String, message: String): ApiResponse<AIResponseDataPayload>{
+        val payload = ChatInputRequestPayload(uid, sessionId, message)
+        val request = ClientRequest("ChatInput", payload)
+        return executeRequest(context, request)
+    }
+    suspend fun quizSubmit(context: Context, uid: Int, wordId: Int, wordText: String, question: String, userAnswer: String, correctAnswer: String): ApiResponse<SimpleMessagePayload>{
+        val payload = QuizSubmitRequestPayload(uid, wordId, wordText, question, userAnswer, correctAnswer)
+        val request = ClientRequest("QuizSubmit", payload)
+        return executeRequest(context, request)
+    }
+    suspend fun analyzeLearning(context: Context, uid: Int, sessionId: String): ApiResponse<AIResponseDataPayload>{
+        val payload = AnalyzeLearningRequestPayload(uid, sessionId)
+        val request = ClientRequest("AnalyzeLearning", payload)
+        return executeRequest(context, request)
+    }
+    suspend fun todayReview(context: Context, uid: Int, sessionId: String): ApiResponse<AIResponseDataPayload>{
+        // AnalyzeLearningRequestPayload 재사용
+        val payload = AnalyzeLearningRequestPayload(uid, sessionId)
+        val request = ClientRequest("TodayReview", payload)
+        return executeRequest(context, request)
+    }
+    suspend fun businessTalk(context: Context, uid: Int, sessionId: String, text: String): ApiResponse<AIResponseDataPayload>{
+        val payload = BusinessTalkReqeustPayload(uid, sessionId, text)
+        val request = ClientRequest("BusinessTalk", payload)
+        return executeRequest(context, request)
+    }
+    suspend fun generateExample(context: Context, uid: Int, sessionId: String): ApiResponse<AIResponseDataPayload>{
+        // AnalyzeLearningRequestPayload 재사용
+        val payload = AnalyzeLearningRequestPayload(uid, sessionId)
+        val request = ClientRequest("GenerateExample", payload)
+        return executeRequest(context, request)
+    }
 
 
 

@@ -11,11 +11,13 @@ class UserPreference(context: Context) {
 
 
     //유저 정보 API Response로 받은 거 저장
-    fun saveUserInfo(uid: String, nickname: String, email: String) {
+    fun saveUserInfo(uid: String, nickname: String, email: String, image: String, oneline: String) {
         prefs.edit().apply {
             putString(KEY_UID, uid)
             putString(KEY_NICKNAME, nickname)
             putString(KEY_EMAIL, email)
+            putString(KEY_IMAGE, image)
+            putString(KEY_ONELINE, oneline)
             apply() // 비동기로 저장
         }
     }
@@ -38,6 +40,29 @@ class UserPreference(context: Context) {
         }
     }
 
+    //자기소개 가져오기
+    fun getOneline(): String{
+        return prefs.getString(KEY_ONELINE, null) ?: ""
+    }
+    //자기소개 수정
+    fun updateOneline(oneLine: String){
+        prefs.edit().apply {
+            putString(KEY_ONELINE, oneLine)
+            apply()
+        }
+    }
+
+    //이미지 정보 가져오기
+    fun getImage(): String{
+        return prefs.getString(KEY_IMAGE, null) ?: ""
+    }
+    fun updateImage(image: String){
+        prefs.edit().apply {
+            putString(KEY_IMAGE, image)
+            apply()
+        }
+    }
+
     //이메일 가져오기
     fun getEmail(): String{
         return prefs.getString(KEY_EMAIL, null) ?: ""
@@ -55,7 +80,10 @@ class UserPreference(context: Context) {
         private const val KEY_UID = "uid"
         private const val KEY_NICKNAME = "nickname"
         private const val KEY_EMAIL = "email"
-        // private const val KEY_IMAGE = "image"
+
+        private const val KEY_IMAGE = "image"
+
+        private const val KEY_ONELINE = "oneline"
     }
 
 }

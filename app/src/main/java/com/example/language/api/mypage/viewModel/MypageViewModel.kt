@@ -57,9 +57,9 @@ class MypageViewModel(private val repository: MypageRepository): ViewModel() {
     }
 
     //3. 유저 정보 업데이트
-    fun updateUserInfo(context: Context, email: String, nickname: String) {
+    fun updateUserInfo(context: Context, email: String, nickname: String, image: String, oneline: String) {
         viewModelScope.launch {
-            val response = repository.loginUser(context, email, nickname)
+            val response = repository.loginUser(context, email, nickname, image, oneline)
             _loginResult.value = response
         }
     }

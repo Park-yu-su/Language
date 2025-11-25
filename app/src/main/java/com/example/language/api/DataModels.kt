@@ -41,7 +41,8 @@ data class ClientRequest<T>(
 data class AuthRequestPayload(
     val email: String,
     val nickname: String,
-    val image: String
+    val image: String,
+    val oneline: String
 )
 
 @Serializable
@@ -49,7 +50,8 @@ data class AuthResponsePayload(
     val uid: String,
     val nickname: String,
     val email: String,
-    val image: String
+    val image: String,
+    val oneline: String
 )
 
 // 4.2.1. 친구 목록 조회 (Friend)
@@ -62,7 +64,8 @@ data class FriendListRequestPayload(
 data class FriendListResponsePayload(
     val uids: List<String>,
     val nicknames: List<String>,
-    val images: List<String>
+    val images: List<String>,
+    val onelines: List<String>
 )
 
 // 4.2.2. 친구 요청/삭제 (Request/Reject)
@@ -223,9 +226,8 @@ data class LinkUserWordRequestPayload(
 // 4.13. 유저의 상태별 단어 불러오기 (GetUserWordStatus)
 @Serializable
 data class GetLinkedWordOfUserRequestPayload(
-    // status : liked | wrong | review
+    // status : liked | review
     // liked : 좋아요 한 단어
-    // wrong : 틀린 단어
     // review : 리뷰할 단어
     val uid: Int,
     val status: String
@@ -241,6 +243,57 @@ data class GetWordbookInfoWithIDResponsePayload(
     val data: WordbookMeta
 )
 
+// 4.15. 신규 세션 생성
+@Serializable
+data class SessionStartRequestPayload(
+    val uid: Int,
+    val name: String
+)
+@Serializable
+data class SessionStartResponsePayload(
+    @SerialName("session_id")
+    val sessionId: String,
+)
+
+// 4.16. 챗봇 인풋
+@Serializable
+data class ChatInputRequestPayload(
+    val uid: Int,
+    @SerialName("session_id")
+    val sessionId: String,
+    val message: String
+)
+
+// 4.17. 퀴즈 제출
+@Serializable
+data class QuizSubmitRequestPayload(
+    val uid: Int,
+    @SerialName("word_id")
+    val wordId: Int,
+    @SerialName("word_text")
+    val wordText: String,
+    val question: String,
+    @SerialName("user_answer")
+    val userAnswer: String,
+    @SerialName("correct_answer")
+    val correctAnswer: String
+)
+// 4.18. 학습 분석
+@Serializable
+data class AnalyzeLearningRequestPayload(
+    val uid: Int,
+    @SerialName("session_id")
+    val sessionID: String
+)
+
+// 4.19. 비즈니스 토킹
+@Serializable
+data class BusinessTalkReqeustPayload(
+    val uid: Int,
+    @SerialName("session_id")
+    val sessionID: String,
+    val text: String
+)
 // 공통 사용 모델
 @Serializable
 data class SimpleMessagePayload(
@@ -290,4 +343,11 @@ data class SubscribedWordbooksData(
     val wid: Int,
     val title: String,
     val tags: List<String>,
+)
+
+@Serializable
+data class AIResponseDataPayload(
+    @SerialName("session_id")
+    val sessionId: String,
+    val response: String
 )

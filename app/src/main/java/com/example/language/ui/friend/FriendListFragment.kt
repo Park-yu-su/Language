@@ -127,9 +127,10 @@ class FriendListFragment : Fragment() {
                     val uids = response.data.uids
                     val nicknames = response.data.nicknames
                     val images = response.data.images
+                    val onelines = response.data.onelines
 
                     for(i in 0 until uids.size){
-                        friendList.add(FriendData(uids[i], nicknames[i], images[i], ""))
+                        friendList.add(FriendData(uids[i], nicknames[i], images[i], onelines[i]))
                     }
                     adatper.notifyDataSetChanged()
 

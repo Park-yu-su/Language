@@ -210,7 +210,8 @@ class LoginActivity : AppCompatActivity() {
                     Log.d("log_login", "서버 인증 성공: UID ${userData.uid}, 닉네임 ${userData.nickname}")
 
                     //sharedPref 저장
-                    userPreference.saveUserInfo(userData.uid, userData.nickname, userData.email)
+                    userPreference.saveUserInfo(
+                        userData.uid, userData.nickname, userData.email, userData.image, userData.oneline)
 
                     //메인 화면으로 이동
                     val intent = Intent(this, MainActivity::class.java)

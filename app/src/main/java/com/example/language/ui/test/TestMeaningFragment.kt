@@ -160,7 +160,7 @@ class TestMeaningFragment : Fragment() {
         var stringUid = userPreference.getUid() ?: "0"
         var uid = stringUid.toInt()
         //타입 체크
-        var typeCheck = listOf<String>("review", "liked", "wrong")
+        var typeCheck = listOf<String>("review", "liked")
         var type = typeCheck[status - 1]
         //단어 가져오기
         var wordIds = listOf<Int>(nowTestWord.wordId)
@@ -199,7 +199,7 @@ class TestMeaningFragment : Fragment() {
         else{
             isLike = false
             likeBtn.setImageResource(R.drawable.ic_like_heart2)
-            unlinkWordUser(3) //unlike
+            unlinkWordUser(2) //unlike
         }
 
     }
@@ -227,6 +227,12 @@ class TestMeaningFragment : Fragment() {
         else if(btnNum == 4){nowBtn = binding.meanAnswer4Btn
             nowCheckBtn = binding.meanAnswer4Imv}
 
+        var chooseWord = nowTestWord.meanings.get(0)
+        if(btnNum == 1){chooseWord = binding.meanAnswer1Tv.text.toString()}
+        else if(btnNum == 2){chooseWord = binding.meanAnswer2Tv.text.toString()}
+        else if(btnNum == 3){chooseWord = binding.meanAnswer3Tv.text.toString()}
+        else if(btnNum == 4){chooseWord = binding.meanAnswer4Tv.text.toString()}
+
         binding.meanAnswer1Btn.isEnabled = false
         binding.meanAnswer2Btn.isEnabled = false
         binding.meanAnswer3Btn.isEnabled = false
@@ -244,6 +250,7 @@ class TestMeaningFragment : Fragment() {
             }
             //정답이니 오늘 푼 문제 추가
             linkWordUser(1) //review
+            wrongHnadle(chooseWord)
         }
         //오답이면 바꾸기
         else{
@@ -256,7 +263,8 @@ class TestMeaningFragment : Fragment() {
             }
             //오답이니 틀린 문제 추가
             linkWordUser(1) //review
-            linkWordUser(3) //wrong
+            //linkWordUser(3) //wrong
+            wrongHnadle(chooseWord)
         }
 
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
@@ -267,6 +275,19 @@ class TestMeaningFragment : Fragment() {
         }
 
 
+    }
+
+    //푼 문제 API 호출하기
+    private fun wrongHnadle(myAnswer: String){
+        var uid = userPreference.getUid() ?: "0" //UID
+        var wordId = nowTestWord.wordId //영단어 ID
+        var wordText = nowTestWord.word //영단어
+        var answer = nowTestWord.meanings.get(0) //정답 = 뜻
+        var question = "choose the best meaning of this word. ${nowTestWord.example}"
+
+
+        testViewModel.submitQuiz(requireContext(), uid.toInt(), wordId,
+            wordText, question, myAnswer, answer)
     }
 
     private fun reResult(btnNum: Int){
