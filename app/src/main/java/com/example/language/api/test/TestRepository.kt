@@ -47,4 +47,13 @@ class TestRepository {
 
     }
 
+    //6. 푼 단어 제추
+    suspend fun quizSubmit(context: Context, uid: Int,
+                           wordId: Int, wordText: String, question: String,
+                           userAnswer: String, correctAnswer: String)
+    : ApiResponse<SimpleMessagePayload> {
+        return ApiClient.quizSubmit(context, uid, wordId, wordText, question, userAnswer, correctAnswer)
+    }
+
+
 }

@@ -179,13 +179,15 @@ class LoginActivity : AppCompatActivity() {
                 Log.d("log_login", "프로필 이미지: $profileImageUrl")
 
                 var existNickName = userPreference.getName() ?: ""
+                var existImage = userPreference.getImage() ?: "0"
+                var existoneline = userPreference.getOneline() ?: "안녕하세요"
 
                 /**API 시작**/
                 if(existNickName == null || existNickName == ""){
-                    LoginViewModel.requestLogin(this, email!!, nickname!!)
+                    LoginViewModel.requestLogin(this, email!!, nickname!!, "0", "안녕하세요")
                 }
                 else{
-                    LoginViewModel.requestLogin(this, email!!, existNickName)
+                    LoginViewModel.requestLogin(this, email!!, existNickName, existImage, existoneline)
                 }
 
 
@@ -210,7 +212,8 @@ class LoginActivity : AppCompatActivity() {
                     Log.d("log_login", "서버 인증 성공: UID ${userData.uid}, 닉네임 ${userData.nickname}")
 
                     //sharedPref 저장
-                    userPreference.saveUserInfo(userData.uid, userData.nickname, userData.email)
+                    userPreference.saveUserInfo(
+                        userData.uid, userData.nickname, userData.email, userData.image, userData.oneline)
 
                     //메인 화면으로 이동
                     val intent = Intent(this, MainActivity::class.java)

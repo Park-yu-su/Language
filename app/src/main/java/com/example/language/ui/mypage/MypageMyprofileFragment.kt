@@ -80,8 +80,11 @@ class MypageMyprofileFragment : Fragment() {
             var uid = stringUid.toInt()
             var email = userPreference.getEmail() ?: ""
             var nickname = binding.userProfileNicknameTv.text.toString()
+            var oneline = binding.selfIntroduceEt.text.toString()
+            /**차후 설정**/
+            var image = "0"
 
-            myPageViewModel.updateUserInfo(requireContext(),email, nickname)
+            myPageViewModel.updateUserInfo(requireContext(),email, nickname, image, oneline)
 
 
         }
@@ -92,6 +95,10 @@ class MypageMyprofileFragment : Fragment() {
         (activity as MainActivity).setUIVisibility(false)
         binding.userProfileNicknameTv.text = userPreference.getName()
         binding.myIdTv.text = userPreference.getUid()
+        binding.selfIntroduceEt.setText(userPreference.getOneline())
+
+        /**이미지 타입 설정 (차후)**/
+        var imageType = userPreference.getImage()
     }
 
     private fun copyUID(){
@@ -119,6 +126,9 @@ class MypageMyprofileFragment : Fragment() {
                     Log.d("log_mypage", "정보 수정 성공")
                     Toast.makeText(requireContext(), "정보가 수정되었습니다", Toast.LENGTH_SHORT).show()
                     userPreference.updateName(binding.userProfileNicknameTv.text.toString())
+                    userPreference.updateOneline(binding.selfIntroduceEt.text.toString())
+                    /**차후 수정**/
+                    userPreference.updateImage("0")
                 }
                 is ApiResponse.Error -> {
                     Log.d("log_mypage", "정보 수정 실패")
