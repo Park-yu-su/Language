@@ -142,4 +142,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
 
+    //애니메이션을 위한 lottie
+    implementation("com.airbnb.android:lottie:6.0.0")
+
 }

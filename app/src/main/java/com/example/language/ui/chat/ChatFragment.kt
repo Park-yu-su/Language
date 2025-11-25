@@ -33,12 +33,14 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.language.R
 import com.example.language.adapter.ChatAdapter
+import com.example.language.api.ApiResponse
 import com.example.language.api.chat.ChatRepository
 import com.example.language.api.chat.viewModel.ChatViewModel
 import com.example.language.api.chat.viewModel.ChatViewModelFactory
 import com.example.language.api.friend.FriendRepository
 import com.example.language.api.friend.viewModel.FriendViewModel
 import com.example.language.api.friend.viewModel.FriendViewModelFactory
+import com.example.language.api.login.UserPreference
 import com.example.language.data.ChatMessage
 import com.example.language.databinding.FragmentChatBinding
 import com.example.language.ui.home.MainActivity
@@ -53,6 +55,9 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import kotlin.getValue
 
 // TODO: Rename parameter arguments, choose names that match
@@ -65,13 +70,15 @@ class ChatFragment : Fragment(), ChatMenuListener {
 
     private lateinit var binding: FragmentChatBinding
     private lateinit var chatAdapter: ChatAdapter
-    private val messageList = mutableListOf<ChatMessage>()
+    //private val messageList = mutableListOf<ChatMessage>()
 
     //viewModel
     private val chatRepository = ChatRepository()
     private val chatViewModel: ChatViewModel by activityViewModels() {
         ChatViewModelFactory(chatRepository)
     }
+
+    private lateinit var userPreference : UserPreference
 
 
     //녹음 관련
@@ -108,21 +115,85 @@ class ChatFragment : Fragment(), ChatMenuListener {
         super.onViewCreated(view, savedInstanceState)
 
         (activity as MainActivity).setUIVisibility(false)
+        userPreference = UserPreference(requireContext())
+
+
         setRecyclerView() //챗봇 recylcer
         setInputListeners() //버튼 클릭 리스너
         setMicMode() //초기는 editText = 없음
+
+        observeSessionID()
+        getChatSessionID()
+        observeAIResponse()
+
         //강제 패딩 제거
         (activity as MainActivity).binding.mainFragmentContainer.setPadding(0, 0, 0, 0)
         animation = AnimationUtils.loadAnimation(requireContext(), R.anim.chat_scale_change)
         //녹음이 저장될 내 파일 경로 초기화
         myVoice = requireContext().getExternalFilesDir(null)?.absolutePath + "/voice.wav"
+        
 
     }
 
 
+    /**API 관련**/
+    //챗봇 대화를 위한 Session ID 생성
+    private fun getChatSessionID(){
+        //이전 session ID가 없으면
+        if(chatViewModel.sessionId == ""){
+            var uid = userPreference.getUid() ?: "0"
+            var chatName = "${getTodayDate()} 영어 채팅방"
+            chatViewModel.startSession(requireContext(), uid.toInt(), chatName)
+        }
+    }
+    //sessionId observe
+    private fun observeSessionID(){
+        chatViewModel.startSessionResult.observe(viewLifecycleOwner){ response ->
+            when(response){
+                is ApiResponse.Success -> {
+                    Log.d("log_chat", "채팅방 SessionId 받아오기 성공")
+                    var sessionId = response.data.sessionId
+                    chatViewModel.sessionId = sessionId
+                    
+                    //만약 내용이 없으면 내용 생성
+                    if(chatViewModel.messageList.size == 0){
+                        addBotResponse("반가워요! 영어 공부가 막막할 때 제가 도와드릴게요 :D")
+                    }
+                    
+                }
+                is ApiResponse.Error -> {
+                    Log.d("log_chat", "채팅방 SessionId 받아오기 실패")
+                    Toast.makeText(requireContext(), "채팅방 생성 실패", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        }
+    }
+    //observe 대화 결과
+    private fun observeAIResponse(){
+        chatViewModel.chatInputResult.observe(viewLifecycleOwner){ response ->
+            //로딩 왔으니 제거
+            chatAdapter.hideLoading()
+
+            when(response){
+                is ApiResponse.Success -> {
+                    Log.d("log_chat", "응답 받아오기 성공")
+                    var message = response.data.response
+                    addBotResponse(message)
+                }
+                is ApiResponse.Error -> {
+                    Log.d("log_chat", "응답 받아오기 실패")
+                    Toast.makeText(requireContext(), "오류 발생", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+
+    /**로직 관련**/
     //recylcerview 셋업
     private fun setRecyclerView(){
-        chatAdapter = ChatAdapter(messageList)
+        chatAdapter = ChatAdapter(chatViewModel.messageList)
         binding.chatRecyclerview.apply {
             layoutManager = LinearLayoutManager(context).apply {
                 stackFromEnd = true // 메시지가 아래쪽에서 위로 쌓이도록 설정
@@ -131,6 +202,7 @@ class ChatFragment : Fragment(), ChatMenuListener {
         }
 
     }
+
 
     //editText 및 버튼들 감지
     private fun setInputListeners(){
@@ -174,12 +246,18 @@ class ChatFragment : Fragment(), ChatMenuListener {
         chatAdapter.addMessage(message)
 
         //RecyclerView를 가장 아래로 스크롤
-        binding.chatRecyclerview.scrollToPosition(messageList.size - 1)
+        binding.chatRecyclerview.scrollToPosition(chatViewModel.messageList.size - 1)
 
-        // 입력창 초기화
+        //입력창 초기화
         binding.chatTextEdt.text.clear()
 
-        addBotResponse("응답입니다.")
+        //API 전송 전 로딩 표시
+        chatAdapter.showLoading()
+        binding.chatRecyclerview.scrollToPosition(chatAdapter.itemCount - 1)
+
+        //전송 
+        val uid = userPreference.getUid() ?: "0"
+        chatViewModel.chatInput(requireContext(), uid.toInt(), chatViewModel.sessionId, text)
 
     }
 
@@ -187,7 +265,7 @@ class ChatFragment : Fragment(), ChatMenuListener {
     private fun addBotResponse(text: String) {
         val botMessage = ChatMessage(System.currentTimeMillis(), text, false, System.currentTimeMillis().toString())
         chatAdapter.addMessage(botMessage)
-        binding.chatRecyclerview.scrollToPosition(messageList.size - 1)
+        binding.chatRecyclerview.scrollToPosition(chatViewModel.messageList.size - 1)
     }
 
     //bottomSheetDialog 띄우기
@@ -201,33 +279,56 @@ class ChatFragment : Fragment(), ChatMenuListener {
         //리뷰
         if(feature == ChatFeature.REVIEW_WORDS){
             //현재 메시지를 넣어서 IN
-            val message = ChatMessage(System.currentTimeMillis(), "오늘 배운 단어들을 리뷰해줄래?",
+            val message = ChatMessage(System.currentTimeMillis(), "오늘 배운 단어 리뷰",
                 true, System.currentTimeMillis().toString())
             chatAdapter.addMessage(message)
 
             //RecyclerView를 가장 아래로 스크롤
-            binding.chatRecyclerview.scrollToPosition(messageList.size - 1)
+            binding.chatRecyclerview.scrollToPosition(chatViewModel.messageList.size - 1)
 
+            //API 전송 전 로딩 표시
+            chatAdapter.showLoading()
+            binding.chatRecyclerview.scrollToPosition(chatAdapter.itemCount - 1)
+
+            //전송
+            val uid = userPreference.getUid() ?: "0"
+            chatViewModel.getTodayReview(requireContext(), uid.toInt(), chatViewModel.sessionId)
         }
         //예문
         else if(feature == ChatFeature.CREATE_EXAMPLE){
             //현재 메시지를 넣어서 IN
-            val message = ChatMessage(System.currentTimeMillis(), "배운 단어들에 대한 예문들을 만들어줄래?",
+            val message = ChatMessage(System.currentTimeMillis(), "예문 생성",
                 true, System.currentTimeMillis().toString())
             chatAdapter.addMessage(message)
 
             //RecyclerView를 가장 아래로 스크롤
-            binding.chatRecyclerview.scrollToPosition(messageList.size - 1)
+            binding.chatRecyclerview.scrollToPosition(chatViewModel.messageList.size - 1)
+
+            //API 전송 전 로딩 표시
+            chatAdapter.showLoading()
+            binding.chatRecyclerview.scrollToPosition(chatAdapter.itemCount - 1)
+
+            //전송
+            val uid = userPreference.getUid() ?: "0"
+            chatViewModel.getExample(requireContext(), uid.toInt(), chatViewModel.sessionId)
 
         }
 
-        //오답노트
-        else if(feature == ChatFeature.CREATE_ODAB){
-            val message = ChatMessage(System.currentTimeMillis(), "오답 노트를 만들어줘"
+        //레포트 출력
+        else if(feature == ChatFeature.CREATE_HAKSUPBUNSUK){
+            val message = ChatMessage(System.currentTimeMillis(), "학습 레포트 출력"
             , true, System.currentTimeMillis().toString())
             chatAdapter.addMessage(message)
 
-            binding.chatRecyclerview.scrollToPosition(messageList.size - 1)
+            binding.chatRecyclerview.scrollToPosition(chatViewModel.messageList.size - 1)
+
+            //API 전송 전 로딩 표시
+            chatAdapter.showLoading()
+            binding.chatRecyclerview.scrollToPosition(chatAdapter.itemCount - 1)
+
+            //전송
+            val uid = userPreference.getUid() ?: "0"
+            chatViewModel.getReport(requireContext(), uid.toInt(), chatViewModel.sessionId)
 
         }
 
@@ -338,6 +439,19 @@ class ChatFragment : Fragment(), ChatMenuListener {
 
         }
     }
+
+
+
+    /******************************************************************************/
+
+    //오늘 날짜 출력
+    fun getTodayDate(): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val currentDate = Date()
+
+        return dateFormat.format(currentDate)
+    }
+
 
     //애니메이션 시작
     private fun startAuraAnimation() {

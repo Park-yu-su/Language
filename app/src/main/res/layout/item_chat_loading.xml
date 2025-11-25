@@ -4,9 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingVertical="4dp">
+    android:paddingVertical="4dp"
+    android:paddingHorizontal="8dp">
 
-    <!-- 1. 챗봇 프로필 이미지 (CircleImageView) -->
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/chat_bot_profile_imv"
         android:layout_width="40dp"
@@ -16,7 +16,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- 2. 챗봇 이름 (선택 사항) -->
     <TextView
         android:id="@+id/chat_bot_name_tv"
         android:layout_width="wrap_content"
@@ -29,33 +28,20 @@
         android:layout_marginBottom="2dp"
         app:layout_constraintStart_toEndOf="@id/chat_bot_profile_imv"
         app:layout_constraintTop_toTopOf="@id/chat_bot_profile_imv"
-        app:layout_constraintBottom_toTopOf="@id/chat_message_tv" />
+        app:layout_constraintBottom_toTopOf="@id/lottie_loading" />
 
 
-    <TextView
-        android:id="@+id/chat_message_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie_loading"
+        android:layout_width="60dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="8dp"
         android:background="@drawable/bg_chat_bot"
-        android:padding="10dp"
-        android:maxWidth="280dp"
-        android:text="제가 입력한 텍스트입니다."
-        style="@style/pretendard_14sp_medium"
-        android:textColor="@color/Black"
+        android:scaleType="centerCrop"
+        app:lottie_rawRes="@raw/loading_dots2"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
         app:layout_constraintStart_toEndOf="@id/chat_bot_profile_imv"
-        app:layout_constraintTop_toBottomOf="@id/chat_bot_profile_imv"/>
+        app:layout_constraintTop_toBottomOf="@id/chat_bot_name_tv"/>
 
-    <TextView
-        android:id="@+id/timestamp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="오후 4:00"
-        style="@style/pretendard_14sp_medium"
-        android:textSize="12sp"
-        android:visibility="invisible"
-        android:layout_marginStart="4dp"
-        app:layout_constraintStart_toEndOf="@id/chat_message_tv"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="@id/chat_message_tv"
-        app:layout_constraintVertical_bias="1.0"  />
 </androidx.constraintlayout.widget.ConstraintLayout>

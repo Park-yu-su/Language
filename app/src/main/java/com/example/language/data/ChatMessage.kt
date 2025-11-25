@@ -4,5 +4,7 @@ data class ChatMessage(
     val id: Long,
     val text: String,
     val isUser: Boolean, //true: 사용자(우측), false: 챗봇(좌측)
-    val timestamp: String // 날짜/시간
+    val timestamp: String, // 날짜/시간
+    val isLoading: Boolean = false //로딩 중인지 여부
+
 )

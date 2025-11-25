@@ -34,7 +34,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="오늘 배운 단어 정리하기"
+        android:text="오늘 배운 단어 리뷰"
         android:textColor="@color/white"
         style="@style/pretendard_16sp_semibold"
         app:layout_constraintStart_toStartOf="@id/dialog_yoyak_btn"
@@ -59,7 +59,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="예문 생성하기"
+        android:text="예문 생성"
         android:textColor="@color/white"
         style="@style/pretendard_16sp_semibold"
         app:layout_constraintStart_toStartOf="@id/dialog_eyemun_btn"
@@ -68,7 +68,7 @@
         app:layout_constraintBottom_toBottomOf="@id/dialog_eyemun_btn"/>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/dialog_odab_btn"
+        android:id="@+id/dialog_haksubbunsuk_btn"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:backgroundTint="@color/Main1_1"
@@ -83,13 +83,13 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="오답노트 작성하기"
+        android:text="학습 분석 리포트 작성"
         android:textColor="@color/white"
         style="@style/pretendard_16sp_semibold"
-        app:layout_constraintStart_toStartOf="@id/dialog_odab_btn"
-        app:layout_constraintEnd_toEndOf="@id/dialog_odab_btn"
-        app:layout_constraintTop_toTopOf="@id/dialog_odab_btn"
-        app:layout_constraintBottom_toBottomOf="@id/dialog_odab_btn"/>
+        app:layout_constraintStart_toStartOf="@id/dialog_haksubbunsuk_btn"
+        app:layout_constraintEnd_toEndOf="@id/dialog_haksubbunsuk_btn"
+        app:layout_constraintTop_toTopOf="@id/dialog_haksubbunsuk_btn"
+        app:layout_constraintBottom_toBottomOf="@id/dialog_haksubbunsuk_btn"/>
 
 
 
