@@ -175,18 +175,24 @@ class ChatFragment : Fragment(), ChatMenuListener {
             //로딩 왔으니 제거
             chatAdapter.hideLoading()
 
-            when(response){
-                is ApiResponse.Success -> {
-                    Log.d("log_chat", "응답 받아오기 성공")
-                    var message = response.data.response
-                    addBotResponse(message)
+            response?.let {
+                when(response){
+                    is ApiResponse.Success -> {
+                        Log.d("log_chat", "응답 받아오기 성공")
+                        var message = response.data.response
+                        addBotResponse(message)
+                    }
+                    is ApiResponse.Error -> {
+                        Log.d("log_chat", "응답 받아오기 실패")
+                        Toast.makeText(requireContext(), "오류 발생", Toast.LENGTH_SHORT).show()
+                    }
+                    else -> {}
                 }
-                is ApiResponse.Error -> {
-                    Log.d("log_chat", "응답 받아오기 실패")
-                    Toast.makeText(requireContext(), "오류 발생", Toast.LENGTH_SHORT).show()
-                }
-                else -> {}
+
+                chatViewModel.clearLiveData()
+
             }
+
         }
     }
 
