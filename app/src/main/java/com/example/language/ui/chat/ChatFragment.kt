@@ -185,6 +185,7 @@ class ChatFragment : Fragment(), ChatMenuListener {
                     Log.d("log_chat", "응답 받아오기 실패")
                     Toast.makeText(requireContext(), "오류 발생", Toast.LENGTH_SHORT).show()
                 }
+                else -> {}
             }
         }
     }
@@ -193,7 +194,7 @@ class ChatFragment : Fragment(), ChatMenuListener {
     /**로직 관련**/
     //recylcerview 셋업
     private fun setRecyclerView(){
-        chatAdapter = ChatAdapter(chatViewModel.messageList)
+        chatAdapter = ChatAdapter(chatViewModel.messageList, requireContext())
         binding.chatRecyclerview.apply {
             layoutManager = LinearLayoutManager(context).apply {
                 stackFromEnd = true // 메시지가 아래쪽에서 위로 쌓이도록 설정

@@ -19,7 +19,7 @@ class ChatViewModel(private val repository: ChatRepository): ViewModel() {
     val startSessionResult = _startSessionResult
 
     //대화 결과 얻는 응답 저장
-    private val _chatInputResult = MutableLiveData<ApiResponse<AIResponseDataPayload>>()
+    private val _chatInputResult = MutableLiveData<ApiResponse<AIResponseDataPayload>?>()
     val chatInputResult = _chatInputResult
 
     //채팅방 ID를 기억
@@ -28,6 +28,10 @@ class ChatViewModel(private val repository: ChatRepository): ViewModel() {
     //채팅 내용을 기억
     val messageList = mutableListOf<ChatMessage>()
 
+    //0. 화면 나갈 때 비우기
+    fun clearLiveData(){
+        _chatInputResult.value = null
+    }
 
     //1. 챗봇 실행
     fun startSession(context: Context, uid: Int, name: String){

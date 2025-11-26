@@ -145,4 +145,7 @@ dependencies {
     //애니메이션을 위한 lottie
     implementation("com.airbnb.android:lottie:6.0.0")
 
+    //Markdown 텍스트
+    implementation("io.noties.markwon:core:4.6.2")
+
 }

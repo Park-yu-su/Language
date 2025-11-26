@@ -1,5 +1,6 @@
 package com.example.language.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,11 +9,12 @@ import com.example.language.data.ChatMessage
 import com.example.language.databinding.ItemChatLoadingBinding
 import com.example.language.databinding.ItemChatMessageBotBinding
 import com.example.language.databinding.ItemChatMessageUserBinding
+import io.noties.markwon.Markwon
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class ChatAdapter(private val messages: MutableList<ChatMessage>) :
+class ChatAdapter(private val messages: MutableList<ChatMessage>, private val context: Context) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     //타입 (1) = 유저 / (2) = 봇 / (3) = 로딩
@@ -20,6 +22,9 @@ class ChatAdapter(private val messages: MutableList<ChatMessage>) :
     private val VIEW_TYPE_BOT = 2
     private val VIEW_TYPE_LOADING = 3
     private val timeFormat = SimpleDateFormat("a h:mm", Locale.getDefault())
+
+    //마크다운 객체 생성
+    private val markdown = Markwon.create(context)
 
     //뷰홀더 : 유저 말풍선
     inner class UserViewHolder(private val binding: ItemChatMessageUserBinding) :
@@ -32,10 +37,13 @@ class ChatAdapter(private val messages: MutableList<ChatMessage>) :
     }
 
     //뷰홀더 : 봇 말풍선
+    //여기에 Markdown 처리를 하자.
     inner class BotViewHolder(private val binding: ItemChatMessageBotBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(message: ChatMessage, timeString: String) {
-            binding.chatMessageTv.text = message.text
+
+            markdown.setMarkdown(binding.chatMessageTv, message.text)
+            //binding.chatMessageTv.text = message.text
             binding.timestamp.text = timeString
             binding.timestamp.visibility = View.INVISIBLE
         }
