@@ -38,16 +38,26 @@ class BottomSheetChatDialog : BottomSheetDialogFragment(){
 
         var popAnim = AnimationUtils.loadAnimation(requireContext(), R.anim.button_pop)
 
+        //오늘 배운 단어 리뷰
         binding.dialogYoyakBtn.setOnClickListener {
             binding.dialogYoyakBtn.startAnimation(popAnim)
             listener?.onFeatureSelected(ChatFeature.REVIEW_WORDS)
             dismiss()
         }
+        //예문 출력
         binding.dialogEyemunBtn.setOnClickListener {
             binding.dialogEyemunBtn.startAnimation(popAnim)
             listener?.onFeatureSelected(ChatFeature.CREATE_EXAMPLE)
             dismiss()
         }
+        //레포트 작성
+        binding.dialogHaksubbunsukBtn.setOnClickListener {
+            binding.dialogHaksubbunsukBtn.startAnimation(popAnim)
+            listener?.onFeatureSelected(ChatFeature.CREATE_HAKSUPBUNSUK)
+            dismiss()
+        }
+
+        
 
     }
 

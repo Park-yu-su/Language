@@ -4,7 +4,7 @@ package com.example.language.ui.chat
 enum class ChatFeature {
     REVIEW_WORDS, //오늘 배운 단어 정리하기
     CREATE_EXAMPLE,  //예문 생성하기
-    CREATE_ODAB //오답 노트 생성하기
+    CREATE_HAKSUPBUNSUK,  //학습 분석 리포트 출력
 }
 
 //ChatFragment가 구현할 인터페이스
