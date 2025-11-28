@@ -79,6 +79,11 @@ class MypageFragment : Fragment() {
         getMywordbook()
         
     }
+
+    override fun onResume() {
+        super.onResume()
+        updateUserInfoUI()
+    }
     
     //단어 리스트 가져오기
     private fun getMywordbook(){
@@ -144,13 +149,35 @@ class MypageFragment : Fragment() {
 
     private fun putVocData1(data : SubscribedWordbooksData){
         binding.vocName1Tv.text = data.title
-        binding.vocTag1Tv.text = data.tags[0]
+        if (data.tags.size > 0) {
+            binding.vocTag1Tv.text = data.tags[0]
+        }
     }
     private fun putVocData2(data : SubscribedWordbooksData){
         binding.vocName2Tv.text = data.title
-        binding.vocTag2Tv.text = data.tags[0]
+        if (data.tags.size > 0) {
+            binding.vocTag2Tv.text = data.tags[0]
+        }
     }
-    
+
+    // 유저 정보(이미지, 닉네임) UI 업데이트 함수
+    private fun updateUserInfoUI() {
+        // 1. 닉네임 갱신
+        binding.userProfileNicknameTv.text = userPreference.getName()
+
+        // 2. 이미지 갱신 (저장된 값 "0"~"3"을 가져와 리소스로 변환)
+        val imageValue = userPreference.getImage()
+
+        val imageResId = when(imageValue) {
+            "0" -> R.drawable.img_default_user1
+            "1" -> R.drawable.img_default_user2
+            "2" -> R.drawable.img_default_user3
+            "3" -> R.drawable.img_default_user4
+            else -> R.drawable.img_default_user1
+        }
+
+        binding.userProfileImage.setImageResource(imageResId)
+    }
     
     override fun onDestroyView() {
         super.onDestroyView()
