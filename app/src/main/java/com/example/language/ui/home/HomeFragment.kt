@@ -151,6 +151,25 @@ class HomeFragment : Fragment() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        updateProfileImage() // 프로필 이미지 최신화
+        binding.homeNameTv.text = userPreference.getName() // 닉네임 최신화
+    }
+
+    private fun updateProfileImage() {
+        val imageValue = userPreference.getImage()
+
+        val imageResId = when(imageValue) {
+            "0" -> R.drawable.img_default_user1
+            "1" -> R.drawable.img_default_user2
+            "2" -> R.drawable.img_default_user3
+            "3" -> R.drawable.img_default_user4
+            else -> R.drawable.img_default_user1
+        }
+        binding.homeProfileImv.setImageResource(imageResId)
+    }
+
     //랜덤 단어 observe
     private fun observeRandomWord(){
         studyViewModel.randomWordListResult.observe(viewLifecycleOwner) { response ->

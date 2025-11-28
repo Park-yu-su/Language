@@ -56,6 +56,7 @@ class UserPreference(context: Context) {
     fun getImage(): String{
         return prefs.getString(KEY_IMAGE, null) ?: ""
     }
+
     fun updateImage(image: String){
         prefs.edit().apply {
             putString(KEY_IMAGE, image)
