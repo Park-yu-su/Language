@@ -294,6 +294,22 @@ data class BusinessTalkReqeustPayload(
     val sessionID: String,
     val text: String
 )
+
+// 4.20. STT 요청
+@Serializable
+data class SendBackRequestPayload(
+    val file_name: String,
+    val file_size: Long
+)
+
+// 4.20 비즈니스 대화
+@Serializable
+data class BusinessTalkResponsePayload(
+    @SerialName("session_id")
+    val sessionID: String,
+    val response: AIFeedbackData
+)
+
 // 공통 사용 모델
 @Serializable
 data class SimpleMessagePayload(
@@ -349,5 +365,11 @@ data class SubscribedWordbooksData(
 data class AIResponseDataPayload(
     @SerialName("session_id")
     val sessionId: String,
+    val response: String
+)
+
+@Serializable
+data class AIFeedbackData(
+    val feedback: String,
     val response: String
 )

@@ -141,6 +141,8 @@ class MainActivity : AppCompatActivity() {
     fun setUIVisibilityOnlyTopbar(){
         val fragmentParams = binding.mainFragmentContainer.layoutParams as ConstraintLayout.LayoutParams
         binding.mainTopbar.visibility = View.GONE
+        binding.mainBnv.visibility = View.VISIBLE
+
         binding.mainFragmentContainer.layoutParams = fragmentParams
     }
 

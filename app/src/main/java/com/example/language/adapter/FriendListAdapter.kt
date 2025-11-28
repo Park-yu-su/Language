@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.language.R
 import com.example.language.data.FriendData
 import com.example.language.databinding.ItemFriendBinding
 
@@ -17,15 +18,15 @@ class FriendListAdapter(private var friendList: MutableList<FriendData>,
         RecyclerView.ViewHolder(binding.root) {
         fun bind(friend: FriendData) {
             //이미지
-            /*
-            Glide.with(itemView)
-                .load(friend.profileImage)
-                .placeholder(R.drawable.ic_friend_profile)
-                .error(R.drawable.ic_friend_profile)
-                .circleCrop()
-                .into(binding.friendProfile)
 
-             */
+            val imageResId = when(friend.userImage) {
+                "0" -> R.drawable.img_default_user1
+                "1" -> R.drawable.img_default_user2
+                "2" -> R.drawable.img_default_user3
+                "3" -> R.drawable.img_default_user4
+                else -> R.drawable.img_default_user1
+            }
+            binding.friendProfile.setImageResource(imageResId)
 
             binding.friendTvName.text = friend.name
             binding.friendTvStatus.text = friend.introduce

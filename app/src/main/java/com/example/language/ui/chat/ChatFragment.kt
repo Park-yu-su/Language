@@ -100,6 +100,14 @@ class ChatFragment : Fragment(), ChatMenuListener {
     //애니메이션
     private lateinit var animation: Animation
 
+    //온보딩 메시지
+    private val onboardingMessages = listOf(
+        "반가워요! 영어 공부가 막막할 때 제가 도와드릴게요 :D",
+        "반가워요! 녹음 기능을 통해 간단한 토크를 진행해봐요!",
+        "틀려도 괜찮아요! 마이크를 켜고 자신 있게 말해보세요.",
+        "오늘 배운 단어, 저랑 같이 복습해 볼까요?",
+        "안녕하세요!👋 당신만의 AI 영어 튜터입니다."
+    )
 
 
     override fun onCreateView(
@@ -125,6 +133,9 @@ class ChatFragment : Fragment(), ChatMenuListener {
         observeSessionID()
         getChatSessionID()
         observeAIResponse()
+        observeSTTResult()
+        observeBusinessTalk()
+
 
         //강제 패딩 제거
         (activity as MainActivity).binding.mainFragmentContainer.setPadding(0, 0, 0, 0)
@@ -157,7 +168,9 @@ class ChatFragment : Fragment(), ChatMenuListener {
                     
                     //만약 내용이 없으면 내용 생성
                     if(chatViewModel.messageList.size == 0){
-                        addBotResponse("반가워요! 영어 공부가 막막할 때 제가 도와드릴게요 :D")
+
+                        val randomMessage = onboardingMessages.random()
+                        addBotResponse(randomMessage)
                     }
                     
                 }
@@ -195,6 +208,69 @@ class ChatFragment : Fragment(), ChatMenuListener {
 
         }
     }
+    private fun observeBusinessTalk(){
+        chatViewModel.businessTalkResult.observe(viewLifecycleOwner) { response ->
+
+            chatAdapter.hideLoading()
+
+            response?.let {
+                when(response){
+                    is ApiResponse.Success -> {
+                        var message = response.data.response.response
+                        var feedback = response.data.response.feedback
+                        addBotResponse(message, feedback)
+                    }
+                    is ApiResponse.Error -> {
+                        Log.d("log_chat", "응답 받아오기 실패")
+                        Toast.makeText(requireContext(), "오류 발생", Toast.LENGTH_SHORT).show()
+                    }
+                    else -> {}
+                }
+
+                chatViewModel.clearLiveData()
+            }
+
+
+        }
+    }
+
+
+    
+    //녹음 결과 observe
+    private fun observeSTTResult(){
+        chatViewModel.sttResult.observe(viewLifecycleOwner){ response ->
+            response?.let{
+                when(response){
+                    is ApiResponse.Success -> {
+                        Log.d("log_chat", "STT 성공")
+                        var text = response.data.message
+
+                        /**이제 여기서 채팅방에 내용 출력 후 send**/
+                        val uid = userPreference.getUid() ?: "0"
+                        val message = ChatMessage(System.currentTimeMillis(), text,
+                            true, System.currentTimeMillis().toString())
+                        chatAdapter.addMessage(message)
+
+                        //API 전송 전 로딩 표시
+                        chatAdapter.showLoading()
+                        binding.chatRecyclerview.scrollToPosition(chatAdapter.itemCount - 1)
+
+                        chatViewModel.businessTalk(requireContext(), uid.toInt(), chatViewModel.sessionId, text)
+
+
+                    }
+                    is ApiResponse.Error -> {
+                        Toast.makeText(requireContext(), "녹음 중 문제 발생", Toast.LENGTH_SHORT).show()
+                        Log.d("log_chat", "STT 실패")
+                    }
+                    else -> {}
+                }
+                chatViewModel.clearSTT()
+            }
+            
+        }
+    }
+
 
 
     /**로직 관련**/
@@ -270,6 +346,21 @@ class ChatFragment : Fragment(), ChatMenuListener {
 
     //챗봇 응답 함수(임시)
     private fun addBotResponse(text: String) {
+        val botMessage = ChatMessage(System.currentTimeMillis(), text, false, System.currentTimeMillis().toString())
+        chatAdapter.addMessage(botMessage)
+        binding.chatRecyclerview.scrollToPosition(chatViewModel.messageList.size - 1)
+    }
+
+    private fun addBotResponse(message: String, feedback: String) {
+
+        var text = ""
+        if(feedback == "" || feedback.isEmpty()){
+            text = message
+        }
+        else{
+            text = "$message\n\n --- \n **피드백 사항** \n\n$feedback"
+        }
+
         val botMessage = ChatMessage(System.currentTimeMillis(), text, false, System.currentTimeMillis().toString())
         chatAdapter.addMessage(botMessage)
         binding.chatRecyclerview.scrollToPosition(chatViewModel.messageList.size - 1)
@@ -405,7 +496,7 @@ class ChatFragment : Fragment(), ChatMenuListener {
 
             //4. Delay로 멈추기
             lifecycleScope.launch(Dispatchers.Main){
-                delay(5000)
+                delay(7000)
                 stopRecord()
             }
 
@@ -440,14 +531,20 @@ class ChatFragment : Fragment(), ChatMenuListener {
                 val recordedFileConvert = File(myVoiceConvert)
 
                 //이 이후는 서버한테 보내는 로직
-                //sendWavForSTT(recordedFileConvert, binding.speakWordTv.text.toString().trim())
-                playWavFile(recordedFileConvert, requireContext())
+                sendWavForSTT(recordedFileConvert)
+                //playWavFile(recordedFileConvert, requireContext())
             }
 
         }
     }
 
+    //음원(wav)을 송수신하는 코드
+    private fun sendWavForSTT(wavFile: File){
+        val wavBytes = wavFile.readBytes()
+        val fileName = wavFile.name
 
+        chatViewModel.doSTT(requireContext(), wavBytes, fileName)
+    }
 
     /******************************************************************************/
 

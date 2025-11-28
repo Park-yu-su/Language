@@ -4,7 +4,9 @@ import android.content.Context
 import com.example.language.api.AIResponseDataPayload
 import com.example.language.api.ApiClient
 import com.example.language.api.ApiResponse
+import com.example.language.api.BusinessTalkResponsePayload
 import com.example.language.api.SessionStartResponsePayload
+import com.example.language.api.SimpleMessagePayload
 
 class ChatRepository {
 
@@ -39,5 +41,16 @@ class ChatRepository {
         return ApiClient.analyzeLearning(context, uid, sessionId)
     }
 
+    //6. 음성 -> String 바꾸기
+    suspend fun doSTT(context: Context, fileBytes: ByteArray, fileName: String)
+    : ApiResponse<SimpleMessagePayload>{
+        return ApiClient.SendBackSTT(context, fileBytes, fileName)
+    }
+
+    //7. 바꾼 String -> 비즈니스 talk
+    suspend fun businessTalk(context: Context, uid: Int, sessionId: String, text: String)
+    : ApiResponse<BusinessTalkResponsePayload>{
+        return ApiClient.businessTalk(context, uid, sessionId, text)
+    }
 
 }
