@@ -225,7 +225,7 @@ object ApiClient {
         val request = ClientRequest("TagUpdate", payload)
         return executeRequest(context, request)
     }
-    
+
     /**단어장 get 관련 + tag 가져오기 관련**/
 
     //단어장 ID로 단어장의 단어들을 얻는 함수
@@ -234,7 +234,7 @@ object ApiClient {
         val request = ClientRequest("GetWordbook", payload)
         return executeRequest(context, request)
     }
-    
+
     //태그 String을 줄 때 -> 이에 매칭되는 태그가 있으면 태그 id를 주는 함수
     suspend fun searchTag(context: Context, query: String): ApiResponse<SearchTagResponsePayload> {
         val payload = SearchTagRequestPayload(query)
@@ -272,7 +272,7 @@ object ApiClient {
         val request = ClientRequest("Cancel", payload)
         return executeRequest(context, request)
     }
-    
+
     //구독된 단어장 목록 가져오기
     suspend fun getSubscribedWordbooks(context: Context, uid: Int): ApiResponse<GetSubscribedWordbooksResponsePayload> {
         // FriendListRequestPayload 재사용
@@ -315,8 +315,8 @@ object ApiClient {
         val request = ClientRequest("GetLinkedWordOfUser", payload)
         return executeRequest(context, request)
     }
-    
-    
+
+
 
 
     /**유저 ID 검색**/
@@ -336,7 +336,7 @@ object ApiClient {
         val request = ClientRequest("GetRandomSubscribedWord", payload)
         return executeRequest(context, request)
     }
-    
+
     //단어장 ID로 검색
     suspend fun getWordbookInfoWithID(context: Context, wid: Int): ApiResponse<GetWordbookInfoWithIDResponsePayload>{
         // GetWordbookRequestPayload 재사용
@@ -373,7 +373,7 @@ object ApiClient {
         val request = ClientRequest("TodayReview", payload)
         return executeRequest(context, request)
     }
-    suspend fun businessTalk(context: Context, uid: Int, sessionId: String, text: String): ApiResponse<AIResponseDataPayload>{
+    suspend fun businessTalk(context: Context, uid: Int, sessionId: String, text: String): ApiResponse<BusinessTalkResponsePayload>{
         val payload = BusinessTalkReqeustPayload(uid, sessionId, text)
         val request = ClientRequest("BusinessTalk", payload)
         return executeRequest(context, request)
@@ -385,7 +385,11 @@ object ApiClient {
         return executeRequest(context, request)
     }
 
-
+    suspend fun SendBackSTT(context: Context, fileBytes: ByteArray, fileName: String): ApiResponse<SimpleMessagePayload> {
+        val payload = SendBackRequestPayload(fileName, fileBytes.size.toLong())
+        val request = ClientRequest("SendBack", payload)
+        return executeRequest(context, request, fileBytes)
+    }
 
 
 }
