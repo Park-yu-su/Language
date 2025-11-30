@@ -60,26 +60,22 @@ class MypageMyvocDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        userPreference = UserPreference(requireContext())
+
+        setWordUI()
+        setupRecyclerView()
+
+        // [관찰] 단어 목록 & 단어장 삭제 결과 관찰
+        observeViewModel()
+        getWords()
+
         binding.manageMyVocDetailBackBtn.setOnClickListener {
             findNavController().popBackStack()
         }
 
-        userPreference = UserPreference(requireContext())
-
-        val container = binding.tagLayout
-        val inflater = LayoutInflater.from(requireContext())
-
-        setWordUI()
-
-        observeWords()
-        getWords()
-
-        // [ ✨ RecyclerView 초기 설정 ✨ ]
-        // (fragmentWordList는 현재 비어있음)
-        setupRecyclerView()
-
         binding.deleteVocBtn.setOnClickListener {
-            // showDeleteVocDialog()
+            val title = myPageViewModel.selectWordbookInfo.title
+            showDeleteVocDialog(title)
         }
 
         binding.setTagBtn.setOnClickListener {
@@ -104,18 +100,14 @@ class MypageMyvocDetailFragment : Fragment() {
             copyID()
         }
 
-        // ⭐️ 'SelectWay...'에서 보낸 결과를 리스닝
-        // (결과를 받을 Key 이름은 "dialog_completed"로 정합니다)
+        // 'SelectWay...'에서 보낸 결과 리스닝 (단어 추가 후 복귀 시)
         val navBackStackEntry = findNavController().getBackStackEntry(R.id.mypageMyvocDetailFragment)
-
         navBackStackEntry.savedStateHandle.getLiveData<Boolean>("dialog_completed")
             .observe(viewLifecycleOwner) { result ->
                 if (result == true) {
-                    // 다이얼로그 작업이 완료되어 복귀함
                     Toast.makeText(requireContext(), "단어 추가 완료", Toast.LENGTH_SHORT).show()
-                    // TODO: (선택) 여기서 단어장 상세 화면 데이터를 새로고침 (예: viewModel.loadDetails())
-
-                    // ⭐️ 중요: 결과를 사용한 후에는 반드시 제거해야 재실행 방지
+                    // 단어 추가 후 목록 즉시 갱신
+                    getWords()
                     navBackStackEntry.savedStateHandle.remove<Boolean>("dialog_completed")
                 }
             }
@@ -126,6 +118,8 @@ class MypageMyvocDetailFragment : Fragment() {
 
         val container = binding.tagLayout
         val inflater = LayoutInflater.from(requireContext())
+
+        container.removeAllViews() // 중복 추가 방지
 
         //태그 추가하기
         var myword = myPageViewModel.selectWordbookInfo
@@ -153,30 +147,46 @@ class MypageMyvocDetailFragment : Fragment() {
         myPageViewModel.getWordbook(requireContext(), myPageViewModel.selectWordbookId)
     }
 
-    private fun observeWords(){
-        myPageViewModel.wordListResult.observe(viewLifecycleOwner) {response ->
+    private fun observeViewModel(){
+
+        // 1. 단어 목록 로드 결과
+        myPageViewModel.wordListResult.observe(viewLifecycleOwner) { response ->
             when(response){
                 is ApiResponse.Success -> {
                     Log.d("log_mypage", "단어 불러오기 성공")
-
-                    var words = response.data.data
                     fragmentWordList.clear()
-                    for(i in 0 until words.size){
-                        val now = words[i]
-                        fragmentWordList.add(WordData(now.wordId, now.word, now.meanings, now.distractors, now.example))
+
+                    response.data.data.forEach { now ->
+                        // API 데이터 -> UI 데이터 변환
+                        fragmentWordList.add(
+                            WordData(
+                                now.wordId,
+                                now.word,
+                                now.meanings,
+                                now.distractors,
+                                now.example)
+                        )
                     }
 
-                    //단어 개수 추가
-                    var num = "${fragmentWordList.size}개"
-                    binding.vocNumTv.text = num
-
+                    binding.vocNumTv.text = "${fragmentWordList.size}개"
                     adapter.notifyDataSetChanged()
-
-
-
                 }
                 is ApiResponse.Error -> {
-                    Log.d("log_mypage", "단어 불러오기 실패")
+                    Log.d("log_mypage", "단어 불러오기 실패: ${response.message}")
+                }
+            }
+        }
+
+        // 2. 단어장 자체 삭제 결과 관찰
+        myPageViewModel.wordbookDeleteResult.observe(viewLifecycleOwner) { response ->
+            when(response) {
+                is ApiResponse.Success -> {
+                    Toast.makeText(requireContext(), "단어장이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                    // 단어장이 삭제되었으므로 목록 화면으로 이동
+                    findNavController().popBackStack()
+                }
+                is ApiResponse.Error -> {
+                    Toast.makeText(requireContext(), "삭제 실패: ${response.message}", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -187,36 +197,26 @@ class MypageMyvocDetailFragment : Fragment() {
      */
     private fun setupRecyclerView() {
         adapter = WordListAdapter(
-            fragmentWordList, // 비어있는 로컬 리스트로 어댑터 생성
-
-            onItemClicked = { wordData, position ->
-                // (클릭 로직)
-                // 예: Toast.makeText(requireContext(), "${wordData.word} 클릭됨", Toast.LENGTH_SHORT).show()
-            },
+            fragmentWordList,
+            onItemClicked = { wordData, position -> },
             onTTSRequest = { }
         )
 
         binding.mypageWordListRecyclerview.adapter = adapter
         binding.mypageWordListRecyclerview.layoutManager = LinearLayoutManager(requireContext())
 
-        // ⭐️ [핵심] RecyclerView에 리스너를 추가하여 자식 View가 생성될 때마다 개입합니다.
+        // RecyclerView에 리스너를 추가하여 자식 View가 생성될 때마다 개입합니다.
         binding.mypageWordListRecyclerview.addOnChildAttachStateChangeListener(object :
             RecyclerView.OnChildAttachStateChangeListener {
 
             // 이 함수는 각 아이템 View가 RecyclerView에 붙을 때 호출됩니다.
             override fun onChildViewAttachedToWindow(view: View) {
-                // view는 item_word.xml 레이아웃 전체를 의미합니다.
-                // 여기서 숨기고 싶은 버튼(ttsBtn)을 찾습니다.
                 val ttsButton = view.findViewById<View>(R.id.study_listen_imv)
-
-                // 찾았다면, 해당 버튼을 숨깁니다.
                 ttsButton?.visibility = View.GONE
             }
 
-            // 이 함수는 아이템 View가 떨어져 나갈 때 호출됩니다. (여기서는 필요 없음)
-            override fun onChildViewDetachedFromWindow(view: View) {
-                // 필요시 로직 추가
-            }
+            // 이 함수는 아이템 View가 떨어져 나갈 때 호출됩니다.
+            override fun onChildViewDetachedFromWindow(view: View) {}
         })
     }
 
@@ -224,18 +224,14 @@ class MypageMyvocDetailFragment : Fragment() {
      * 단어장 삭제 여부를 묻는 커스텀 다이얼로그를 띄웁니다.
      */
     private fun showDeleteVocDialog(vocName: String) {
-        // 1. 바인딩 생성 (XML과 일치)
+        // 바인딩 생성 (XML과 일치)
         val dialogBinding = DialogCustomSelectBinding.inflate(layoutInflater)
 
-        // ⭐️ 2. [수정] 내용 채우기 (요청하신 텍스트 형식으로)
-        val message = "${vocName}를 \n삭제하시겠습니까?"
-        dialogBinding.dialogMessageTv.text = message
-
-        // ⭐️ [수정] 버튼 텍스트 (XML 레이아웃에 맞게)
+        dialogBinding.dialogMessageTv.text = "${vocName}를 \n삭제하시겠습니까?"
         dialogBinding.dialogOkTv.text = "삭제"
         dialogBinding.dialogCancelTv.text = "취소"
 
-        // 3. 다이얼로그 생성
+        // 다이얼로그 생성
         val dialog = AlertDialog.Builder(requireContext())
             .setView(dialogBinding.root)
             .create()
@@ -243,15 +239,23 @@ class MypageMyvocDetailFragment : Fragment() {
         // 다이얼로그 투명
         dialog.window?.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
 
-        // 4. [수정] 취소 버튼 리스너
+        // 취소 버튼 리스너
         dialogBinding.dialogCancelCdv.setOnClickListener {
             dialog.dismiss()
         }
 
-        // 5. ⭐️ [수정] 'OK' (추가) 버튼 리스너
+        // 'OK' (추가) 버튼 리스너
         dialogBinding.dialogOkCdv.setOnClickListener {
-            // TODO: 여기서 실질적인 단어장 삭제 로직 (API)
-            Toast.makeText(requireContext(), "${vocName} 삭제 완료", Toast.LENGTH_SHORT).show()
+            val wid = myPageViewModel.selectWordbookId.toString()
+            var ownerUid = myPageViewModel.selectWordbookInfo.owner_uid
+
+            // 만약 null이라면, UserPreference(내 정보)에서 가져오기
+            if (ownerUid.isEmpty()) {
+                ownerUid = userPreference.getUid().toString()
+            }
+
+            myPageViewModel.deleteWordbook(requireContext(), wid, ownerUid)
+
             dialog.dismiss()
         }
 
