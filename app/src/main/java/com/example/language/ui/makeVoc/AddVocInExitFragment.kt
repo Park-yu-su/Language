@@ -24,7 +24,6 @@ import com.example.language.viewModel.VocViewModel
 import com.example.language.viewModel.VocViewModelFactory
 import kotlin.getValue
 
-
 class AddVocInExitFragment : Fragment() {
 
     private var _binding: FragmentAddVocInExitBinding? = null
@@ -115,11 +114,6 @@ class AddVocInExitFragment : Fragment() {
      * ViewModel의 LiveData를 관찰하여 UI를 업데이트합니다.
      */
     private fun observeViewModel() {
-        // 로딩 상태 관찰
-        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
-            // (ProgressBar가 있다면)
-            // binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-        }
 
         // [ ✨ 8. 핵심: 단어 목록 관찰 ✨ ]
         viewModel.wordList.observe(viewLifecycleOwner) { wordsFromViewModel ->

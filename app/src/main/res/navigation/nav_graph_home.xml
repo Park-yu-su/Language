@@ -83,6 +83,8 @@
             app:argType="boolean"
             android:defaultValue="false" />
 
+        <deepLink app:uri="myapp://addvoc" />
+
         <action
             android:id="@+id/action_selectWayAddVocFragment_to_addVocFinalCheckFragment"
             app:destination="@id/addVocFinalCheckFragment"/>

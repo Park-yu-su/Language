@@ -6,13 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.map
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.language.R
 import com.example.language.adapter.VocListAdapter
 import com.example.language.api.login.UserPreference
-import com.example.language.data.VocData
 import com.example.language.data.repository.WordbookRepository
 import com.example.language.databinding.FragmentMakeVocBinding
 import com.example.language.ui.home.MainActivity
@@ -40,10 +38,6 @@ class MakeVocFragment : Fragment() {
     // 팩토리를 람다로 전달합니다.
     private val viewModel: VocViewModel by activityViewModels<VocViewModel> { viewModelFactory }
 
-    private val uid by lazy {
-        userPreference.getUid().toString()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -64,6 +58,8 @@ class MakeVocFragment : Fragment() {
             // 클릭 이벤트 처리
             val selectedVocId = clickedVocData.wid.toString()
             val selectedVocTitle = clickedVocData.title
+            viewModel.setTags(clickedVocData.tags)
+
             val action = MakeVocFragmentDirections
                 .actionMakeVocFragmentToAddVocInExitFragment(selectedVocId, selectedVocTitle)
             findNavController().navigate(action)

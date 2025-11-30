@@ -221,6 +221,7 @@ object ApiClient {
         val request = ClientRequest("WordbookDelete", payload)
         return executeRequest(context, request)
     }
+
     suspend fun updateTag(context: Context, payload: TagUpdateRequestPayload): ApiResponse<SimpleMessagePayload> {
         val request = ClientRequest("TagUpdate", payload)
         return executeRequest(context, request)
