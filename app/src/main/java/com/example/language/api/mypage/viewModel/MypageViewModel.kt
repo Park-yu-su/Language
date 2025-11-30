@@ -45,8 +45,8 @@ class MypageViewModel(private val repository: MypageRepository): ViewModel() {
     val wordbookRegisterResult: LiveData<ApiResponse<WordbookRegisterResponsePayload>> = _wordbookRegisterResult
 
     // 5. 단어장 수정 결과 (단어 삭제 시에도 사용)
-    private val _wordbookUpdateResult = MutableLiveData<ApiResponse<WordbookUpdateResponsePayload>>()
-    val wordbookUpdateResult: LiveData<ApiResponse<WordbookUpdateResponsePayload>> = _wordbookUpdateResult
+    private val _wordbookUpdateResult = MutableLiveData<ApiResponse<WordbookUpdateResponsePayload>?>()
+    val wordbookUpdateResult: LiveData<ApiResponse<WordbookUpdateResponsePayload>?> = _wordbookUpdateResult
 
     // 6. 단어장 삭제 결과
     private val _wordbookDeleteResult = MutableLiveData<ApiResponse<WordbookDeleteResponsePayload>?>()
@@ -55,6 +55,11 @@ class MypageViewModel(private val repository: MypageRepository): ViewModel() {
     // 삭제 결과 초기화 함수
     fun initDeleteResult() {
         _wordbookDeleteResult.value = null
+    }
+
+    // 단어장 수정(단어 삭제) 결과 초기화 함수
+    fun initUpdateResult() {
+        _wordbookUpdateResult.value = null
     }
 
     //1. 내 단어장 가져오기

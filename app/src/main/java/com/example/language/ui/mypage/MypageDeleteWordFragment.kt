@@ -159,9 +159,13 @@ class MypageDeleteWordFragment : Fragment() {
 
         // (2) 단어장 수정(삭제 포함) 결과 관찰
         myPageViewModel.wordbookUpdateResult.observe(viewLifecycleOwner) { response ->
+
+            if (response == null) return@observe
+
             when (response) {
                 is ApiResponse.Success -> {
                     Toast.makeText(requireContext(), "단어가 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+                    myPageViewModel.initUpdateResult()
                     findNavController().popBackStack()
                 }
 

@@ -64,6 +64,8 @@ class MakeVocFragment : Fragment() {
             // 클릭 이벤트 처리
             val selectedVocId = clickedVocData.wid.toString()
             val selectedVocTitle = clickedVocData.title
+            viewModel.setTags(clickedVocData.tags)
+
             val action = MakeVocFragmentDirections
                 .actionMakeVocFragmentToAddVocInExitFragment(selectedVocId, selectedVocTitle)
             findNavController().navigate(action)

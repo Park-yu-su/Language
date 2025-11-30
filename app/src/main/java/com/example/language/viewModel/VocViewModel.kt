@@ -43,7 +43,9 @@ class VocViewModel(
     // --- UI State (LiveData) ---
     private val _title = MutableLiveData<String>()
     val title = _title
-    val tags = MutableLiveData<String>()
+
+    private val _tags = MutableLiveData<List<String>>()
+    val tags: LiveData<List<String>> = _tags
 
     // 최종 단어 목록
     private val _wordList = MutableLiveData<List<AppWordData>>()
@@ -105,6 +107,10 @@ class VocViewModel(
         _currentVocId.value = vocId
     }
 
+    fun setTags(newTags: List<String>) {
+        _tags.value = newTags
+    }
+
     // --- 4. 단어장 데이터 로드/설정 함수 ---
 
     fun getSubscribedWordbooks(context: Context) {
@@ -127,15 +133,15 @@ class VocViewModel(
      * 단어장의 기본 정보(ID, 이름, 태그)를 ViewModel에 설정합니다.
      * 이어서 loadVocabookDetails를 호출하여 단어 목록을 불러옵니다.
      */
-    fun loadVocabookForEditing(context: Context, vocData: VocData) {
-        _currentVocId.value = vocData.wid.toString()
-        _title.value = vocData.title
-        tags.value = vocData.tags.joinToString(", ")
-        _wordList.value = emptyList() // (일단 비우고, 로드 시작)
-
-        // 단어 목록(words) 로드
-        loadVocabookDetails(context, vocData.wid.toString())
-    }
+//    fun loadVocabookForEditing(context: Context, vocData: VocData) {
+//        _currentVocId.value = vocData.wid.toString()
+//        _title.value = vocData.title
+//        tags.value = vocData.tags.joinToString(", ")
+//        _wordList.value = emptyList() // (일단 비우고, 로드 시작)
+//
+//        // 단어 목록(words) 로드
+//        loadVocabookDetails(context, vocData.wid.toString())
+//    }
 
     /**
      * [새 단어장 흐름 시작]
@@ -144,7 +150,7 @@ class VocViewModel(
     fun setupForNewVocabook(newTitle: String, newTags: List<String>) {
         _currentVocId.value = null // 새 단어장이므로 ID 없음
         _title.value = newTitle
-        tags.value = newTags.joinToString(", ")
+        _tags.value = newTags
         _wordList.value = emptyList() // 단어 목록 비어있음
     }
 
@@ -252,7 +258,7 @@ class VocViewModel(
             _isLoading.value = true
             val title = title.value
             val ownerUid = _ownerUid.value
-            val tagsList = tags.value.orEmpty().split(",").map { it.trim() }.filter { it.isNotEmpty() }
+            val tagsList = tags.value.orEmpty().filter { it.isNotBlank() }
             val words = _wordList.value ?: emptyList() // List<AppWordData>
 
             if (title.isNullOrEmpty() || ownerUid.isNullOrEmpty()) {
@@ -294,7 +300,7 @@ class VocViewModel(
             val wid = _currentVocId.value
             val title = title.value
             val ownerUid = _ownerUid.value
-            val tagsList = tags.value.orEmpty().split(",").map { it.trim() }.filter { it.isNotEmpty() }
+            val tagsList = tags.value.orEmpty().filter { it.isNotBlank() }
             val words = _wordList.value ?: emptyList()
 
             // 2. 유효성 검사
