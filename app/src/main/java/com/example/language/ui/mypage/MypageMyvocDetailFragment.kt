@@ -5,6 +5,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -30,6 +31,8 @@ import com.example.language.api.mypage.MypageRepository
 import com.example.language.api.mypage.viewModel.MypageViewModel
 import com.example.language.api.mypage.viewModel.MypageViewModelFactory
 import kotlin.getValue
+import androidx.core.net.toUri
+import androidx.navigation.NavDeepLinkRequest
 
 class MypageMyvocDetailFragment : Fragment() {
 
@@ -83,13 +86,16 @@ class MypageMyvocDetailFragment : Fragment() {
         }
 
         binding.addWordBtn.setOnClickListener {
-            // 1. 전달할 인자("isReturnMode")를 Bundle로 만듭니다.
-            val bundle = bundleOf("isReturnMode" to true)
+            // 1. 이동할 주소(URI) 만들기
+            val uri = "myapp://addvoc?isReturnMode=true".toUri()
 
-            findNavController().navigate(
-                R.id.action_mypageMyvocDetailFragment_to_selectWayAddVocFragment,
-                bundle
-            )
+            // 2. 딥링크 요청 객체 생성
+            val request = NavDeepLinkRequest.Builder
+                .fromUri(uri)
+                .build()
+
+            // 3. 이동 (그래프가 달라도 주소를 찾아갑니다)
+            findNavController().navigate(request)
         }
 
         binding.deleteWordBtn.setOnClickListener {

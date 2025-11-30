@@ -1,11 +1,9 @@
 package com.example.language.viewModel
 
 import android.content.Context
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.example.language.api.ApiResponse
 import com.example.language.api.DictionaryResponsePayload
