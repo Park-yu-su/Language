@@ -179,6 +179,9 @@ class MypageMyvocDetailFragment : Fragment() {
 
         // 2. 단어장 자체 삭제 결과 관찰
         myPageViewModel.wordbookDeleteResult.observe(viewLifecycleOwner) { response ->
+
+            if (response == null) return@observe
+
             when(response) {
                 is ApiResponse.Success -> {
                     Toast.makeText(requireContext(), "단어장이 삭제되었습니다.", Toast.LENGTH_SHORT).show()

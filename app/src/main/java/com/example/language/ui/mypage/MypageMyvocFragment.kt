@@ -46,6 +46,8 @@ class MypageMyvocFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        myPageViewModel.initDeleteResult()
+
         binding.manageMyVocBackBtn.setOnClickListener {
             findNavController().popBackStack()
         }

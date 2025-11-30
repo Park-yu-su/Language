@@ -17,7 +17,6 @@ import com.example.language.api.WordbookUpdateRequestPayload
 import com.example.language.api.WordbookUpdateResponsePayload
 import com.example.language.api.mypage.MypageRepository
 import com.example.language.data.VocData
-import com.example.language.data.WordData
 import kotlinx.coroutines.launch
 
 class MypageViewModel(private val repository: MypageRepository): ViewModel() {
@@ -50,8 +49,13 @@ class MypageViewModel(private val repository: MypageRepository): ViewModel() {
     val wordbookUpdateResult: LiveData<ApiResponse<WordbookUpdateResponsePayload>> = _wordbookUpdateResult
 
     // 6. 단어장 삭제 결과
-    private val _wordbookDeleteResult = MutableLiveData<ApiResponse<WordbookDeleteResponsePayload>>()
-    val wordbookDeleteResult: LiveData<ApiResponse<WordbookDeleteResponsePayload>> = _wordbookDeleteResult
+    private val _wordbookDeleteResult = MutableLiveData<ApiResponse<WordbookDeleteResponsePayload>?>()
+    val wordbookDeleteResult: LiveData<ApiResponse<WordbookDeleteResponsePayload>?> = _wordbookDeleteResult
+
+    // 삭제 결과 초기화 함수
+    fun initDeleteResult() {
+        _wordbookDeleteResult.value = null
+    }
 
     //1. 내 단어장 가져오기
     fun getSubscribedWordbooks(context: Context, uid: Int) {
