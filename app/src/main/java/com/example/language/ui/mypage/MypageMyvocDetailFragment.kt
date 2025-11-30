@@ -74,18 +74,9 @@ class MypageMyvocDetailFragment : Fragment() {
         observeWords()
         getWords()
 
-
-
         // [ ✨ RecyclerView 초기 설정 ✨ ]
         // (fragmentWordList는 현재 비어있음)
         setupRecyclerView()
-
-        // TODO: (중요) 실제 데이터를 가져온 후 어댑터에 알려야 합니다.
-        // 예: viewModel.wordList.observe(viewLifecycleOwner) { words ->
-        //    fragmentWordList.clear()
-        //    fragmentWordList.addAll(words)
-        //    adapter.notifyDataSetChanged() // 어댑터 새로고침
-        // }
 
         binding.deleteVocBtn.setOnClickListener {
             // showDeleteVocDialog()

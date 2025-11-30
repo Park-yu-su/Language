@@ -10,6 +10,11 @@ import com.example.language.api.AuthResponsePayload
 import com.example.language.api.GetSubscribedWordbooksResponsePayload
 import com.example.language.api.GetWordbookResponsePayload
 import com.example.language.api.SubscribedWordbooksData
+import com.example.language.api.WordbookDeleteResponsePayload
+import com.example.language.api.WordbookRegisterRequestPayload
+import com.example.language.api.WordbookRegisterResponsePayload
+import com.example.language.api.WordbookUpdateRequestPayload
+import com.example.language.api.WordbookUpdateResponsePayload
 import com.example.language.api.mypage.MypageRepository
 import com.example.language.data.VocData
 import com.example.language.data.WordData
@@ -36,9 +41,17 @@ class MypageViewModel(private val repository: MypageRepository): ViewModel() {
     lateinit var selectWordbookInfo : VocData
     var selectWordbookId : Int = 0
 
+    // 4. 단어장 생성 결과
+    private val _wordbookRegisterResult = MutableLiveData<ApiResponse<WordbookRegisterResponsePayload>>()
+    val wordbookRegisterResult: LiveData<ApiResponse<WordbookRegisterResponsePayload>> = _wordbookRegisterResult
 
+    // 5. 단어장 수정 결과 (단어 삭제 시에도 사용)
+    private val _wordbookUpdateResult = MutableLiveData<ApiResponse<WordbookUpdateResponsePayload>>()
+    val wordbookUpdateResult: LiveData<ApiResponse<WordbookUpdateResponsePayload>> = _wordbookUpdateResult
 
-
+    // 6. 단어장 삭제 결과
+    private val _wordbookDeleteResult = MutableLiveData<ApiResponse<WordbookDeleteResponsePayload>>()
+    val wordbookDeleteResult: LiveData<ApiResponse<WordbookDeleteResponsePayload>> = _wordbookDeleteResult
 
     //1. 내 단어장 가져오기
     fun getSubscribedWordbooks(context: Context, uid: Int) {
@@ -64,5 +77,27 @@ class MypageViewModel(private val repository: MypageRepository): ViewModel() {
         }
     }
 
+    // 4. 단어장 생성
+    fun registerWordbook(context: Context, payload: WordbookRegisterRequestPayload) {
+        viewModelScope.launch {
+            val response = repository.registerWordbook(context, payload)
+            _wordbookRegisterResult.value = response
+        }
+    }
 
+    // 5. 단어장 수정 (단어 하나를 삭제하고 싶을 때, 리스트를 수정해서 이 함수를 호출합니다)
+    fun updateWordbook(context: Context, payload: WordbookUpdateRequestPayload) {
+        viewModelScope.launch {
+            val response = repository.updateWordbook(context, payload)
+            _wordbookUpdateResult.value = response
+        }
+    }
+
+    // 6. 단어장 자체 삭제
+    fun deleteWordbook(context: Context, wid: String, ownerUid: String) {
+        viewModelScope.launch {
+            val response = repository.deleteWordbook(context, wid, ownerUid)
+            _wordbookDeleteResult.value = response
+        }
+    }
 }
