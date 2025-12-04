@@ -32,6 +32,8 @@ android {
         properties.load(project.rootProject.file("local.properties").inputStream())
         manifestPlaceholders["KAKAO_API_KEY"] = properties.getProperty("KAKAO_API_KEY")
         buildConfigField("String", "KAKAO_API_KEY", "\"${properties.getProperty("KAKAO_API_KEY")}\"")
+
+        buildConfigField("String", "BASE_URL", "\"${properties.getProperty("API_BASE_URL")}\"")
     }
 
     buildFeatures {

@@ -14,6 +14,7 @@
         android:padding="10dp"
         android:maxWidth="280dp"
         style="@style/pretendard_14sp_medium"
+        android:textSize="15sp"
         android:text="제가 입력한 텍스트입니다."
         android:textColor="@color/Black"
         app:layout_constraintEnd_toEndOf="parent"

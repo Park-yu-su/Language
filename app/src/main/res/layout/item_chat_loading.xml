@@ -35,13 +35,12 @@
         android:id="@+id/lottie_loading"
         android:layout_width="60dp"
         android:layout_height="35dp"
-        android:layout_marginStart="8dp"
         android:background="@drawable/bg_chat_bot"
         android:scaleType="centerCrop"
         app:lottie_rawRes="@raw/loading_dots2"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
         app:layout_constraintStart_toEndOf="@id/chat_bot_profile_imv"
-        app:layout_constraintTop_toBottomOf="@id/chat_bot_name_tv"/>
+        app:layout_constraintTop_toBottomOf="@id/chat_bot_profile_imv"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

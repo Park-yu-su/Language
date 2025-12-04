@@ -80,6 +80,7 @@ class ChatFragment : Fragment(), ChatMenuListener {
 
     private lateinit var userPreference : UserPreference
 
+    private lateinit var textToSpeech: TextToSpeech
 
     //녹음 관련
     private var audioRecord: AudioRecord? = null
@@ -136,6 +137,12 @@ class ChatFragment : Fragment(), ChatMenuListener {
         observeSTTResult()
         observeBusinessTalk()
 
+        //TTS 세팅
+        textToSpeech = TextToSpeech(requireContext()) { status ->
+            if (status == TextToSpeech.SUCCESS) {
+                textToSpeech.language = Locale.US
+            }
+        }
 
         //강제 패딩 제거
         (activity as MainActivity).binding.mainFragmentContainer.setPadding(0, 0, 0, 0)
@@ -364,6 +371,9 @@ class ChatFragment : Fragment(), ChatMenuListener {
         val botMessage = ChatMessage(System.currentTimeMillis(), text, false, System.currentTimeMillis().toString())
         chatAdapter.addMessage(botMessage)
         binding.chatRecyclerview.scrollToPosition(chatViewModel.messageList.size - 1)
+
+        //발음 말하기
+        textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, null, null)
     }
 
     //bottomSheetDialog 띄우기

@@ -19,7 +19,10 @@ class WordListEditAdapter(
         fun bind(data: AppWordData) {
             binding.englishTv.text = data.word
             binding.exampleTv.text = data.example
-            binding.meangins1Tv.text = data.meanings.firstOrNull() ?: "뜻 없음"
+            binding.meangins1Tv.text = data.meanings.get(0)
+            if (data.meanings.size > 1) {binding.meangins2Tv.text = data.meanings.get(1)}
+            if (data.meanings.size > 2) {binding.meangins3Tv.text = data.meanings.get(2)}
+            if (data.meanings.size > 3) {binding.meangins4Tv.text = data.meanings.get(3)}
 
             binding.root.setOnClickListener {
                 onItemClicked(data)
