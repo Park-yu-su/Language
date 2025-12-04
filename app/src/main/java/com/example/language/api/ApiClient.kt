@@ -20,7 +20,7 @@ import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.TrustManagerFactory
 
 object ApiClient {
-    private const val SERVER_IP = "43.201.171.76"
+    private const val SERVER_IP = BuildConfig.BASE_URL
     private const val PORT = 2121
     private const val TAG = "ApiClient"
 
