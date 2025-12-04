@@ -2,6 +2,7 @@ package com.example.language.api
 
 import android.content.Context
 import android.util.Log
+import com.example.language.BuildConfig
 import com.example.language.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -19,7 +20,7 @@ import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.TrustManagerFactory
 
 object ApiClient {
-    private const val SERVER_IP = "58.76.177.184"
+    private const val SERVER_IP = "43.201.171.76"
     private const val PORT = 2121
     private const val TAG = "ApiClient"
 

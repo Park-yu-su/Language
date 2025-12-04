@@ -3,6 +3,7 @@ package com.example.language.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.language.R
 import com.example.language.data.FriendData
 import com.example.language.databinding.ItemFriendDeleteBinding
 
@@ -24,6 +25,16 @@ class FriendDeleteAdapter(
                     .into(binding.friendProfile)
 
                  */
+
+                val imageResId = when(friend.userImage) {
+                    "0" -> R.drawable.img_default_user1
+                    "1" -> R.drawable.img_default_user2
+                    "2" -> R.drawable.img_default_user3
+                    "3" -> R.drawable.img_default_user4
+                    else -> R.drawable.img_default_user1
+                }
+                binding.friendDeleteProfile.setImageResource(imageResId)
+
 
                 binding.friendDeleteTvName.text = friend.name
                 binding.friendDeleteTvStatus.text = friend.introduce

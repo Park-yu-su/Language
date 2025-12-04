@@ -28,6 +28,15 @@ class FriendAddAdapter(
                         .into(binding.friendProfile)
         
                      */
+
+                    val imageResId = when(item.userImage) {
+                        "0" -> R.drawable.img_default_user1
+                        "1" -> R.drawable.img_default_user2
+                        "2" -> R.drawable.img_default_user3
+                        "3" -> R.drawable.img_default_user4
+                        else -> R.drawable.img_default_user1
+                    }
+                    binding.friendAddProfile.setImageResource(imageResId)
                     
                     binding.friendAddTvName.text = item.name
                     binding.friendAddTvStatus.text = item.introduce

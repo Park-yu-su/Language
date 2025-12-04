@@ -96,32 +96,6 @@ class FriendHandleFragment : Fragment() {
         (activity as? MainActivity)?.setUIVisibility(false)
         userPreference = UserPreference(requireContext())
 
-        //더미 데이터(요청 리스트)
-        /*
-        requestList.add(
-            FriendData("22", "사람입니다", "","자기소개")
-        )
-        requestList.add(
-            FriendData("33", "너도?", "","자기소개")
-        )
-        */
-
-        //더미데이터(유저 검색 결과 임시)
-        /*
-        tmpResult.add(
-            FriendData("7130", "핑구", "","자기소개")
-        )
-        tmpResult.add(
-            FriendData("3174", "뽀로로", "","자기소개")
-        )
-        */
-
-        //임시 데이터 셋(친구 리스트-삭제 때)
-        /*
-        friendList.add(FriendData("1","친구1", "","자기소개"))
-        friendList.add(FriendData("2","친구2", "","자기소개"))
-        friendList.add(FriendData("3","친구3", "","자기소개"))
-         */
 
 
         //EditText listenr -> request/delete or add를 보여준다.
@@ -236,10 +210,11 @@ class FriendHandleFragment : Fragment() {
                 val uids = data.uids
                 val nicknames = data.nicknames
                 val images = data.images
+                val introduce = data.onelines
 
                 for(i in 0 until uids.size){
                     // FriendData 생성자 순서에 맞춰 데이터를 추가합니다.
-                    friendList.add(FriendData(uids[i], nicknames[i], images[i], "현재는 이미지 URL"))
+                    friendList.add(FriendData(uids[i], nicknames[i], images[i], introduce[i]))
                 }
 
                 deleteAdapter.notifyDataSetChanged()
