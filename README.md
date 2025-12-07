@@ -1,98 +1,58 @@
-# Language Android README
+# 📸 찍어보카 - Android Client
 
-## 커밋 타입 태그
-- `[UI]` : XML 및 Drawable 관련 작업  
-- `[Logic]` : 기능 구현  
-- `[Add]` : 기능 추가  
-- `[Delete]` : 파일/코드 삭제  
-- `[Fix]` : 버그 수정  
-- `[Rename]` : 이름 변경(변수, 파일, 클래스 등)  
-- `[Merge]` : Merge 작업  
-- `[Backend]` : 백엔드 API/데이터 연결
+![Kotlin](https://img.shields.io/badge/Kotlin-1.9.22-purple?logo=kotlin)
+![Android SDK](https://img.shields.io/badge/Target%20SDK-36-brightgreen?logo=android)
+![Retrofit](https://img.shields.io/badge/Retrofit-3.0.0-square?logo=squareup)
+![Architecture](https://img.shields.io/badge/Architecture-MVVM-blue)
 
-- ## Branch 전략
-모든 작업은 `main` 브랜치에서 파생된 기능별 하위 브랜치에서 진행합니다.  
-Branch 이름은 Issue 생성 후, `이름/Issue 번호` 를 이용해 생성합니다.
+> **OCR 및 AI 챗봇(RAG)을 활용한 자기주도적 영어 학습 플랫폼**
+> 안드로이드 16 (API 36) 최신 환경 대응 및 SSE 실시간 스트리밍 채팅 지원
+
+## 📱 프로젝트 소개 (Introduction)
+**찍어보카**는 일상 속 단어를 카메라로 촬영(OCR)하여 나만의 단어장을 만들고, **AI 튜터**와 실시간으로 회화하며 학습하는 안드로이드 애플리케이션입니다.
+최신 Android 기술 스택을 적용하여 **Server-Sent Events(SSE)** 기반의 실시간 채팅, **Material Calendar**를 활용한 학습 관리, **Room DB** 기반의 로컬 캐싱을 구현했습니다.
+
+## 🌟 주요 기능 (Key Features)
+
+### 1. 🤖 AI 챗봇 & 실시간 소통
+* **Real-time Streaming**: `OkHttp SSE`를 적용하여 AI의 긴 답변을 기다리지 않고 타자기처럼 실시간으로 확인합니다.
+* **인터랙티브 피드백**: `Lottie` 애니메이션을 적용하여 음성 인식 중이거나 로딩 중일 때 생동감 있는 UX를 제공합니다.
+* **Rich Text 지원**: `Markwon`을 통해 AI가 보내주는 마크다운(Code Block, Bold 등)을 깔끔하게 렌더링합니다.
+
+### 2. 🗓️ 스마트 학습 관리
+* **학습 스트릭(Streak)**: `Material CalendarView`와 `ThreeTenABP`를 통해 매일의 학습 기록을 캘린더에 표시하여 꾸준한 학습을 유도합니다.
+* **로컬 캐싱**: `Room DB`를 활용하여 학습 데이터를 로컬에 저장, 오프라인 환경에서도 내 단어장과 기록을 확인할 수 있습니다.
+
+### 3. 📷 OCR 단어장 & UI UX
+* **OCR 텍스트 추출**: 카메라로 촬영한 이미지에서 영단어를 인식하여 자동으로 단어장에 등록합니다.
+* **소셜 프로필**: `Glide`와 `CircleImageView`를 사용하여 친구들의 프로필 이미지를 빠르고 둥글게 렌더링합니다.
+* **반응형 디자인**: `ConstraintLayout` 및 `GridLayout`을 활용하여 다양한 디바이스 해상도에 대응합니다.
+
+## 🏗️ 시스템 아키텍처 (Architecture)
+
+클라이언트(Android)는 **MVVM 패턴**을 기반으로 설계되었으며, 서버와 **TLS 소켓 통신** 및 **REST API**를 병행하여 통신합니다.
+
+![System Architecture](images/architecture_diagram.png)
+
+## 🛠️ 기술 스택 (Tech Stack)
+
+| Category | Library | Version | Description |
+| --- | --- | --- | --- |
+| **Language** | Kotlin | 1.9.22 | Android Native |
+| **SDK** | Android SDK | **Target 36** | Latest Android Preview Support |
+| **Network** | Retrofit2 | **3.0.0** | Type-safe HTTP Client |
+| **Streaming** | OkHttp SSE | 4.12.0 | Server-Sent Events |
+| **Local DB** | Room | 2.6.1 | Local Caching & DAO |
+| **Calendar** | Material CalendarView | 2.0.1 | Learning Streak Calendar |
+| **Auth** | Kakao SDK | 2.13.0 | Social Login |
+| **Image** | Glide | 4.16.0 | Image Loading |
+
+## 📂 패키지 구조 (Package Structure)
 
 ```text
-main
- ├─ [팀원1/#1/]
- ├─ [팀원2/#2/]
- └─ [팀원3/#3/]
-```
-
-- **브랜치명**: `팀원명/#이슈번호/`
-
----
-
-## Issue 컨벤션
-- **제목 형식**: `[팀원명/타입] 구현 내용`  
-- **예시**: `[어헛차//UI] 메인 화면 UI 구현`
-
----
-
-## PR 컨벤션
-- **제목 형식**: `[팀원명/#이슈번호] - 작업 내용`  
-- **예시**: `[어헛차/#1] - 아이템 RecyclerView 연결`
-
----
-
-## Commit 컨벤션
-- **메시지 형식**: `[팀원명/#이슈번호] - 작업 내용`  
-- **예시**: `[어헛차/#1] - RecyclerView 어댑터 구현`
-
----
-
-## Code 컨벤션
-
-### 1. 위젯 ID 네이밍
-```
-[Activity/Fragment]_[기능]_[위젯이름]
-예) MainActivity 뒤로가기 버튼 → main_back_btn
-```
-
-### 2. UI 주석
-- XML 내 주요 레이아웃/위젯에 한 줄 설명
-```xml
-<!-- 상단 앱바 -->
-
- xml 작성...
-
-<!-- 중앙 fragment -->
-
- xml 작성...
-
-<!-- 하단 bottomNavigationView-->
-
- xml 작성...
-
-```
-
-### 3. 패키지 구조
-```
-com.hwarok
-├─ data        # Data classes, 모델
-├─ api         # 네트워크/API
-├─ ui          # Activity, Fragment, Adapter
-└─ adapter     # 어댑터
-```
-
-### 4. Activity & Fragment 네이밍
-- **CamelCase** 사용  
-  - 예) `WriteVocActivity`, `DiaryHistoryFragment`
-
----
-
-## 개발 환경
-
-- **Android Studio 버전**  
-  `Android Studio Narwhal | 2025.1.1`
-
-- **SDK 설정**  
-  - `targetSdkVersion`: 36  
-  - `minSdkVersion`: 24
-
-- **테스트 환경**  
-  다양한 기기에서의 원활한 테스트를 위해 **Emulator** 및 **실제 디바이스**를 함께 사용하여 검증을 진행합니다.
-
-  ---
+com.example.language
+├── adapter      # RecyclerView Adapters
+├── api          # Retrofit Interfaces & SSE Clients
+├── data         # Data Layer (Model/DTO, Repository, Room Entities)
+├── ui           # Presentation Layer (Activities, Fragments, Custom Views)
+└── viewmodel    # MVVM ViewModels (State Holders)
