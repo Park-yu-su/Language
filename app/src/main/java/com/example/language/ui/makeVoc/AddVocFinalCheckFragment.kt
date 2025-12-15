@@ -53,7 +53,7 @@ class AddVocFinalCheckFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentAddVocFinalCheckBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -65,6 +65,14 @@ class AddVocFinalCheckFragment : Fragment() {
 
         // 1. 어댑터 설정
         setupRecyclerView()
+
+        viewModel.wordList.observe(viewLifecycleOwner) { newWords ->
+            if (newWords != null) {
+                fragmentWordList.clear()
+                fragmentWordList.addAll(newWords)
+                adapter.updateData(newWords)
+            }
+        }
 
         // 2. ViewModel <-> UI 바인딩 설정
         setupDataBinding()
@@ -218,6 +226,7 @@ class AddVocFinalCheckFragment : Fragment() {
             when (response) {
                 is ApiResponse.Success -> {
                     showToast("'${response.data.title}' 생성 성공!")
+                    viewModel.clearWordList()
                     findNavController().popBackStack() // (수정 필요시 수정)
                 }
                 is ApiResponse.Error -> {
