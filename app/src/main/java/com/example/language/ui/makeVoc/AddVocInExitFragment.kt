@@ -59,13 +59,15 @@ class AddVocInExitFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         _binding = FragmentAddVocInExitBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.clearWordList()
 
         // [ ✨ 3. RecyclerView 초기 설정 ✨ ]
         // (fragmentWordList는 현재 비어있음)
@@ -76,6 +78,21 @@ class AddVocInExitFragment : Fragment() {
         val vocId = args.vocId
         viewModel.setVocId(vocId)
         viewModel.setVocTitle(args.vocTitle)
+
+        // ------------------------------------------------------------------
+        // [ 임시 조치: ID 13~17번 단어장(서버 데이터)은 추가 버튼 숨기기 ]
+        // ------------------------------------------------------------------
+        val idNum = vocId.toIntOrNull() ?: 0
+
+        // 13부터 17까지(13, 14, 15, 16, 17)인 경우 버튼을 없앱니다.
+        if (idNum in 13..17) {
+            binding.addVocBtn.visibility = View.GONE
+        } else {
+            binding.addVocBtn.visibility = View.VISIBLE
+        }
+        // ------------------------------------------------------------------
+
+        viewModel.loadVocabookDetails(requireContext(), vocId)
 
         // [ ✨ 4. ViewModel 관찰 시작 ✨ ]
         // (데이터 로드, UI 업데이트)

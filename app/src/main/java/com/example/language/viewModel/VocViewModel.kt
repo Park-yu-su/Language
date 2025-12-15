@@ -184,6 +184,11 @@ class VocViewModel(
         _wordList.value = newList
     }
 
+    // 단어 목록을 비우는 초기화 함수입니다.
+    fun clearWordList() {
+        _wordList.value = emptyList()
+    }
+
     // --- 5. 단어 추가 함수 (SelectWayAddVocFragment용) ---
 
     /**
@@ -209,7 +214,6 @@ class VocViewModel(
                     fileSizes,
                     combinedFileBytes
                 )
-                _analysisStatus.value = response
 
                 if (response is ApiResponse.Success) {
                     // (response.data.data가 List<WordData> - ID 없는 모델 - 라고 가정)
@@ -224,8 +228,11 @@ class VocViewModel(
                             example = apiWord.example
                         )
                     }
-                    _wordList.value = (_wordList.value ?: emptyList()) + newAppWords
+                    val currentList = _wordList.value ?: emptyList()
+                    _wordList.value = newAppWords + currentList
                 }
+
+                _analysisStatus.value = response
                 // (실패 시 response가 Error 상태이므로 analysisStatus가 관찰함)
             } catch (e: Exception) {
                 // [2. 예외 처리] (네트워크 오류 등)
@@ -242,7 +249,7 @@ class VocViewModel(
      */
     fun addManualWord(word: AppWordData) {
         val currentList = _wordList.value ?: emptyList()
-        _wordList.value = currentList + word
+        _wordList.value = listOf(word) + currentList
     }
 
     // --- 6. 단어장 CUD API 호출 함수 ---
