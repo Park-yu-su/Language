@@ -141,13 +141,15 @@ class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictur
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         _binding = FragmentSelectWayAddVocBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.resetAnalysisStatus()
 
         binding.addToPictureBtn.setOnClickListener {
             showPictureDialog()
@@ -379,7 +381,6 @@ class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictur
                         // 2. 현재 Fragment(SelectWay...) 닫기
                         findNavController().popBackStack()
                     } else {
-                        // [ ✨ 핵심 ✨ ]
                         // ViewModel의 wordList는 이미 갱신되었음
                         // Safe Args 없이 다음 화면으로 이동
                         findNavController().navigate(R.id.action_selectWayAddVocFragment_to_addVocFinalCheckFragment)
@@ -389,8 +390,6 @@ class SelectWayAddVocFragment : Fragment(), PictureSelectDialogFragment.OnPictur
                     showToast("업로드 실패: ${response.message} (코드: ${response.code})")
                 }
             }
-            // [!] 이벤트 소비 후 리셋
-            viewModel.resetAnalysisStatus()
         }
     }
 

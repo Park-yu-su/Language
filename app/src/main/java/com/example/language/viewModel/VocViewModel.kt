@@ -413,8 +413,8 @@ class VocViewModel(
      */
     fun resetRegisterStatus() { _registerStatus.value = null }
     fun resetUpdateStatus() { _updateStatus.value = null }
+    fun resetAnalysisStatus() { _analysisStatus.value = null }
     fun resetDeleteStatus() { _deleteStatus.value = null }
     fun resetTagUpdateStatus() { _tagUpdateStatus.value = null }
-    fun resetAnalysisStatus() { _analysisStatus.value = null }
     fun resetLinkWordStatus() { _linkWordStatus.value = null }
 }
