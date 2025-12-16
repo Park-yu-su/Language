@@ -63,6 +63,9 @@ class AddVocFinalCheckFragment : Fragment() {
 
         fragmentWordList = viewModel.wordList.value?.toMutableList() ?: mutableListOf()
 
+        viewModel.resetUpdateStatus()
+        viewModel.resetRegisterStatus()
+
         // 1. 어댑터 설정
         setupRecyclerView()
 
