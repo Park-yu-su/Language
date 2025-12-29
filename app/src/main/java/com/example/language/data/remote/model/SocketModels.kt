@@ -29,3 +29,14 @@ sealed class SocketResult<out T> {
 data class SimpleMessagePayload(
     val message: String
 )
+
+/**
+ * SocketResult 데이터를 변환해주는 공용 확장 함수
+ * 예: SocketResult<Payload> -> SocketResult<DomainModel>
+ */
+fun <T, R> SocketResult<T>.map(transform: (T) -> R): SocketResult<R> {
+    return when (this) {
+        is SocketResult.Success -> SocketResult.Success(transform(data))
+        is SocketResult.Error -> SocketResult.Error(code, message)
+    }
+}
