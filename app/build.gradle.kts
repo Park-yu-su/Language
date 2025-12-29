@@ -82,20 +82,11 @@ dependencies {
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
-    // Network & JSON
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.gson)
-    implementation(libs.okhttp)
-    implementation(libs.okhttp.sse)
+    // JSON
     implementation(libs.kotlinx.serialization.json)
 
     // Image Loading (Glide 대신 Coil 사용 예정)
     implementation(libs.coil.compose)
-
-    // Database (Room)
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-    ksp(libs.androidx.room.compiler)
 
     // Firebase
 //    implementation(platform(libs.firebase.bom))
