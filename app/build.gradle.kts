@@ -7,7 +7,7 @@ plugins {
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.ksp) // kapt 대체 (Room, Hilt 속도 향상)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.google.services)
+    // alias(libs.plugins.google.services) Firebase 사용시 주석 해제
     // fragment에 직렬화를 위해
     id("kotlin-parcelize")
 }
@@ -98,10 +98,10 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     // Firebase
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics)
-    implementation(libs.firebase.firestore)
-    implementation(libs.firebase.messaging)
+//    implementation(platform(libs.firebase.bom))
+//    implementation(libs.firebase.analytics)
+//    implementation(libs.firebase.firestore)
+//    implementation(libs.firebase.messaging)
 
     // Kakao
     implementation(libs.kakao.user)

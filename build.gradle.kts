@@ -18,7 +18,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization) apply false
 
     // Google Services (Firebase용)
-    alias(libs.plugins.google.services) apply false
+    // alias(libs.plugins.google.services) apply false
 }
 
 // *****************************
