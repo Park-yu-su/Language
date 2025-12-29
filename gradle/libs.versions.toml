@@ -32,6 +32,9 @@ firebaseBom = "33.1.0"
 # Room DB
 room = "2.6.1"
 
+# Timber
+timber = "5.0.1"
+
 # Test
 junit = "4.13.2"
 junitVersion = "1.1.5"
@@ -92,6 +95,9 @@ kakao-auth = { group = "com.kakao.sdk", name = "v2-auth", version.ref = "kakao" 
 # UI Utils
 lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
 androidx-splashscreen = { group = "androidx.core", name = "core-splashscreen", version = "1.0.1" }
+
+# Timber
+timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 
 # Test
 junit = { group = "junit", name = "junit", version.ref = "junit" }

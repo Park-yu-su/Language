@@ -110,6 +110,9 @@ dependencies {
     // Lottie (Animation)
     implementation(libs.lottie.compose)
 
+    // 배포 시 로그 자동으로 삭제
+    implementation(libs.timber)
+
     // Test
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
