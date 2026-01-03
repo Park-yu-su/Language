@@ -1,6 +1,5 @@
 package com.example.language.data.remote
 
-import android.util.Log
 import com.example.language.BuildConfig
 import com.example.language.data.remote.model.ClientRequest
 import com.example.language.data.remote.model.GenericServerResponse
