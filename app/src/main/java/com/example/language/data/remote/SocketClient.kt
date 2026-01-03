@@ -21,12 +21,12 @@ import javax.net.ssl.SSLSocketFactory
 class SocketClient @Inject constructor(
     private val sslSocketFactory: SSLSocketFactory,
     @PublishedApi
-    internal val json: Json
+    internal val json: Json,
 ) {
     companion object {
         private const val TAG = "SocketClient"
         private val SERVER_IP = BuildConfig.BASE_URL
-        private const val PORT = 2121
+        private val PORT = BuildConfig.SERVER_PORT
     }
 
     /**
@@ -34,7 +34,7 @@ class SocketClient @Inject constructor(
      */
     suspend inline fun <reified Req, reified Res> executeRequest(
         request: ClientRequest<Req>,
-        fileBytes: ByteArray? = null
+        fileBytes: ByteArray? = null,
     ): SocketResult<Res> {
         // 요청 데이터를 JSON 문자열로 변환
         val finalJsonString = json.encodeToString(request)
@@ -62,7 +62,7 @@ class SocketClient @Inject constructor(
     @PublishedApi
     internal suspend fun performCommunication(
         jsonString: String,
-        fileBytes: ByteArray?
+        fileBytes: ByteArray?,
     ): CommunicationRawResult = withContext(Dispatchers.IO) {
         var socket: Socket? = null
         try {
@@ -96,7 +96,7 @@ class SocketClient @Inject constructor(
             CommunicationRawResult.Success(String(responseBytes, Charsets.UTF_8))
 
         } catch (e: Exception) {
-            Log.e(TAG, "Socket Error", e)
+            Timber.tag(TAG).e(e, "Socket Error")
             CommunicationRawResult.Error("NETWORK_ERROR", e.message ?: "네트워크 오류")
         } finally {
             socket?.close()
@@ -108,7 +108,7 @@ class SocketClient @Inject constructor(
      */
     @PublishedApi
     internal inline fun <reified Res> parseGenericResponse(
-        genericResponse: GenericServerResponse
+        genericResponse: GenericServerResponse,
     ): SocketResult<Res> {
         return when (genericResponse.status) {
             "ACCEPT" -> {
