@@ -1,6 +1,5 @@
 package com.example.language.presentation.mypage
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.language.data.remote.model.SocketResult
@@ -11,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,7 +18,7 @@ class MypageViewModel @Inject constructor(
     private val getMyProfileUseCase: GetMyProfileUseCase,
     private val getSubscribedWordbooksUseCase: GetSubscribedWordbooksUseCase,
     private val getSavedWordsUseCase: GetSavedWordsUseCase,
-    private val manageWordbookUseCase: ManageWordbookUseCase
+    private val manageWordbookUseCase: ManageWordbookUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<MypageUiState>(MypageUiState.Loading)
@@ -67,7 +67,7 @@ class MypageViewModel @Inject constructor(
                     loadData(uid)
                 }
                 is SocketResult.Error -> {
-                    Log.d("MypageViewModel","Delete failed: ${result.message}")
+                    Timber.d("Delete failed: ${result.message}")
                 }
             }
         }
